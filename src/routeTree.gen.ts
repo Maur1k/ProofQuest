@@ -10,33 +10,141 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as PracticeQuestIdRouteImport } from './routes/practice.$questId'
+import { Route as QuestsIndexRouteImport } from './routes/quests.index'
+import { Route as QuestsNewRouteImport } from './routes/quests.new'
+import { Route as ResultsQuestIdRouteImport } from './routes/results.$questId'
+import { Route as SubjectsIndexRouteImport } from './routes/subjects.index'
+import { Route as SubjectsSubjectIdRouteImport } from './routes/subjects.$subjectId'
+import { Route as QuestsQuestIdEditRouteImport } from './routes/quests.$questId.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProgressRoute = ProgressRouteImport.update({
+  id: '/progress',
+  path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PracticeQuestIdRoute = PracticeQuestIdRouteImport.update({
+  id: '/practice/$questId',
+  path: '/practice/$questId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestsIndexRoute = QuestsIndexRouteImport.update({
+  id: '/quests/',
+  path: '/quests/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestsNewRoute = QuestsNewRouteImport.update({
+  id: '/quests/new',
+  path: '/quests/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResultsQuestIdRoute = ResultsQuestIdRouteImport.update({
+  id: '/results/$questId',
+  path: '/results/$questId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubjectsIndexRoute = SubjectsIndexRouteImport.update({
+  id: '/subjects/',
+  path: '/subjects/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SubjectsSubjectIdRoute = SubjectsSubjectIdRouteImport.update({
+  id: '/subjects/$subjectId',
+  path: '/subjects/$subjectId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuestsQuestIdEditRoute = QuestsQuestIdEditRouteImport.update({
+  id: '/quests/$questId/edit',
+  path: '/quests/$questId/edit',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/progress': typeof ProgressRoute
+  '/practice/$questId': typeof PracticeQuestIdRoute
+  '/quests/new': typeof QuestsNewRoute
+  '/results/$questId': typeof ResultsQuestIdRoute
+  '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
+  '/quests/': typeof QuestsIndexRoute
+  '/subjects/': typeof SubjectsIndexRoute
+  '/quests/$questId/edit': typeof QuestsQuestIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/progress': typeof ProgressRoute
+  '/practice/$questId': typeof PracticeQuestIdRoute
+  '/quests/new': typeof QuestsNewRoute
+  '/results/$questId': typeof ResultsQuestIdRoute
+  '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
+  '/quests': typeof QuestsIndexRoute
+  '/subjects': typeof SubjectsIndexRoute
+  '/quests/$questId/edit': typeof QuestsQuestIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/progress': typeof ProgressRoute
+  '/practice/$questId': typeof PracticeQuestIdRoute
+  '/quests/new': typeof QuestsNewRoute
+  '/results/$questId': typeof ResultsQuestIdRoute
+  '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
+  '/quests/': typeof QuestsIndexRoute
+  '/subjects/': typeof SubjectsIndexRoute
+  '/quests/$questId/edit': typeof QuestsQuestIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/progress'
+    | '/practice/$questId'
+    | '/quests/new'
+    | '/results/$questId'
+    | '/subjects/$subjectId'
+    | '/quests/'
+    | '/subjects/'
+    | '/quests/$questId/edit'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/progress'
+    | '/practice/$questId'
+    | '/quests/new'
+    | '/results/$questId'
+    | '/subjects/$subjectId'
+    | '/quests'
+    | '/subjects'
+    | '/quests/$questId/edit'
+  id:
+    | '__root__'
+    | '/'
+    | '/progress'
+    | '/practice/$questId'
+    | '/quests/new'
+    | '/results/$questId'
+    | '/subjects/$subjectId'
+    | '/quests/'
+    | '/subjects/'
+    | '/quests/$questId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ProgressRoute: typeof ProgressRoute
+  PracticeQuestIdRoute: typeof PracticeQuestIdRoute
+  QuestsNewRoute: typeof QuestsNewRoute
+  ResultsQuestIdRoute: typeof ResultsQuestIdRoute
+  SubjectsSubjectIdRoute: typeof SubjectsSubjectIdRoute
+  QuestsIndexRoute: typeof QuestsIndexRoute
+  SubjectsIndexRoute: typeof SubjectsIndexRoute
+  QuestsQuestIdEditRoute: typeof QuestsQuestIdEditRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +156,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/progress': {
+      id: '/progress'
+      path: '/progress'
+      fullPath: '/progress'
+      preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/practice/$questId': {
+      id: '/practice/$questId'
+      path: '/practice/$questId'
+      fullPath: '/practice/$questId'
+      preLoaderRoute: typeof PracticeQuestIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quests/': {
+      id: '/quests/'
+      path: '/quests'
+      fullPath: '/quests/'
+      preLoaderRoute: typeof QuestsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quests/new': {
+      id: '/quests/new'
+      path: '/quests/new'
+      fullPath: '/quests/new'
+      preLoaderRoute: typeof QuestsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/results/$questId': {
+      id: '/results/$questId'
+      path: '/results/$questId'
+      fullPath: '/results/$questId'
+      preLoaderRoute: typeof ResultsQuestIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subjects/': {
+      id: '/subjects/'
+      path: '/subjects'
+      fullPath: '/subjects/'
+      preLoaderRoute: typeof SubjectsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/subjects/$subjectId': {
+      id: '/subjects/$subjectId'
+      path: '/subjects/$subjectId'
+      fullPath: '/subjects/$subjectId'
+      preLoaderRoute: typeof SubjectsSubjectIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quests/$questId/edit': {
+      id: '/quests/$questId/edit'
+      path: '/quests/$questId/edit'
+      fullPath: '/quests/$questId/edit'
+      preLoaderRoute: typeof QuestsQuestIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ProgressRoute: ProgressRoute,
+  PracticeQuestIdRoute: PracticeQuestIdRoute,
+  QuestsNewRoute: QuestsNewRoute,
+  ResultsQuestIdRoute: ResultsQuestIdRoute,
+  SubjectsSubjectIdRoute: SubjectsSubjectIdRoute,
+  QuestsIndexRoute: QuestsIndexRoute,
+  SubjectsIndexRoute: SubjectsIndexRoute,
+  QuestsQuestIdEditRoute: QuestsQuestIdEditRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
