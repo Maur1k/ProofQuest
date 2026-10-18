@@ -87,7 +87,8 @@ export function QuestEditor({
     }
     const id = onSave(draft);
     skipBlock.current = true;
-    navigate({ to: "/quests", search: {}, replace: false, state: { savedId: id } as never });
+    void id;
+    navigate({ to: "/quests", search: {} });
   };
 
   return (
