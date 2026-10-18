@@ -12,18 +12,18 @@ const STATUSES: QuestStatus[] = ["new", "in-progress", "completed"];
 const STATUS_LABEL: Record<QuestStatus, string> = { new: "Not started", "in-progress": "In progress", completed: "Completed" };
 
 interface LibrarySearch {
-  q?: string;
-  subject?: SubjectId;
-  difficulty?: Difficulty;
-  status?: QuestStatus;
+  q?: string | undefined;
+  subject?: SubjectId | undefined;
+  difficulty?: Difficulty | undefined;
+  status?: QuestStatus | undefined;
 }
 
 export const Route = createFileRoute("/quests/")({
   validateSearch: (s: Record<string, unknown>): LibrarySearch => ({
-    q: typeof s.q === "string" && s.q ? s.q : undefined,
-    subject: (SUBJECT_IDS as readonly unknown[]).includes(s.subject) ? (s.subject as SubjectId) : undefined,
-    difficulty: (DIFFICULTIES as readonly unknown[]).includes(s.difficulty) ? (s.difficulty as Difficulty) : undefined,
-    status: (STATUSES as unknown[]).includes(s.status) ? (s.status as QuestStatus) : undefined,
+    q: typeof s["q"] === "string" && s["q"] ? s["q"] : undefined,
+    subject: (SUBJECT_IDS as readonly unknown[]).includes(s["subject"]) ? (s["subject"] as SubjectId) : undefined,
+    difficulty: (DIFFICULTIES as readonly unknown[]).includes(s["difficulty"]) ? (s["difficulty"] as Difficulty) : undefined,
+    status: (STATUSES as unknown[]).includes(s["status"]) ? (s["status"] as QuestStatus) : undefined,
   }),
   head: () => ({
     meta: [

@@ -15,7 +15,7 @@ export function blankQuestion(type: QuestionType, language: Question["language"]
   return { ...base, type, variables: ["x"], steps: [{ label: "Step 1", values: [""] }] };
 }
 
-function Field({ label, error, children, hint, id }: { label: string; error?: string; hint?: string; children: ReactNode; id: string }) {
+function Field({ label, error, children, hint, id }: { label: string; error?: string | undefined; hint?: string | undefined; children: ReactNode; id: string }) {
   return (
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm font-medium text-foreground">
@@ -75,7 +75,11 @@ export function QuestEditor({
       const qs = [...d.questions];
       const j = i + dir;
       if (j < 0 || j >= qs.length) return d;
-      [qs[i], qs[j]] = [qs[j], qs[i]];
+      const a = qs[i];
+      const b = qs[j];
+      if (!a || !b) return d;
+      qs[i] = b;
+      qs[j] = a;
       return { ...d, questions: qs };
     });
 
@@ -112,11 +116,11 @@ export function QuestEditor({
       )}
 
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
-        <Field label="Title" id="title" error={shown.title}>
+        <Field label="Title" id="title" error={shown["title"]}>
           <input id="title" className="field" value={draft.title} maxLength={LIMITS.titleMax + 20} onChange={(e) => set("title", e.target.value)} placeholder="e.g. Loops & Accumulators" {...err(shown, "title")} />
         </Field>
         <div className="grid grid-cols-2 gap-3">
-          <Field label="Subject" id="subjectId" error={shown.subjectId}>
+          <Field label="Subject" id="subjectId" error={shown["subjectId"]}>
             <select id="subjectId" className="field" value={draft.subjectId} onChange={(e) => set("subjectId", e.target.value as QuestDraft["subjectId"])}>
               {SUBJECTS.map((s) => (
                 <option key={s.id} value={s.id}>
@@ -125,7 +129,7 @@ export function QuestEditor({
               ))}
             </select>
           </Field>
-          <Field label="Difficulty" id="difficulty" error={shown.difficulty}>
+          <Field label="Difficulty" id="difficulty" error={shown["difficulty"]}>
             <select id="difficulty" className="field" value={draft.difficulty} onChange={(e) => set("difficulty", e.target.value as QuestDraft["difficulty"])}>
               {DIFFICULTIES.map((d) => (
                 <option key={d} value={d}>
@@ -135,7 +139,7 @@ export function QuestEditor({
             </select>
           </Field>
         </div>
-        <Field label="Topic" id="topic" error={shown.topic} hint="Pick a suggestion or type your own.">
+        <Field label="Topic" id="topic" error={shown["topic"]} hint="Pick a suggestion or type your own.">
           <input id="topic" className="field" list="topic-options" value={draft.topic} onChange={(e) => set("topic", e.target.value)} {...err(shown, "topic")} />
           <datalist id="topic-options">
             {subject?.topics.map((t) => <option key={t} value={t} />)}
@@ -149,7 +153,7 @@ export function QuestEditor({
             Questions <span className="text-sm font-normal text-muted-foreground">({draft.questions.length})</span>
           </h2>
         </div>
-        {shown.questions && <p className="text-sm font-medium text-destructive">{shown.questions}</p>}
+        {shown["questions"] && <p className="text-sm font-medium text-destructive">{shown["questions"]}</p>}
 
         {draft.questions.map((q, i) => (
           <QuestionEditor

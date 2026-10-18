@@ -76,7 +76,7 @@ export function suggestFocus(stats: TopicStat[]): TopicStat | null {
   if (!candidates.length) return null;
   return [...candidates].sort(
     (a, b) => a.accuracy - b.accuracy || (b.lastIncorrectAt ?? 0) - (a.lastIncorrectAt ?? 0),
-  )[0];
+  )[0] ?? null;
 }
 
 export interface Summary {

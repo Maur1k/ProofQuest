@@ -8,8 +8,8 @@ import { attemptSummary, latestCompleted, pct } from "@/domain/stats";
 import type { AnswerResponse } from "@/domain/types";
 
 export const Route = createFileRoute("/results/$questId")({
-  validateSearch: (s: Record<string, unknown>): { attempt?: string } => ({
-    attempt: typeof s.attempt === "string" ? s.attempt : undefined,
+  validateSearch: (s: Record<string, unknown>): { attempt?: string | undefined } => ({
+    attempt: typeof s["attempt"] === "string" ? s["attempt"] : undefined,
   }),
   head: () => ({
     meta: [
@@ -91,6 +91,7 @@ function Results() {
         {!quest && <Card className="text-sm text-muted-foreground">This quest was deleted, so individual questions can't be shown.</Card>}
         {questions.map((q, i) => {
           const r = attempt.answers[q.id];
+          if (!r) return null;
           const good = r.correct && !r.revealed;
           return (
             <details key={q.id} className="group rounded-2xl border border-border bg-card" open={!good}>

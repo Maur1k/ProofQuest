@@ -20,20 +20,20 @@ export type ValidationErrors = Record<string, string>;
 export function validateQuest(draft: QuestDraft): ValidationErrors {
   const e: ValidationErrors = {};
   const title = draft.title.trim();
-  if (title.length < LIMITS.titleMin) e.title = `Title needs at least ${LIMITS.titleMin} characters.`;
-  else if (title.length > LIMITS.titleMax) e.title = `Title must be ${LIMITS.titleMax} characters or fewer.`;
+  if (title.length < LIMITS.titleMin) e["title"] = `Title needs at least ${LIMITS.titleMin} characters.`;
+  else if (title.length > LIMITS.titleMax) e["title"] = `Title must be ${LIMITS.titleMax} characters or fewer.`;
 
-  if (!(SUBJECT_IDS as readonly string[]).includes(draft.subjectId)) e.subjectId = "Choose a subject.";
+  if (!(SUBJECT_IDS as readonly string[]).includes(draft.subjectId)) e["subjectId"] = "Choose a subject.";
 
   const topic = draft.topic.trim();
-  if (topic.length < LIMITS.topicMin) e.topic = "Enter a topic.";
-  else if (topic.length > LIMITS.topicMax) e.topic = `Topic must be ${LIMITS.topicMax} characters or fewer.`;
+  if (topic.length < LIMITS.topicMin) e["topic"] = "Enter a topic.";
+  else if (topic.length > LIMITS.topicMax) e["topic"] = `Topic must be ${LIMITS.topicMax} characters or fewer.`;
 
-  if (!(DIFFICULTIES as readonly string[]).includes(draft.difficulty)) e.difficulty = "Choose a difficulty.";
+  if (!(DIFFICULTIES as readonly string[]).includes(draft.difficulty)) e["difficulty"] = "Choose a difficulty.";
 
-  if (draft.questions.length < LIMITS.questionsMin) e.questions = "Add at least one question.";
+  if (draft.questions.length < LIMITS.questionsMin) e["questions"] = "Add at least one question.";
   else if (draft.questions.length > LIMITS.questionsMax)
-    e.questions = `A quest can have at most ${LIMITS.questionsMax} questions.`;
+    e["questions"] = `A quest can have at most ${LIMITS.questionsMax} questions.`;
 
   for (const q of draft.questions) {
     const k = (f: string) => `q.${q.id}.${f}`;

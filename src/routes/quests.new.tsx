@@ -6,9 +6,9 @@ import { getSubject } from "@/domain/subjects";
 import { SUBJECT_IDS, type QuestDraft, type SubjectId } from "@/domain/types";
 
 export const Route = createFileRoute("/quests/new")({
-  validateSearch: (s: Record<string, unknown>): { subject?: SubjectId; topic?: string } => ({
-    subject: (SUBJECT_IDS as readonly unknown[]).includes(s.subject) ? (s.subject as SubjectId) : undefined,
-    topic: typeof s.topic === "string" && s.topic ? s.topic.slice(0, 40) : undefined,
+  validateSearch: (s: Record<string, unknown>): { subject?: SubjectId | undefined; topic?: string | undefined } => ({
+    subject: (SUBJECT_IDS as readonly unknown[]).includes(s["subject"]) ? (s["subject"] as SubjectId) : undefined,
+    topic: typeof s["topic"] === "string" && s["topic"] ? s["topic"].slice(0, 40) : undefined,
   }),
   head: () => ({
     meta: [

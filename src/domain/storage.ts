@@ -87,18 +87,18 @@ export function parseStoredData(raw: string | null): ParseResult {
     return { kind: "corrupt", warning: "Saved data had an unexpected structure." };
   }
   const obj = json as Record<string, unknown>;
-  if (!Array.isArray(obj.quests) || !Array.isArray(obj.attempts)) {
+  if (!Array.isArray(obj["quests"]) || !Array.isArray(obj["attempts"])) {
     return { kind: "corrupt", warning: "Saved data was missing quests or attempts." };
   }
   const quests: Quest[] = [];
   const attempts: Attempt[] = [];
   let dropped = 0;
-  for (const q of obj.quests) {
+  for (const q of obj["quests"]) {
     const r = questSchema.safeParse(q);
     if (r.success) quests.push(r.data);
     else dropped++;
   }
-  for (const a of obj.attempts) {
+  for (const a of obj["attempts"]) {
     const r = attemptSchema.safeParse(a);
     if (r.success) attempts.push(r.data);
     else dropped++;

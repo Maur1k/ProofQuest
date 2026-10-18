@@ -51,6 +51,7 @@ function Practice() {
   const total = quest.questions.length;
   const index = Math.min(attempt.currentIndex, total - 1);
   const question = quest.questions[index];
+  if (!question) return <LoadingState />;
   const record = attempt.answers[question.id];
   const hintsShown = record ? record.hintsUsed : (attempt.hintsShown[question.id] ?? 0);
   const answeredCount = quest.questions.filter((q) => attempt.answers[q.id]).length;
