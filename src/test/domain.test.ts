@@ -87,15 +87,15 @@ describe("quest validation", () => {
     expect(validateQuest(validDraft())).toEqual({});
   });
   it("requires a title of at least 3 characters", () => {
-    expect(validateQuest({ ...validDraft(), title: "  ab " }).title).toBeDefined();
+    expect(validateQuest({ ...validDraft(), title: "  ab " })["title"]).toBeDefined();
   });
   it("requires at least one question", () => {
-    expect(validateQuest({ ...validDraft(), questions: [] }).questions).toBeDefined();
+    expect(validateQuest({ ...validDraft(), questions: [] })["questions"]).toBeDefined();
   });
   it("rejects more than 20 questions", () => {
     const d = validDraft();
-    const qs = Array.from({ length: 21 }, (_, i) => ({ ...d.questions[0], id: `p${i}` }));
-    expect(validateQuest({ ...d, questions: qs }).questions).toBeDefined();
+    const qs = Array.from({ length: 21 }, (_, i) => ({ ...d.questions[0]!, id: `p${i}` }));
+    expect(validateQuest({ ...d, questions: qs })["questions"]).toBeDefined();
   });
   it("rejects an invalid subject and difficulty", () => {
     const e = validateQuest({ ...validDraft(), subjectId: "nope" as never, difficulty: "x" as never });
@@ -104,7 +104,7 @@ describe("quest validation", () => {
   });
   it("requires code, expected answer and explanation", () => {
     const d = validDraft();
-    d.questions[0] = { ...d.questions[0], code: " ", explanation: "", ...{ expectedOutput: "" } } as never;
+    d.questions[0]! = { ...d.questions[0]!, code: " ", explanation: "", ...{ expectedOutput: "" } } as never;
     const e = validateQuest(d);
     expect(e["q.p.code"]).toBeDefined();
     expect(e["q.p.explanation"]).toBeDefined();
@@ -112,18 +112,18 @@ describe("quest validation", () => {
   });
   it("rejects empty hints and more than 3 hints", () => {
     const d = validDraft();
-    expect(validateQuest({ ...d, questions: [{ ...d.questions[0], hints: [" "] }] })["q.p.hints"]).toBeDefined();
-    expect(validateQuest({ ...d, questions: [{ ...d.questions[0], hints: ["a", "b", "c", "d"] }] })["q.p.hints"]).toBeDefined();
+    expect(validateQuest({ ...d, questions: [{ ...d.questions[0]!, hints: [" "] }] })["q.p.hints"]).toBeDefined();
+    expect(validateQuest({ ...d, questions: [{ ...d.questions[0]!, hints: ["a", "b", "c", "d"] }] })["q.p.hints"]).toBeDefined();
   });
   it("rejects duplicate trace variables and empty cells", () => {
     const d = validDraft();
-    const t = d.questions[1] as Extract<QuestDraft["questions"][number], { type: "trace" }>;
+    const t = d.questions[1]! as Extract<QuestDraft["questions"][number], { type: "trace" }>;
     expect(validateQuest({ ...d, questions: [{ ...t, variables: ["x", "x"], steps: [{ label: "s", values: ["1", "2"] }] }] })["q.t.variables"]).toBeDefined();
     expect(validateQuest({ ...d, questions: [{ ...t, steps: [{ label: "s", values: [""] }] }] })["q.t.steps"]).toBeDefined();
   });
   it("rejects a fix identical to the buggy code", () => {
     const d = validDraft();
-    expect(validateQuest({ ...d, questions: [{ ...d.questions[2], fixedCode: "x  =  0" } as never] })["q.f.expected"]).toBeDefined();
+    expect(validateQuest({ ...d, questions: [{ ...d.questions[2]!, fixedCode: "x  =  0" } as never] })["q.f.expected"]).toBeDefined();
   });
   it("all sample quests are valid", () => {
     for (const q of createSampleQuests()) expect(validateQuest(q)).toEqual({});
@@ -146,7 +146,7 @@ describe("mastery and accuracy", () => {
     expect(masteryDelta({ correct: false, hintsUsed: 0, revealed: false })).toBe(-1);
   });
   it("computes topic mastery and accuracy from recorded answers", () => {
-    const [s] = computeTopicStats([attemptWith([{}, {}, { hintsUsed: 1 }, { correct: false, revealed: true }])]);
+    const s = computeTopicStats([attemptWith([{}, {}, { hintsUsed: 1 }, { correct: false, revealed: true }])])[0]!;
     expect(s.answered).toBe(4);
     expect(s.correct).toBe(3);
     expect(s.accuracy).toBe(0.75);
@@ -156,8 +156,8 @@ describe("mastery and accuracy", () => {
     expect(summarize([{ correct: true, revealed: true }]).correct).toBe(0);
   });
   it("mastery is clamped between 0 and 5", () => {
-    expect(computeTopicStats([attemptWith([{ correct: false }, { correct: false }])])[0].mastery).toBe(0);
-    expect(computeTopicStats([attemptWith(Array.from({ length: 8 }, () => ({})))])[0].mastery).toBe(5);
+    expect(computeTopicStats([attemptWith([{ correct: false }, { correct: false }])])[0]!.mastery).toBe(0);
+    expect(computeTopicStats([attemptWith(Array.from({ length: 8 }, () => ({})))])[0]!.mastery).toBe(5);
   });
   it("suggests the lowest-accuracy topic", () => {
     const a = attemptWith([{}, {}], { id: "x", topic: "Loops" });
@@ -173,22 +173,22 @@ describe("attempt reducer", () => {
   it("ignores a duplicate answer for the same question", () => {
     let d = dataReducer(base(), { type: "recordAnswer", attemptId: "a1", record: rec });
     d = dataReducer(d, { type: "recordAnswer", attemptId: "a1", record: { ...rec, correct: false, answeredAt: 6 } });
-    expect(Object.keys(d.attempts[0].answers)).toHaveLength(1);
-    expect(d.attempts[0].answers.q.correct).toBe(true);
+    expect(Object.keys(d.attempts[0]!.answers)).toHaveLength(1);
+    expect(d.attempts[0]!.answers["q"]!.correct).toBe(true);
   });
   it("does not start a second unfinished attempt for the same quest", () => {
-    const d = dataReducer(base(), { type: "startAttempt", attempt: { ...base().attempts[0], id: "a2" } });
+    const d = dataReducer(base(), { type: "startAttempt", attempt: { ...base().attempts[0]!, id: "a2" } });
     expect(d.attempts).toHaveLength(1);
   });
   it("retry after completion creates a new attempt and keeps history", () => {
     let d = dataReducer(base(), { type: "completeAttempt", attemptId: "a1", now: 9 });
-    d = dataReducer(d, { type: "startAttempt", attempt: { ...base().attempts[0], id: "a2" } });
+    d = dataReducer(d, { type: "startAttempt", attempt: { ...base().attempts[0]!, id: "a2" } });
     expect(d.attempts.map((a) => a.id)).toEqual(["a1", "a2"]);
   });
   it("continue target picks the most recent unfinished attempt", () => {
     const quests = createSampleQuests();
-    const a = attemptWith([], { id: "o", questId: quests[0].id, completedAt: null, updatedAt: 1, currentIndex: 1 });
-    const b = attemptWith([], { id: "n", questId: quests[1].id, completedAt: null, updatedAt: 2, currentIndex: 1 });
+    const a = attemptWith([], { id: "o", questId: quests[0]!.id, completedAt: null, updatedAt: 1, currentIndex: 1 });
+    const b = attemptWith([], { id: "n", questId: quests[1]!.id, completedAt: null, updatedAt: 2, currentIndex: 1 });
     expect(continueTarget(quests, [a, b])?.attempt.id).toBe("n");
   });
 });
@@ -207,7 +207,7 @@ describe("stored data parsing", () => {
     const r = parseStoredData(raw);
     expect(r.kind).toBe("recovered");
     if (r.kind === "recovered") {
-      expect(r.data.quests.map((q) => q.id)).toEqual([quests[0].id]);
+      expect(r.data.quests.map((q) => q.id)).toEqual([quests[0]!.id]);
       expect(r.dropped).toBe(1);
     }
   });
