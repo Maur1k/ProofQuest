@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import { createSampleQuests } from "@/data/sample-quests";
 import { BACKUP_KEY_PREFIX, STORAGE_KEY, parseStoredData } from "@/domain/storage";
 import type { AnswerRecord, AppData, Attempt, QuestDraft } from "@/domain/types";
+import { newId } from "@/lib/id";
 import { dataReducer, type Action } from "./reducer";
 
 interface StoreValue {
@@ -22,12 +23,6 @@ interface StoreValue {
 const StoreContext = createContext<StoreValue | null>(null);
 
 const EMPTY: AppData = { version: 1, quests: [], attempts: [] };
-
-function newId() {
-  return typeof crypto !== "undefined" && "randomUUID" in crypto
-    ? crypto.randomUUID()
-    : `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
-}
 
 function cleanDraft(d: QuestDraft): QuestDraft {
   return {
