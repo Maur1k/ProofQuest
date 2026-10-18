@@ -99,8 +99,8 @@ describe("quest validation", () => {
   });
   it("rejects an invalid subject and difficulty", () => {
     const e = validateQuest({ ...validDraft(), subjectId: "nope" as never, difficulty: "x" as never });
-    expect(e.subjectId).toBeDefined();
-    expect(e.difficulty).toBeDefined();
+    expect(e["subjectId"]).toBeDefined();
+    expect(e["difficulty"]).toBeDefined();
   });
   it("requires code, expected answer and explanation", () => {
     const d = validDraft();
