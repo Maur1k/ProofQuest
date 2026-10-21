@@ -63,7 +63,7 @@ function Ready() {
       <PageHeader
         title="Ready to practice"
         subtitle="Prototype summary of your reviewed demo quest."
-        back={{ to: "/study/review", label: "Back to review" }}
+        back={{ to: "/study/review", label: "Review" }}
       />
 
       <Card>

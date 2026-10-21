@@ -53,7 +53,7 @@ function Review() {
       <PageHeader
         title="Review demo questions"
         subtitle={`${config.title.trim()} · ${questions.length} question${questions.length === 1 ? "" : "s"}`}
-        back={{ to: `/study/configure/${lesson.id}`, label: "Back to settings" }}
+        back={{ to: `/study/lesson/${lesson.id}`, label: "Lesson" }}
       />
 
       {questions.length === 0 ? (

@@ -1,10 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { CheckCircle2, Circle, Sparkles } from "lucide-react";
-import { Card, CodeBlock, EmptyState, PageHeader, Pill, ProgressBar } from "@/components/common";
+import { CheckCircle2, Circle } from "lucide-react";
+import { CodeBlock, EmptyState, PageHeader } from "@/components/common";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
+import { Button } from "@/components/ui/button";
 import { getSubject } from "@/domain/subjects";
 import { DemoBanner } from "@/demo/DemoBanner";
 import { useDemo } from "@/demo/DemoContext";
-import { getDemoLesson } from "@/demo/lessons";
+import { getDemoLesson, type DemoLesson } from "@/demo/lessons";
+import { usePreviewQuestions } from "@/demo/usePreviewQuestions";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/study/lesson/$lessonId")({
@@ -20,8 +23,10 @@ export const Route = createFileRoute("/study/lesson/$lessonId")({
         { property: "og:title", content: title },
         {
           property: "og:description",
-          content: "Sample lesson with objectives, code examples and key points.",
+          content: "Sample lesson with code examples and key points.",
         },
+        { property: "og:type", content: "article" },
+        { name: "twitter:card", content: "summary" },
       ],
     };
   },
@@ -31,86 +36,87 @@ export const Route = createFileRoute("/study/lesson/$lessonId")({
 function LessonReader() {
   const { lessonId } = Route.useParams();
   const lesson = getDemoLesson(lessonId);
-  const { readSections, toggleRead } = useDemo();
-
   if (!lesson) {
     return (
       <div className="pt-8">
         <EmptyState
-          title="Demo lesson not found"
+          title="Sample lesson not found"
           body="This sample lesson doesn't exist."
           action={
             <Link
               to="/study"
               className="inline-flex min-h-11 items-center text-sm font-semibold text-primary"
             >
-              Back to Study Library
+              Back to Study
             </Link>
           }
         />
       </div>
     );
   }
+  return <Reader lesson={lesson} />;
+}
+
+function Reader({ lesson }: { lesson: DemoLesson }) {
+  const { readSections, toggleRead } = useDemo();
+  const preview = usePreviewQuestions(lesson);
   const read = readSections[lesson.id] ?? [];
   const readCount = lesson.sections.filter((s) => read.includes(s.id)).length;
 
   return (
     <>
-      <DemoBanner>
-        Sample lesson. Reading progress lives only in this tab and does not affect mastery or
-        progress.
-      </DemoBanner>
       <PageHeader
         title={lesson.title}
         subtitle={`${getSubject(lesson.subjectId)?.name} · ${lesson.topic} · ${lesson.readMinutes} min read`}
-        back={{ to: "/study", label: "Study Library" }}
+        back={{ to: "/study", label: "Study" }}
       />
+      <div className="-mt-4">
+        <DemoBanner>
+          Sample lesson. Marking sections read is optional, lives only in this tab, and does not
+          affect mastery or progress.
+        </DemoBanner>
+      </div>
 
-      <Card>
-        <div className="flex items-center justify-between gap-2 text-sm">
-          <span className="text-foreground">Demo reading progress</span>
-          <span className="text-muted-foreground">
-            {readCount}/{lesson.sections.length} sections
-          </span>
-        </div>
-        <div className="mt-2">
-          <ProgressBar value={readCount / lesson.sections.length} label="Demo reading progress" />
-        </div>
-      </Card>
-
-      <nav aria-label="Lesson sections" className="mt-4">
-        <ol className="space-y-1">
-          {lesson.sections.map((s, i) => (
-            <li key={s.id}>
-              <a
-                href={`#sec-${s.id}`}
-                className="flex min-h-11 items-center gap-2 rounded-xl px-2 text-sm text-muted-foreground hover:bg-accent/40 hover:text-foreground"
-              >
-                {read.includes(s.id) ? (
-                  <CheckCircle2 className="h-4 w-4 text-success" aria-hidden />
-                ) : (
-                  <Circle className="h-4 w-4" aria-hidden />
-                )}
-                {i + 1}. {s.heading}
-                {read.includes(s.id) && <span className="sr-only">(read)</span>}
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
-
-      <section aria-labelledby="obj-h" className="mt-4">
-        <Card>
-          <h2 id="obj-h" className="font-display text-base font-semibold text-foreground">
-            Learning objectives
+      <details className="mt-3 rounded-xl border border-border bg-card text-sm">
+        <summary className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
+          <span className="min-w-0 flex-1">Outline &amp; objectives</span>
+          {readCount > 0 && (
+            <span className="shrink-0 text-xs text-muted-foreground">
+              {readCount}/{lesson.sections.length} read
+            </span>
+          )}
+        </summary>
+        <div className="px-3 pb-3">
+          <h2 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+            You'll learn to
           </h2>
-          <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
+          <ul className="mt-1 list-disc space-y-1 pl-5 text-muted-foreground">
             {lesson.objectives.map((o) => (
               <li key={o}>{o}</li>
             ))}
           </ul>
-        </Card>
-      </section>
+          <nav aria-label="Lesson sections" className="mt-3">
+            <ol>
+              {lesson.sections.map((s, i) => (
+                <li key={s.id}>
+                  <a
+                    href={`#sec-${s.id}`}
+                    className="flex min-h-11 items-center gap-2 rounded-lg px-1 text-muted-foreground hover:text-foreground"
+                  >
+                    {i + 1}. {s.heading}
+                    {read.includes(s.id) && (
+                      <>
+                        <CheckCircle2 className="h-4 w-4 text-success" aria-hidden />
+                        <span className="sr-only">(read)</span>
+                      </>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </div>
+      </details>
 
       {lesson.sections.map((s, i) => {
         const done = read.includes(s.id);
@@ -145,10 +151,8 @@ function LessonReader() {
               aria-pressed={done}
               onClick={() => toggleRead(lesson.id, s.id)}
               className={cn(
-                "mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl border px-3 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                done
-                  ? "border-success/50 text-success"
-                  : "border-border text-muted-foreground hover:text-foreground",
+                "mt-2 inline-flex min-h-11 items-center gap-2 rounded-lg px-1 text-xs focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                done ? "text-success" : "text-muted-foreground hover:text-foreground",
               )}
             >
               {done ? (
@@ -156,32 +160,43 @@ function LessonReader() {
               ) : (
                 <Circle className="h-4 w-4" aria-hidden />
               )}
-              {done ? "Marked as read (demo)" : "Mark section as read (demo)"}
+              {done ? "Read" : "Mark read (optional)"}
             </button>
           </section>
         );
       })}
 
-      <div className="mt-8 rounded-2xl border border-primary/40 bg-accent/30 p-4">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" aria-hidden />
-          <h2 className="font-display text-base font-semibold text-foreground">
-            Turn this into a quest
-          </h2>
-          <Pill tone="warning">Demo</Pill>
-        </div>
+      <section aria-labelledby="practice-h" className="mt-8 rounded-2xl border border-border bg-card p-4">
+        <h2 id="practice-h" className="font-display text-base font-semibold text-foreground">
+          Practice this lesson
+        </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Choose sections and question types to preview a sample quest. Questions come from a fixed
-          sample set, not AI.
+          Preview sample questions from this lesson. Fixed sample set, not AI. Nothing is saved.
         </p>
-        <Link
-          to="/study/configure/$lessonId"
-          params={{ lessonId: lesson.id }}
-          className="mt-3 inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-gradient-primary px-4 text-sm font-semibold text-primary-foreground shadow-glow"
-        >
-          Configure demo quest
-        </Link>
-      </div>
+        <div className="mt-3 grid gap-2 sm:grid-cols-[1fr_auto]">
+          <Button className="min-h-11" onClick={preview.start}>
+            {preview.label}
+          </Button>
+          <Link
+            to="/study/configure/$lessonId"
+            params={{ lessonId: lesson.id }}
+            className="inline-flex min-h-11 items-center justify-center rounded-md px-4 text-sm font-medium text-primary hover:bg-accent/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            Customize
+          </Link>
+        </div>
+      </section>
+
+      <ConfirmDialog
+        open={preview.confirmOpen}
+        onOpenChange={preview.setConfirmOpen}
+        title="Replace demo questions?"
+        description={preview.replaceDescription}
+        confirmLabel="Replace"
+        cancelLabel="Keep current"
+        destructive
+        onConfirm={preview.generateDefaults}
+      />
     </>
   );
 }
