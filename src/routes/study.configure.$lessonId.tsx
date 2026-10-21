@@ -96,6 +96,7 @@ function Configure() {
     timer.current = setTimeout(() => {
       if (i + 1 < STEPS.length) run(i + 1);
       else {
+        demo.setConfig(c);
         demo.setGenerated(lesson.id, generateDemoQuestions(lesson, c));
         setStep(null);
         void navigate({ to: "/study/review" });
