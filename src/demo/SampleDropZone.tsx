@@ -222,8 +222,8 @@ export function SampleDropZone() {
       {ghost && (
         <div
           aria-hidden
-          className="pointer-events-none fixed left-0 top-0 z-50 rounded-xl border border-primary bg-popover px-3 py-2 font-mono text-[13px] text-foreground shadow-glow"
-          style={{ transform: `translate(${ghost.x + 12}px, ${ghost.y - 20}px)` }}
+          className="pointer-events-none fixed z-50 max-w-[80vw] truncate rounded-xl border border-primary bg-popover px-3 py-2 font-mono text-[13px] text-foreground shadow-glow"
+          style={{ left: ghost.x, top: ghost.y, transform: "translate(-50%, -130%)" }}
         >
           {ghost.name}
         </div>
