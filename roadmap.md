@@ -7,3 +7,4 @@
 - [x] Vitest tests (checking, validation, mastery, storage) and production build
 - [x] Manual E2E scenarios (create/persist, practice/hint/reveal, resume, edit/delete warnings, search/filters, malformed storage, mobile/keyboard)
 - [x] Study-to-Quest demo: create choice sheet, Study Library + simulated upload, lesson reader, configure + review, ready-to-practice prototype
+- [x] Study demo simplification: drop/tap sample to read, compact demo label, one-tap question preview with no silent overwrite
