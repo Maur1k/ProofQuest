@@ -213,7 +213,7 @@ function QuestionReviewCard({
           </>
         )}
         {q.type === "trace" && (
-          <fieldset>
+          <fieldset className="min-w-0">
             <legend className="text-sm font-medium text-foreground">Expected trace</legend>
             <div className="mt-1 overflow-x-auto">
               <table className="w-full min-w-max border-separate border-spacing-1 text-sm">
