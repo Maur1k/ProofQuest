@@ -34,7 +34,7 @@ function Review() {
   const demo = useDemo();
   const [pendingRemove, setPendingRemove] = useState<string | null>(null);
   const lesson = demo.generatedFor ? getDemoLesson(demo.generatedFor) : undefined;
-  const config = demo.config?.lessonId === lesson?.id ? demo.config : null;
+  const config = demo.reviewConfig?.lessonId === lesson?.id ? demo.reviewConfig : null;
   const questions = demo.questions;
   const errors = useMemo(
     () =>

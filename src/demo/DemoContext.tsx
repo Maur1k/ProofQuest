@@ -13,7 +13,9 @@ interface DemoValue {
   setConfig: (c: DemoConfig) => void;
   questions: Question[] | null;
   generatedFor: string | null;
-  setGenerated: (lessonId: string, qs: Question[]) => void;
+  /** Settings the current review was generated with; separate from draft settings being customized. */
+  reviewConfig: DemoConfig | null;
+  setGenerated: (config: DemoConfig, qs: Question[]) => void;
   updateQuestion: (q: Question) => void;
   removeQuestion: (id: string) => void;
   reset: () => void;
@@ -26,6 +28,7 @@ export function DemoProvider({ children }: { children: ReactNode }) {
   const [config, setConfig] = useState<DemoConfig | null>(null);
   const [questions, setQuestions] = useState<Question[] | null>(null);
   const [generatedFor, setGeneratedFor] = useState<string | null>(null);
+  const [reviewConfig, setReviewConfig] = useState<DemoConfig | null>(null);
 
   const value = useMemo<DemoValue>(
     () => ({
@@ -44,8 +47,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
       setConfig,
       questions,
       generatedFor,
-      setGenerated: (lessonId, qs) => {
-        setGeneratedFor(lessonId);
+      reviewConfig,
+      setGenerated: (c, qs) => {
+        setGeneratedFor(c.lessonId);
+        setReviewConfig(c);
         setQuestions(qs);
       },
       updateQuestion: (q) => setQuestions((qs) => qs?.map((x) => (x.id === q.id ? q : x)) ?? qs),
@@ -54,9 +59,10 @@ export function DemoProvider({ children }: { children: ReactNode }) {
         setConfig(null);
         setQuestions(null);
         setGeneratedFor(null);
+        setReviewConfig(null);
       },
     }),
-    [readSections, config, questions, generatedFor],
+    [readSections, config, questions, generatedFor, reviewConfig],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

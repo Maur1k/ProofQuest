@@ -19,7 +19,7 @@ export function usePreviewQuestions(lesson: DemoLesson) {
 
   const generate = (c: DemoConfig) => {
     demo.setConfig(c);
-    demo.setGenerated(lesson.id, generateDemoQuestions(lesson, c));
+    demo.setGenerated(c, generateDemoQuestions(lesson, c));
     void navigate({ to: "/study/review" });
   };
   const generateDefaults = () =>

@@ -40,7 +40,7 @@ function Ready() {
   const demo = useDemo();
   const [open, setOpen] = useState(false);
   const lesson = demo.generatedFor ? getDemoLesson(demo.generatedFor) : undefined;
-  const config = demo.config?.lessonId === lesson?.id ? demo.config : null;
+  const config = demo.reviewConfig?.lessonId === lesson?.id ? demo.reviewConfig : null;
   const questions = demo.questions;
   const errorCount = useMemo(
     () =>
