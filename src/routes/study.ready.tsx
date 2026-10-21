@@ -72,7 +72,7 @@ function Ready() {
           <Pill tone="primary">{getSubject(lesson.subjectId)?.short}</Pill>
           <DifficultyPill difficulty={config.difficulty} />
         </div>
-        <h2 className="mt-2 font-display text-lg font-semibold text-foreground">
+        <h2 className="mt-2 font-display text-lg font-semibold text-foreground [overflow-wrap:anywhere]">
           {config.title.trim()}
         </h2>
         <p className="text-sm text-muted-foreground">
@@ -86,7 +86,7 @@ function Ready() {
             </dd>
           </div>
           <div className="rounded-xl bg-secondary/60 p-3">
-            <dt className="text-xs text-muted-foreground">Sections</dt>
+            <dt className="text-xs text-muted-foreground">Sections selected</dt>
             <dd className="font-display text-xl font-semibold text-foreground">
               {config.sectionIds.length}
             </dd>
