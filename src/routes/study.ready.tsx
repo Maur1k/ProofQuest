@@ -18,7 +18,7 @@ import { DemoBanner } from "@/demo/DemoBanner";
 import { useDemo } from "@/demo/DemoContext";
 import { getDemoLesson } from "@/demo/lessons";
 import { demoDraft } from "@/demo/logic";
-import { NoDemoQuest } from "./study.review";
+import { NoDemoQuest } from "@/demo/NoDemoQuest";
 
 export const Route = createFileRoute("/study/ready")({
   head: () => ({

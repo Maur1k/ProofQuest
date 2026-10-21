@@ -13,6 +13,7 @@ import { DemoBanner } from "@/demo/DemoBanner";
 import { useDemo } from "@/demo/DemoContext";
 import { getDemoLesson } from "@/demo/lessons";
 import { demoDraft } from "@/demo/logic";
+import { NoDemoQuest } from "@/demo/NoDemoQuest";
 
 export const Route = createFileRoute("/study/review")({
   head: () => ({
@@ -28,28 +29,6 @@ export const Route = createFileRoute("/study/review")({
   }),
   component: Review,
 });
-
-export function NoDemoQuest() {
-  return (
-    <div className="pt-8">
-      <DemoBanner />
-      <div className="mt-4">
-        <EmptyState
-          title="No demo quest yet"
-          body="Demo questions live only in this tab. Pick a sample lesson and configure a quest to get started."
-          action={
-            <Link
-              to="/study"
-              className="inline-flex min-h-11 items-center rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground"
-            >
-              Open Study Library
-            </Link>
-          }
-        />
-      </div>
-    </div>
-  );
-}
 
 function Review() {
   const demo = useDemo();
