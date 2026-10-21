@@ -14,6 +14,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { StoreProvider } from "@/store/store";
 import { AppShell } from "@/components/AppShell";
+import { DemoProvider } from "@/demo/DemoContext";
 
 function NotFoundComponent() {
   return (
@@ -47,7 +48,9 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+          This page didn't load
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Something went wrong. Your saved quests are not affected. Try again or head back home.
         </p>
@@ -80,7 +83,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { name: "theme-color", content: "#141a2e" },
       { title: "ProofQuest" },
-      { name: "description", content: "Practice programming by predicting output, tracing code, and fixing bugs." },
+      {
+        name: "description",
+        content: "Practice programming by predicting output, tracing code, and fixing bugs.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -121,9 +127,11 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <StoreProvider>
-        <AppShell>
-          <Outlet />
-        </AppShell>
+        <DemoProvider>
+          <AppShell>
+            <Outlet />
+          </AppShell>
+        </DemoProvider>
       </StoreProvider>
     </QueryClientProvider>
   );

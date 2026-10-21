@@ -1,14 +1,35 @@
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
-import { BarChart3, BookOpen, Home, Library, Plus, X } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  BookOpenText,
+  Home,
+  Library,
+  PenLine,
+  Plus,
+  Sparkles,
+  X,
+} from "lucide-react";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { useStore } from "@/store/store";
 
 const navItem =
   "flex min-h-14 min-w-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground";
+const choice =
+  "flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm transition-colors hover:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 const active = { className: "text-foreground [&_svg]:text-primary" };
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { warning, dismissWarning } = useStore();
+  const [createOpen, setCreateOpen] = useState(false);
+  const close = () => setCreateOpen(false);
   return (
     <div className="min-h-screen">
       <a
@@ -18,7 +39,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         Skip to content
       </a>
       {warning && (
-        <div role="alert" className="mx-auto flex max-w-[430px] items-start gap-2 bg-warning/15 px-4 py-3 text-sm text-warning">
+        <div
+          role="alert"
+          className="mx-auto flex max-w-[430px] items-start gap-2 bg-warning/15 px-4 py-3 text-sm text-warning"
+        >
           <p className="flex-1">{warning}</p>
           <button
             onClick={dismissWarning}
@@ -44,15 +68,22 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/subjects" className={navItem} activeProps={active}>
             <BookOpen className="h-5 w-5" aria-hidden /> Subjects
           </Link>
-          <Link
-            to="/quests/new"
-            search={{}}
-            aria-label="Create quest"
+          <button
+            type="button"
+            onClick={() => setCreateOpen(true)}
+            aria-label="Create"
+            aria-haspopup="dialog"
+            aria-expanded={createOpen}
             className="mx-1 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow transition-transform hover:scale-105"
           >
             <Plus className="h-6 w-6" aria-hidden />
-          </Link>
-          <Link to="/quests" className={navItem} activeProps={active} activeOptions={{ exact: true }}>
+          </button>
+          <Link
+            to="/quests"
+            className={navItem}
+            activeProps={active}
+            activeOptions={{ exact: true }}
+          >
             <Library className="h-5 w-5" aria-hidden /> Quests
           </Link>
           <Link to="/progress" className={navItem} activeProps={active}>
@@ -60,6 +91,51 @@ export function AppShell({ children }: { children: ReactNode }) {
           </Link>
         </div>
       </nav>
+      <Sheet open={createOpen} onOpenChange={setCreateOpen}>
+        <SheetContent
+          side="bottom"
+          className="mx-auto max-w-[430px] rounded-t-2xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+        >
+          <SheetHeader className="text-left">
+            <SheetTitle className="font-display">Create</SheetTitle>
+            <SheetDescription>
+              Write a quest yourself, or try the Study-to-Quest demo.
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-4 space-y-2">
+            <Link to="/quests/new" search={{}} onClick={close} className={choice}>
+              <PenLine className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+              <span className="min-w-0">
+                <span className="block font-semibold text-foreground">Create quest manually</span>
+                <span className="block text-xs text-muted-foreground">
+                  Write your own questions. Saved to your library.
+                </span>
+              </span>
+            </Link>
+            <Link to="/study" onClick={close} className={choice}>
+              <Sparkles className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+              <span className="min-w-0">
+                <span className="flex items-center gap-2 font-semibold text-foreground">
+                  Study-to-Quest{" "}
+                  <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-medium text-warning">
+                    Demo
+                  </span>
+                </span>
+                <span className="block text-xs text-muted-foreground">
+                  Simulated: preview quests from sample lessons. Nothing is saved.
+                </span>
+              </span>
+            </Link>
+            <Link
+              to="/study"
+              onClick={close}
+              className="flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm text-muted-foreground hover:text-foreground"
+            >
+              <BookOpenText className="h-4 w-4" aria-hidden /> Open Study Library
+            </Link>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }
