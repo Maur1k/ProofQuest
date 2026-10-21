@@ -142,7 +142,7 @@ function Home() {
         search={{}}
         className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-primary text-base font-semibold text-primary-foreground shadow-glow"
       >
-        <Plus className="h-5 w-5" aria-hidden /> Create a quest
+        <Plus className="h-5 w-5" aria-hidden /> Create quest manually
       </Link>
 
       <Link
@@ -150,9 +150,9 @@ function Home() {
         className="flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/60"
       >
         <span>
-          <span className="block text-sm font-semibold text-foreground">Study Library</span>
+          <span className="block text-sm font-semibold text-foreground">Study a sample lesson</span>
           <span className="block text-xs text-muted-foreground">
-            Demo: turn a sample lesson into a quest preview
+            Drop or tap a sample to start reading
           </span>
         </span>
         <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-medium text-warning">
