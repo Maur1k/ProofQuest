@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import {
   BarChart3,
   BookOpen,
-  BookOpenText,
   Home,
   Library,
   PenLine,
