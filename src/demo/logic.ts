@@ -155,3 +155,26 @@ export function formatBytes(n: number): string {
   if (n >= 1_000) return `${Math.round(n / 1_000)} KB`;
   return `${n} B`;
 }
+
+/** What the one-tap "Preview demo questions" action should do, so edited questions are never silently replaced. */
+export type PreviewAction = "resume" | "generate" | "confirm-replace";
+export function previewAction(
+  lessonId: string,
+  generatedFor: string | null,
+  questionCount: number,
+): PreviewAction {
+  if (generatedFor === lessonId && questionCount > 0) return "resume";
+  if (generatedFor !== null && generatedFor !== lessonId) return "confirm-replace";
+  return "generate";
+}
+
+export interface Rect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
+}
+/** True when a pointer release point lies inside the drop target. */
+export function isPointInRect(x: number, y: number, r: Rect | null): boolean {
+  return !!r && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+}
