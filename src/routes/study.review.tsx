@@ -52,7 +52,11 @@ function Review() {
       </DemoBanner>
       <PageHeader
         title="Review demo questions"
-        subtitle={`${config.title.trim()} · ${questions.length} question${questions.length === 1 ? "" : "s"}`}
+        subtitle={
+          <span className="[overflow-wrap:anywhere]">
+            {config.title.trim()} · {questions.length} question{questions.length === 1 ? "" : "s"}
+          </span>
+        }
         back={{ to: `/study/lesson/${lesson.id}`, label: "Lesson" }}
       />
 
