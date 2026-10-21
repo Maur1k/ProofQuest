@@ -40,7 +40,7 @@ function Ready() {
   const demo = useDemo();
   const [open, setOpen] = useState(false);
   const lesson = demo.generatedFor ? getDemoLesson(demo.generatedFor) : undefined;
-  const config = demo.config?.lessonId === lesson?.id ? demo.config : null;
+  const config = demo.reviewConfig?.lessonId === lesson?.id ? demo.reviewConfig : null;
   const questions = demo.questions;
   const errorCount = useMemo(
     () =>
@@ -63,7 +63,7 @@ function Ready() {
       <PageHeader
         title="Ready to practice"
         subtitle="Prototype summary of your reviewed demo quest."
-        back={{ to: "/study/review", label: "Back to review" }}
+        back={{ to: "/study/review", label: "Review" }}
       />
 
       <Card>
@@ -126,7 +126,7 @@ function Ready() {
           to="/study"
           className="inline-flex min-h-11 w-full items-center justify-center rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground"
         >
-          Back to Study Library
+          Back to Study
         </Link>
       </div>
 
@@ -146,7 +146,7 @@ function Ready() {
             </Button>
             <Button asChild className="min-h-11">
               <Link to="/study" onClick={() => setOpen(false)}>
-                Back to Study Library
+                Back to Study
               </Link>
             </Button>
           </DialogFooter>

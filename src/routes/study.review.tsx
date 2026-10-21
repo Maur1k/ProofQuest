@@ -34,7 +34,7 @@ function Review() {
   const demo = useDemo();
   const [pendingRemove, setPendingRemove] = useState<string | null>(null);
   const lesson = demo.generatedFor ? getDemoLesson(demo.generatedFor) : undefined;
-  const config = demo.config?.lessonId === lesson?.id ? demo.config : null;
+  const config = demo.reviewConfig?.lessonId === lesson?.id ? demo.reviewConfig : null;
   const questions = demo.questions;
   const errors = useMemo(
     () =>
@@ -53,20 +53,20 @@ function Review() {
       <PageHeader
         title="Review demo questions"
         subtitle={`${config.title.trim()} · ${questions.length} question${questions.length === 1 ? "" : "s"}`}
-        back={{ to: `/study/configure/${lesson.id}`, label: "Back to settings" }}
+        back={{ to: `/study/lesson/${lesson.id}`, label: "Lesson" }}
       />
 
       {questions.length === 0 ? (
         <EmptyState
           title="All questions removed"
-          body="Go back to settings and generate again to get a fresh sample set."
+          body="Open Customize to generate a fresh sample set."
           action={
             <Link
               to="/study/configure/$lessonId"
               params={{ lessonId: lesson.id }}
               className="inline-flex min-h-11 items-center text-sm font-semibold text-primary"
             >
-              Back to settings
+              Customize questions
             </Link>
           }
         />

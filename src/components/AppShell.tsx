@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import {
   BarChart3,
   BookOpen,
-  BookOpenText,
   Home,
   Library,
   PenLine,
@@ -86,7 +85,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <SheetHeader className="text-left">
                 <SheetTitle className="font-display">Create</SheetTitle>
                 <SheetDescription>
-                  Write a quest yourself, or try the Study-to-Quest demo.
+                  Write your own quest, or study a sample lesson.
                 </SheetDescription>
               </SheetHeader>
               <div className="mt-4 space-y-2">
@@ -105,22 +104,15 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Sparkles className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   <span className="min-w-0">
                     <span className="flex items-center gap-2 font-semibold text-foreground">
-                      Study-to-Quest{" "}
+                      Study a sample lesson{" "}
                       <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-medium text-warning">
                         Demo
                       </span>
                     </span>
                     <span className="block text-xs text-muted-foreground">
-                      Simulated: preview quests from sample lessons. Nothing is saved.
+                      Drop or tap a sample to start reading. Nothing is saved.
                     </span>
                   </span>
-                </Link>
-                <Link
-                  to="/study"
-                  onClick={close}
-                  className="flex min-h-11 items-center gap-2 rounded-xl px-3 text-sm text-muted-foreground hover:text-foreground"
-                >
-                  <BookOpenText className="h-4 w-4" aria-hidden /> Open Study Library
                 </Link>
               </div>
             </SheetContent>

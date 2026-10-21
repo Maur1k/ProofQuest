@@ -95,3 +95,26 @@ describe("Study-to-Quest demo", () => {
     expect(filterLessons(DEMO_LESSONS, { query: "zzz", subjectId: "all" })).toEqual([]);
   });
 });
+
+import { isPointInRect, previewAction } from "@/demo/logic";
+
+describe("Study demo interactions", () => {
+  it("resumes an existing review for the same lesson instead of regenerating", () => {
+    expect(previewAction("loops-js", "loops-js", 3)).toBe("resume");
+  });
+  it("asks before replacing questions reviewed for another lesson", () => {
+    expect(previewAction("loops-js", "stacks-arrays", 2)).toBe("confirm-replace");
+    expect(previewAction("loops-js", "stacks-arrays", 0)).toBe("confirm-replace");
+  });
+  it("generates straight away when nothing exists, or the same lesson's set was emptied", () => {
+    expect(previewAction("loops-js", null, 0)).toBe("generate");
+    expect(previewAction("loops-js", "loops-js", 0)).toBe("generate");
+  });
+  it("only counts a release inside the drop zone as a drop", () => {
+    const r = { left: 10, top: 10, right: 110, bottom: 60 };
+    expect(isPointInRect(50, 30, r)).toBe(true);
+    expect(isPointInRect(5, 30, r)).toBe(false);
+    expect(isPointInRect(50, 61, r)).toBe(false);
+    expect(isPointInRect(50, 30, null)).toBe(false);
+  });
+});
