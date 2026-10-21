@@ -41,12 +41,12 @@ function StudyLibrary() {
 
   return (
     <>
+      <DemoBanner />
       <PageHeader title="Study" back={{ to: "/", label: "Home" }} />
-      <div className="-mt-4">
-        <DemoBanner />
-      </div>
 
-      <SampleDropZone />
+      <div className="-mt-4">
+        <SampleDropZone />
+      </div>
 
       <section aria-labelledby="lessons-h" className="mt-8">
         <h2 id="lessons-h" className="font-display text-base font-semibold text-foreground">

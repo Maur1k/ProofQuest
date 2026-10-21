@@ -65,19 +65,17 @@ function Reader({ lesson }: { lesson: DemoLesson }) {
 
   return (
     <>
+      <DemoBanner>
+        Sample lesson. Marking sections read is optional, lives only in this tab, and does not
+        affect mastery or progress.
+      </DemoBanner>
       <PageHeader
         title={lesson.title}
         subtitle={`${getSubject(lesson.subjectId)?.name} · ${lesson.topic} · ${lesson.readMinutes} min read`}
         back={{ to: "/study", label: "Study" }}
       />
-      <div className="-mt-4">
-        <DemoBanner>
-          Sample lesson. Marking sections read is optional, lives only in this tab, and does not
-          affect mastery or progress.
-        </DemoBanner>
-      </div>
 
-      <details className="mt-3 rounded-xl border border-border bg-card text-sm">
+      <details className="-mt-2 rounded-xl border border-border bg-card text-sm">
         <summary className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           <span className="min-w-0 flex-1">Outline &amp; objectives</span>
           {readCount > 0 && (

@@ -126,7 +126,7 @@ function Ready() {
           to="/study"
           className="inline-flex min-h-11 w-full items-center justify-center rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground"
         >
-          Back to Study Library
+          Back to Study
         </Link>
       </div>
 
@@ -146,7 +146,7 @@ function Ready() {
             </Button>
             <Button asChild className="min-h-11">
               <Link to="/study" onClick={() => setOpen(false)}>
-                Back to Study Library
+                Back to Study
               </Link>
             </Button>
           </DialogFooter>

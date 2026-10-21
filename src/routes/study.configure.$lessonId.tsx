@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { Loader2 } from "lucide-react";
+import { useState } from "react";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { Card, EmptyState, PageHeader } from "@/components/common";
+import { ConfirmDialog } from "@/components/ConfirmDialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -9,12 +9,12 @@ import { DIFFICULTY_LABEL, QUESTION_TYPE_LABEL } from "@/domain/subjects";
 import { DIFFICULTIES, QUESTION_TYPES, type QuestionType } from "@/domain/types";
 import { DemoBanner } from "@/demo/DemoBanner";
 import { useDemo } from "@/demo/DemoContext";
-import { getDemoLesson } from "@/demo/lessons";
+import { getDemoLesson, type DemoLesson } from "@/demo/lessons";
+import { usePreviewQuestions } from "@/demo/usePreviewQuestions";
 import {
   DEMO_LIMITS,
   availableQuestionCount,
   defaultDemoConfig,
-  generateDemoQuestions,
   validateDemoConfig,
   type DemoConfig,
 } from "@/demo/logic";
@@ -23,13 +23,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/study/configure/$lessonId")({
   head: () => ({
     meta: [
-      { title: "Configure demo quest — ProofQuest" },
+      { title: "Customize demo questions — ProofQuest" },
       {
         name: "description",
         content:
           "Pick sections, difficulty and question types for a simulated Study-to-Quest preview.",
       },
-      { property: "og:title", content: "Configure demo quest — ProofQuest" },
+      { property: "og:title", content: "Customize demo questions — ProofQuest" },
       {
         property: "og:description",
         content: "Simulated quest configuration from a sample lesson.",
@@ -39,7 +39,6 @@ export const Route = createFileRoute("/study/configure/$lessonId")({
   component: Configure,
 });
 
-const STEPS = ["Reading selected sections", "Matching question styles", "Preparing review"];
 const optionCls = (on: boolean) =>
   cn(
     "flex min-h-11 cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 text-sm has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-ring",
@@ -49,36 +48,32 @@ const optionCls = (on: boolean) =>
 function Configure() {
   const { lessonId } = Route.useParams();
   const lesson = getDemoLesson(lessonId);
-  const demo = useDemo();
-  const navigate = useNavigate();
-  const [submitted, setSubmitted] = useState(false);
-  const [step, setStep] = useState<number | null>(null);
-  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  useEffect(
-    () => () => {
-      if (timer.current) clearTimeout(timer.current);
-    },
-    [],
-  );
-
   if (!lesson) {
     return (
       <div className="pt-8">
         <EmptyState
-          title="Demo lesson not found"
-          body="Pick a sample lesson from the library."
+          title="Sample lesson not found"
+          body="Pick a sample lesson from Study."
           action={
             <Link
               to="/study"
               className="inline-flex min-h-11 items-center text-sm font-semibold text-primary"
             >
-              Study Library
+              Back to Study
             </Link>
           }
         />
       </div>
     );
   }
+  return <ConfigureForm lesson={lesson} />;
+}
+
+function ConfigureForm({ lesson }: { lesson: DemoLesson }) {
+  const demo = useDemo();
+  const preview = usePreviewQuestions(lesson);
+  const [submitted, setSubmitted] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const c: DemoConfig =
     demo.config?.lessonId === lesson.id ? demo.config : defaultDemoConfig(lesson);
   const set = (patch: Partial<DemoConfig>) => demo.setConfig({ ...c, ...patch });
@@ -86,40 +81,26 @@ function Configure() {
   const shown = submitted ? errors : {};
   const max = availableQuestionCount(lesson, c);
   const hasExisting = demo.generatedFor === lesson.id && (demo.questions?.length ?? 0) > 0;
-  const generating = step !== null;
+  const generating = false;
+  const hasOther = preview.action === "confirm-replace";
 
   const toggle = <T extends string>(list: T[], v: T) =>
     list.includes(v) ? list.filter((x) => x !== v) : [...list, v];
 
-  const run = (i: number) => {
-    setStep(i);
-    timer.current = setTimeout(() => {
-      if (i + 1 < STEPS.length) run(i + 1);
-      else {
-        demo.setConfig(c);
-        demo.setGenerated(lesson.id, generateDemoQuestions(lesson, c));
-        setStep(null);
-        void navigate({ to: "/study/review" });
-      }
-    }, 500);
-  };
   const generate = () => {
     setSubmitted(true);
     if (Object.keys(errors).length > 0) return;
-    run(0);
-  };
-  const cancel = () => {
-    if (timer.current) clearTimeout(timer.current);
-    setStep(null);
+    if (hasExisting || hasOther) setConfirmOpen(true);
+    else preview.generate(c);
   };
 
   return (
     <>
       <DemoBanner>
-        Simulated generation from a fixed sample question set. Nothing is created or saved.
+        Questions come from a fixed sample set, not AI. Nothing is created or saved.
       </DemoBanner>
       <PageHeader
-        title="Configure demo quest"
+        title="Customize demo questions"
         subtitle={lesson.title}
         back={{ to: `/study/lesson/${lesson.id}`, label: "Lesson" }}
       />
@@ -283,30 +264,28 @@ function Configure() {
             >
               Return to review
             </Link>{" "}
-            to keep them, or generate again to replace them.
+            to keep them.
           </Card>
         )}
 
-        {generating ? (
-          <Card>
-            <div
-              role="status"
-              aria-live="polite"
-              className="flex items-center gap-2 text-sm text-foreground"
-            >
-              <Loader2 className="h-4 w-4 animate-spin text-primary" aria-hidden />
-              Simulating: {STEPS[step]}… ({step + 1}/{STEPS.length})
-            </div>
-            <Button type="button" variant="outline" className="mt-3 min-h-11" onClick={cancel}>
-              Cancel
-            </Button>
-          </Card>
-        ) : (
-          <Button type="submit" className="min-h-11 w-full">
-            {hasExisting ? "Generate again (demo)" : "Generate demo questions"}
-          </Button>
-        )}
+        <Button type="submit" className="min-h-11 w-full">
+          {hasExisting ? "Replace with new questions" : "Preview demo questions"}
+        </Button>
       </form>
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title="Replace demo questions?"
+        description={
+          hasExisting
+            ? `Your ${demo.questions?.length ?? 0} reviewed demo question(s) for this lesson, including any edits, will be replaced.`
+            : preview.replaceDescription
+        }
+        confirmLabel="Replace"
+        cancelLabel="Keep current"
+        destructive
+        onConfirm={() => preview.generate(c)}
+      />
     </>
   );
 }
