@@ -81,7 +81,6 @@ function ConfigureForm({ lesson }: { lesson: DemoLesson }) {
   const shown = submitted ? errors : {};
   const max = availableQuestionCount(lesson, c);
   const hasExisting = demo.generatedFor === lesson.id && (demo.questions?.length ?? 0) > 0;
-  const generating = false;
   const hasOther = preview.action === "confirm-replace";
 
   const toggle = <T extends string>(list: T[], v: T) =>
@@ -124,7 +123,7 @@ function ConfigureForm({ lesson }: { lesson: DemoLesson }) {
             below.
           </p>
         )}
-        <fieldset disabled={generating} className="space-y-5">
+        <fieldset className="space-y-5">
           <div>
             <Label htmlFor="cfg-title">Quest title</Label>
             <Input
@@ -254,7 +253,7 @@ function ConfigureForm({ lesson }: { lesson: DemoLesson }) {
           </div>
         </fieldset>
 
-        {hasExisting && !generating && (
+        {hasExisting && (
           <Card className="text-sm text-muted-foreground">
             You already have {demo.questions?.length} reviewed demo question
             {demo.questions?.length === 1 ? "" : "s"}.{" "}
