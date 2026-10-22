@@ -10,7 +10,11 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as IntroRouteImport } from './routes/intro'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as RegisterRouteImport } from './routes/register'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as PracticeQuestIdRouteImport } from './routes/practice.$questId'
 import { Route as QuestsIndexRouteImport } from './routes/quests.index'
 import { Route as QuestsNewRouteImport } from './routes/quests.new'
@@ -29,9 +33,29 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const IntroRoute = IntroRouteImport.update({
+  id: '/intro',
+  path: '/intro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProgressRoute = ProgressRouteImport.update({
   id: '/progress',
   path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RegisterRoute = RegisterRouteImport.update({
+  id: '/register',
+  path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PracticeQuestIdRoute = PracticeQuestIdRouteImport.update({
@@ -97,7 +121,11 @@ const StudyLessonLessonIdRoute = StudyLessonLessonIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/intro': typeof IntroRoute
+  '/login': typeof LoginRoute
   '/progress': typeof ProgressRoute
+  '/register': typeof RegisterRoute
+  '/welcome': typeof WelcomeRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/results/$questId': typeof ResultsQuestIdRoute
@@ -113,7 +141,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/intro': typeof IntroRoute
+  '/login': typeof LoginRoute
   '/progress': typeof ProgressRoute
+  '/register': typeof RegisterRoute
+  '/welcome': typeof WelcomeRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/results/$questId': typeof ResultsQuestIdRoute
@@ -130,7 +162,11 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/intro': typeof IntroRoute
+  '/login': typeof LoginRoute
   '/progress': typeof ProgressRoute
+  '/register': typeof RegisterRoute
+  '/welcome': typeof WelcomeRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/results/$questId': typeof ResultsQuestIdRoute
@@ -148,7 +184,11 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/intro'
+    | '/login'
     | '/progress'
+    | '/register'
+    | '/welcome'
     | '/practice/$questId'
     | '/quests/new'
     | '/results/$questId'
@@ -164,7 +204,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/intro'
+    | '/login'
     | '/progress'
+    | '/register'
+    | '/welcome'
     | '/practice/$questId'
     | '/quests/new'
     | '/results/$questId'
@@ -180,7 +224,11 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/intro'
+    | '/login'
     | '/progress'
+    | '/register'
+    | '/welcome'
     | '/practice/$questId'
     | '/quests/new'
     | '/results/$questId'
@@ -197,7 +245,11 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  IntroRoute: typeof IntroRoute
+  LoginRoute: typeof LoginRoute
   ProgressRoute: typeof ProgressRoute
+  RegisterRoute: typeof RegisterRoute
+  WelcomeRoute: typeof WelcomeRoute
   PracticeQuestIdRoute: typeof PracticeQuestIdRoute
   QuestsNewRoute: typeof QuestsNewRoute
   ResultsQuestIdRoute: typeof ResultsQuestIdRoute
@@ -221,11 +273,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/intro': {
+      id: '/intro'
+      path: '/intro'
+      fullPath: '/intro'
+      preLoaderRoute: typeof IntroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/progress': {
       id: '/progress'
       path: '/progress'
       fullPath: '/progress'
       preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/register': {
+      id: '/register'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/practice/$questId': {
@@ -317,7 +397,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  IntroRoute: IntroRoute,
+  LoginRoute: LoginRoute,
   ProgressRoute: ProgressRoute,
+  RegisterRoute: RegisterRoute,
+  WelcomeRoute: WelcomeRoute,
   PracticeQuestIdRoute: PracticeQuestIdRoute,
   QuestsNewRoute: QuestsNewRoute,
   ResultsQuestIdRoute: ResultsQuestIdRoute,

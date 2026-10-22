@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { FileText, GripVertical, Inbox } from "lucide-react";
+import { FileText, GripVertical } from "lucide-react";
+import { ART } from "@/onboarding/slides";
 import { DEMO_SAMPLE_FILES, getDemoLesson, type DemoSampleFile } from "./lessons";
 import { formatBytes, isPointInRect, validateSampleFile } from "./logic";
 import { cn } from "@/lib/utils";
@@ -125,9 +126,12 @@ export function SampleDropZone() {
           over ? "border-primary bg-accent/40" : "border-border bg-card",
         )}
       >
-        <Inbox
-          className={cn("mx-auto h-7 w-7", over ? "text-primary" : "text-muted-foreground")}
-          aria-hidden
+        <img
+          src={ART.study}
+          alt=""
+          width={72}
+          height={72}
+          className={cn("mx-auto h-[72px] w-[72px] object-contain transition-transform motion-reduce:transition-none", over && "scale-110")}
         />
         <h2 id="drop-h" className="mt-1 font-display text-base font-semibold text-foreground">
           {over ? "Release to start studying" : "Drop a sample to start studying"}
@@ -163,7 +167,7 @@ export function SampleDropZone() {
                 >
                   <GripVertical className="h-5 w-5" />
                 </span>
-                <FileText className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+                <DocThumb ext={f.extension} />
                 <span className="min-w-0 flex-1">
                   <span className="block truncate font-mono text-[13px] text-foreground">
                     {f.name}
@@ -229,5 +233,28 @@ export function SampleDropZone() {
         </div>
       )}
     </section>
+  );
+}
+
+/** Small drawn document thumbnail: page with text lines and a type badge. Decorative. */
+function DocThumb({ ext }: { ext: string }) {
+  return (
+    <span
+      aria-hidden
+      className="relative flex h-11 w-9 shrink-0 flex-col gap-[3px] rounded-md border border-cream/30 bg-cream/90 px-1.5 pt-2"
+    >
+      <span className="h-[2px] w-4/5 rounded bg-background/50" />
+      <span className="h-[2px] w-full rounded bg-background/30" />
+      <span className="h-[2px] w-3/5 rounded bg-background/30" />
+      <span className="h-[2px] w-full rounded bg-background/30" />
+      <span
+        className={cn(
+          "absolute -bottom-1 -right-1.5 rounded px-1 font-mono text-[9px] font-bold uppercase leading-4",
+          ext === "pdf" ? "bg-destructive text-destructive-foreground" : "bg-teal text-background",
+        )}
+      >
+        {ext}
+      </span>
+    </span>
   );
 }
