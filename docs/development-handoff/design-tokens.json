@@ -1,0 +1,65 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "$description": "ProofQuest design tokens. Source of truth for the web build is src/styles.css (oklch). Hex values are sRGB conversions for platforms without oklch (e.g. Flutter). Keep both in sync when changing the theme.",
+  "color": {
+    "background":       { "$type": "color", "$value": "#080f1f", "oklch": "oklch(0.17 0.035 266)", "css": "--background" },
+    "surface":          { "$type": "color", "$value": "#11192c", "oklch": "oklch(0.215 0.04 266)", "css": "--card" },
+    "surfaceRaised":    { "$type": "color", "$value": "#141c31", "oklch": "oklch(0.23 0.042 266)", "css": "--popover" },
+    "onSurface":        { "$type": "color", "$value": "#eef2f9", "oklch": "oklch(0.96 0.01 260)", "css": "--foreground" },
+    "onSurfaceMuted":   { "$type": "color", "$value": "#a1abbe", "oklch": "oklch(0.74 0.03 262)", "css": "--muted-foreground" },
+    "primary":          { "$type": "color", "$value": "#6e80f2", "oklch": "oklch(0.64 0.17 274)", "css": "--primary" },
+    "primaryGlow":      { "$type": "color", "$value": "#5fa1f3", "oklch": "oklch(0.7 0.14 255)", "css": "--primary-glow" },
+    "onPrimary":        { "$type": "color", "$value": "#fbfbff", "css": "--primary-foreground" },
+    "secondary":        { "$type": "color", "$value": "#1d263b", "oklch": "oklch(0.27 0.042 266)", "css": "--secondary" },
+    "accent":           { "$type": "color", "$value": "#232b4c", "oklch": "oklch(0.3 0.06 272)", "css": "--accent" },
+    "border":           { "$type": "color", "$value": "#293248", "oklch": "oklch(0.32 0.04 266)", "css": "--border" },
+    "inputBorder":      { "$type": "color", "$value": "#333d53", "oklch": "oklch(0.36 0.04 266)", "css": "--input" },
+    "focusRing":        { "$type": "color", "$value": "#889bff", "oklch": "oklch(0.72 0.15 274)", "css": "--ring" },
+    "codeBackground":   { "$type": "color", "$value": "#040814", "oklch": "oklch(0.135 0.03 266)", "css": "--code" },
+    "codeForeground":   { "$type": "color", "$value": "#d0e0f2", "oklch": "oklch(0.9 0.03 250)", "css": "--code-foreground" },
+    "success":          { "$type": "color", "$value": "#4fcc92", "oklch": "oklch(0.76 0.14 160)", "css": "--success" },
+    "warning":          { "$type": "color", "$value": "#f0ba59", "oklch": "oklch(0.82 0.13 80)", "css": "--warning", "usage": "Demo / Simulated labels" },
+    "danger":           { "$type": "color", "$value": "#f05653", "oklch": "oklch(0.66 0.19 25)", "css": "--destructive" },
+    "teal":             { "$type": "color", "$value": "#26bdae", "oklch": "oklch(0.72 0.12 185)", "css": "--teal", "usage": "Positive accents, MD badge, diagram 'true' branch" },
+    "gold":             { "$type": "color", "$value": "#eec05b", "oklch": "oklch(0.83 0.13 85)", "css": "--gold", "usage": "Wordmark 'Quest', active onboarding dot" },
+    "cream":            { "$type": "color", "$value": "#f8eed5", "oklch": "oklch(0.95 0.035 90)", "css": "--cream", "usage": "Document thumbnail paper" }
+  },
+  "gradient": {
+    "primary": { "$value": "linear 135deg: primary -> primaryGlow", "css": "--gradient-primary" },
+    "surface": { "$value": "linear 160deg: #1f2850 -> #121a33", "css": "--gradient-surface" }
+  },
+  "typography": {
+    "fontFamily": {
+      "display": { "$type": "fontFamily", "$value": ["Space Grotesk", "system-ui", "sans-serif"], "weights": [500, 600, 700] },
+      "body":    { "$type": "fontFamily", "$value": ["DM Sans", "system-ui", "sans-serif"], "weights": [400, 500, 600, 700] },
+      "code":    { "$type": "fontFamily", "$value": ["JetBrains Mono", "ui-monospace", "monospace"], "weights": [400, 500] }
+    },
+    "scale": {
+      "displayL":  { "fontSize": 30, "lineHeight": 1.2, "weight": 700, "family": "display", "use": "Home title" },
+      "headline":  { "fontSize": 24, "lineHeight": 1.25, "weight": 700, "family": "display", "use": "Screen titles, slide titles" },
+      "title":     { "fontSize": 18, "lineHeight": 1.3, "weight": 600, "family": "display", "use": "Section headings" },
+      "bodyL":     { "fontSize": 15, "lineHeight": 1.6, "weight": 400, "family": "body", "use": "Lesson text, slide body" },
+      "body":      { "fontSize": 14, "lineHeight": 1.45, "weight": 400, "family": "body" },
+      "caption":   { "fontSize": 12, "lineHeight": 1.4, "weight": 400, "family": "body" },
+      "label":     { "fontSize": 11, "lineHeight": 1.3, "weight": 500, "family": "body", "use": "Pills, nav labels" },
+      "code":      { "fontSize": 13, "lineHeight": 1.6, "weight": 400, "family": "code" }
+    },
+    "inputFontSize": { "$value": 16, "note": "16px minimum on inputs prevents iOS zoom" }
+  },
+  "space": { "$type": "dimension", "unit": "px", "xs": 4, "sm": 8, "md": 12, "lg": 16, "xl": 24, "2xl": 32, "screenGutter": 16, "contentMaxWidth": 430, "introMaxWidthTablet": 560 },
+  "radius": { "$type": "dimension", "unit": "px", "sm": 12, "md": 14, "lg": 16, "xl": 20, "2xl": 24, "pill": 9999 },
+  "shadow": {
+    "glow": { "$value": "0 10px 30px -12px primary@60%", "css": "--shadow-glow", "use": "Primary CTAs and the Create button only" }
+  },
+  "motion": {
+    "durationFast": { "$type": "duration", "$value": "150ms" },
+    "durationSlide": { "$type": "duration", "$value": "300ms", "use": "Onboarding slide fade-in" },
+    "easing": { "$value": "ease-out" },
+    "reducedMotion": "When the OS requests reduced motion, disable slide fade, dot width transition and drop-zone scale. Never autoplay."
+  },
+  "touch": { "minTarget": 44, "primaryButtonHeight": 48, "heroButtonHeight": 56, "bottomNavItem": 56, "unit": "px" },
+  "layout": {
+    "bottomNavReserve": 128,
+    "safeArea": "Pad top/bottom with max(spacing, env(safe-area-inset-*)) on full-screen routes; bottom nav pads env(safe-area-inset-bottom)."
+  }
+}
