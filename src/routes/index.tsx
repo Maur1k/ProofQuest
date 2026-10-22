@@ -1,5 +1,8 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Plus, Target } from "lucide-react";
+import { useEffect } from "react";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, BookOpenText, Plus, Target } from "lucide-react";
+import { ART } from "@/onboarding/slides";
+import { useIntroDecision } from "@/onboarding/useOnboarding";
 import { useStore } from "@/store/store";
 import { Card, EmptyState, LoadingState, MasteryDots, ProgressBar } from "@/components/common";
 import { QuestCard } from "@/components/QuestCard";
@@ -42,7 +45,13 @@ function greeting() {
 
 function Home() {
   const { ready, data } = useStore();
-  if (!ready) return <LoadingState />;
+  const navigate = useNavigate();
+  const intro = useIntroDecision();
+  useEffect(() => {
+    // First launch only: Home is the app's entry, so the introduction is shown from here.
+    if (intro === "intro") void navigate({ to: "/intro", replace: true });
+  }, [intro, navigate]);
+  if (!ready || intro !== "home") return <LoadingState />;
   const { quests, attempts } = data;
   const overall = summarize(flattenAnswers(attempts));
   const completed = attempts.filter((a) => a.completedAt !== null).length;
@@ -58,12 +67,81 @@ function Home() {
     : undefined;
   const recent = [...quests].sort((a, b) => b.updatedAt - a.updatedAt).slice(0, 3);
 
+  const continueCard = cont && (
+    <section aria-labelledby="continue-heading" className="space-y-2">
+      <h2 id="continue-heading" className="text-lg font-semibold">
+        Continue learning
+      </h2>
+      <Link
+        to="/practice/$questId"
+        params={{ questId: cont.quest.id }}
+        className="block rounded-2xl border border-primary/40 bg-gradient-surface p-4 transition-colors hover:border-primary"
+      >
+        <p className="text-xs text-muted-foreground">
+          {getSubject(cont.quest.subjectId)?.short} · {cont.quest.topic}
+        </p>
+        <p className="mt-0.5 break-words text-base font-semibold">{cont.quest.title}</p>
+        <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
+          <span>
+            Question {Math.min(cont.attempt.currentIndex, cont.quest.questions.length - 1) + 1}{" "}
+            of {cont.quest.questions.length}
+          </span>
+          <span className="inline-flex items-center gap-1 font-semibold text-primary">
+            Resume <ArrowRight className="h-4 w-4" aria-hidden />
+          </span>
+        </div>
+        <div className="mt-2">
+          <ProgressBar
+            value={Object.keys(cont.attempt.answers).length / cont.quest.questions.length}
+            label="Quest progress"
+          />
+        </div>
+      </Link>
+    </section>
+  );
+
   return (
     <div className="space-y-6 pt-6">
-      <header>
-        <p className="text-sm text-muted-foreground">{greeting()}</p>
-        <h1 className="text-3xl font-bold">Ready to prove it?</h1>
+      <header className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-sm text-muted-foreground">{greeting()}</p>
+          <h1 className="text-3xl font-bold">Ready to prove it?</h1>
+        </div>
       </header>
+
+      {continueCard}
+
+      <section
+        aria-labelledby="study-intro-h"
+        className="relative flex items-center gap-3 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-4"
+      >
+        <div className="min-w-0 flex-1">
+          <h2 id="study-intro-h" className="text-lg font-semibold">
+            Understand it, then practice it
+          </h2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Open a sample lesson in one tap and preview practice questions.
+          </p>
+          <Link
+            to="/study"
+            className={
+              cont
+                ? "mt-3 inline-flex min-h-11 items-center gap-2 rounded-xl border border-primary/60 px-4 text-sm font-semibold text-foreground hover:bg-accent"
+                : "mt-3 inline-flex min-h-12 items-center gap-2 rounded-xl bg-gradient-primary px-5 text-base font-semibold text-primary-foreground shadow-glow"
+            }
+          >
+            <BookOpenText className="h-5 w-5" aria-hidden /> Start studying
+          </Link>
+          <p className="mt-2 text-[11px] font-medium text-warning">Demo · sample lessons only</p>
+        </div>
+        <img
+          src={ART.study}
+          alt=""
+          width={112}
+          height={112}
+          className="h-28 w-28 shrink-0 object-contain"
+        />
+      </section>
 
       <section aria-label="Study summary" className="grid grid-cols-3 gap-2">
         {[
@@ -78,86 +156,39 @@ function Home() {
         ))}
       </section>
 
-      <section aria-labelledby="continue-heading" className="space-y-2">
-        <h2 id="continue-heading" className="text-lg font-semibold">
-          Continue learning
-        </h2>
-        {cont ? (
-          <Link
-            to="/practice/$questId"
-            params={{ questId: cont.quest.id }}
-            className="block rounded-2xl border border-primary/40 bg-gradient-surface p-4 transition-colors hover:border-primary"
-          >
-            <p className="text-xs text-muted-foreground">
-              {getSubject(cont.quest.subjectId)?.short} · {cont.quest.topic}
+      {!cont && (
+        <Card className="text-sm text-muted-foreground">
+          No quest in progress. Start one from your library below.
+        </Card>
+      )}
+      {focus && (
+        <Card className="flex items-center gap-3">
+          <Target className="h-5 w-5 shrink-0 text-warning" aria-hidden />
+          <div className="min-w-0 flex-1">
+            <p className="text-xs text-muted-foreground">Suggested focus · lowest accuracy so far</p>
+            <p className="truncate text-sm font-semibold">
+              {focus.topic} · {pct(focus.accuracy)} ({focus.correct}/{focus.answered})
             </p>
-            <p className="mt-0.5 text-base font-semibold">{cont.quest.title}</p>
-            <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
-              <span>
-                Question {Math.min(cont.attempt.currentIndex, cont.quest.questions.length - 1) + 1}{" "}
-                of {cont.quest.questions.length}
-              </span>
-              <span className="inline-flex items-center gap-1 font-semibold text-primary">
-                Resume <ArrowRight className="h-4 w-4" aria-hidden />
-              </span>
-            </div>
-            <div className="mt-2">
-              <ProgressBar
-                value={Object.keys(cont.attempt.answers).length / cont.quest.questions.length}
-                label="Quest progress"
-              />
-            </div>
-          </Link>
-        ) : (
-          <Card className="text-sm text-muted-foreground">
-            No quest in progress. Start one from your library below.
-          </Card>
-        )}
-        {focus && (
-          <Card className="flex items-center gap-3">
-            <Target className="h-5 w-5 shrink-0 text-warning" aria-hidden />
-            <div className="min-w-0 flex-1">
-              <p className="text-xs text-muted-foreground">
-                Suggested focus · lowest accuracy so far
-              </p>
-              <p className="truncate text-sm font-semibold">
-                {focus.topic} · {pct(focus.accuracy)} ({focus.correct}/{focus.answered})
-              </p>
-            </div>
-            {focusQuest && focusQuest.questions.length > 0 && (
-              <Link
-                to="/practice/$questId"
-                params={{ questId: focusQuest.id }}
-                className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-primary hover:bg-accent"
-              >
-                Practice
-              </Link>
-            )}
-          </Card>
-        )}
-      </section>
+          </div>
+          {focusQuest && focusQuest.questions.length > 0 && (
+            <Link
+              to="/practice/$questId"
+              params={{ questId: focusQuest.id }}
+              className="inline-flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold text-primary hover:bg-accent"
+            >
+              Practice
+            </Link>
+          )}
+        </Card>
+      )}
 
       <Link
         to="/quests/new"
         search={{}}
-        className="flex min-h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-primary text-base font-semibold text-primary-foreground shadow-glow"
+        className="flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-input bg-card text-sm font-semibold text-foreground hover:border-primary/60"
       >
-        <Plus className="h-5 w-5" aria-hidden /> Create quest manually
-      </Link>
-
-      <Link
-        to="/study"
-        className="flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-border bg-card px-4 py-3 transition-colors hover:border-primary/60"
-      >
-        <span>
-          <span className="block text-sm font-semibold text-foreground">Study a sample lesson</span>
-          <span className="block text-xs text-muted-foreground">
-            Drop or tap a sample to start reading
-          </span>
-        </span>
-        <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-medium text-warning">
-          Demo
-        </span>
+        <Plus className="h-5 w-5 text-primary" aria-hidden /> Create quest manually
+        <span className="text-xs font-normal text-muted-foreground">· saved to your library</span>
       </Link>
 
       <section aria-labelledby="subjects-heading" className="space-y-2">
@@ -221,6 +252,15 @@ function Home() {
           <EmptyState title="No quests yet" body="Create your first quest to start practicing." />
         )}
       </section>
+
+      <nav aria-label="More" className="flex flex-wrap items-center justify-center gap-x-4 border-t border-border pt-3 text-sm">
+        <Link to="/intro" className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground">
+          Replay introduction
+        </Link>
+        <Link to="/welcome" className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground">
+          Account demo
+        </Link>
+      </nav>
     </div>
   );
 }
