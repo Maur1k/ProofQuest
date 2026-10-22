@@ -10,7 +10,8 @@ export function LoopDiagram() {
       <svg
         viewBox="0 0 320 300"
         role="img"
-        aria-labelledby="loopdiag-t loopdiag-d"
+        aria-labelledby="loopdiag-t"
+        aria-describedby="loopdiag-d"
         className="mx-auto h-auto w-full max-w-[320px]"
       >
         <title id="loopdiag-t">How a for loop runs</title>
