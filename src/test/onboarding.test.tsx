@@ -88,7 +88,7 @@ describe("account demo validation", () => {
     expect(validateRegister({ ...ok, confirm: "abcd12345" }).confirm).toBe("Passwords don't match.");
   });
   it("focuses the first invalid field in form order", () => {
-    expect(firstErrorField(["displayName", "email", "password"], { password: "x", email: "y" })).toBe("email");
+    expect(firstErrorField<{ displayName: string; email: string; password: string }>(["displayName", "email", "password"], { password: "x", email: "y" })).toBe("email");
   });
 });
 
