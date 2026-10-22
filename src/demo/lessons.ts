@@ -10,6 +10,8 @@ export interface DemoSection {
   body: string[];
   example: string;
   keyPoints: string[];
+  /** Optional explanatory diagram rendered by the reader (see LoopDiagram). */
+  diagram?: "for-loop-flow";
   /** Exactly one bank question per question type. */
   bank: Record<QuestionType, Question>;
 }
@@ -49,6 +51,7 @@ export const DEMO_LESSONS: DemoLesson[] = [
           "The loop stops as soon as the condition is false, so after the loop the counter is one step past the last value the body saw.",
         ],
         example: "for (let i = 0; i < 3; i++) {\n  console.log(i);\n}\n// prints 0, 1, 2",
+        diagram: "for-loop-flow",
         keyPoints: [
           "The condition is checked before each pass.",
           "< n runs n times when starting at 0.",

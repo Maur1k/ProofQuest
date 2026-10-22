@@ -33,6 +33,8 @@ export const Route = createFileRoute("/")({
         property: "og:description",
         content: "Self-made programming quests: predict output, trace variables, fix bugs.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: Home,
