@@ -66,6 +66,9 @@
   --color-code: var(--code);
   --color-code-foreground: var(--code-foreground);
   --color-primary-glow: var(--primary-glow);
+  --color-teal: var(--teal);
+  --color-gold: var(--gold);
+  --color-cream: var(--cream);
   --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
   --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
@@ -99,6 +102,9 @@
   --ring: oklch(0.72 0.15 274);
   --code: oklch(0.135 0.03 266);
   --code-foreground: oklch(0.9 0.03 250);
+  --teal: oklch(0.72 0.12 185);
+  --gold: oklch(0.83 0.13 85);
+  --cream: oklch(0.95 0.035 90);
   --gradient-primary: linear-gradient(135deg, var(--primary), var(--primary-glow));
   --gradient-surface: linear-gradient(160deg, oklch(0.26 0.06 272), oklch(0.2 0.04 266));
   --shadow-glow: 0 10px 30px -12px color-mix(in oklab, var(--primary) 60%, transparent);
