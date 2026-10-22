@@ -1,5 +1,5 @@
 import { useState, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   BarChart3,
   BookOpen,
@@ -24,12 +24,24 @@ const navItem =
   "flex min-h-14 min-w-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground";
 const choice =
   "flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm transition-colors hover:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+const BARE_PATHS = ["/intro", "/welcome", "/login", "/register"];
 const active = { className: "text-foreground [&_svg]:text-primary" };
 
 export function AppShell({ children }: { children: ReactNode }) {
   const { warning, dismissWarning } = useStore();
   const [createOpen, setCreateOpen] = useState(false);
   const close = () => setCreateOpen(false);
+  // Onboarding and account demo screens are full-screen: no app navigation behind them.
+  const bare = useRouterState({
+    select: (s) => BARE_PATHS.includes(s.location.pathname.replace(/\/$/, "") || "/"),
+  });
+  if (bare) {
+    return (
+      <main id="main" className="min-h-[100dvh] px-4">
+        {children}
+      </main>
+    );
+  }
   return (
     <div className="min-h-screen">
       <a

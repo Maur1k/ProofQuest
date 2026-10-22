@@ -3,6 +3,7 @@ import { Link } from "@tanstack/react-router";
 import { Brand } from "./Brand";
 import { AccountDemoNotice } from "./AccountForms";
 import { ART } from "./slides";
+import { markOnboardingSeen } from "./useOnboarding";
 
 /** Shared frame for the sample-only login/register screens. */
 export function AccountScreen({ title, children }: { title: string; children: ReactNode }) {
@@ -17,6 +18,7 @@ export function AccountScreen({ title, children }: { title: string; children: Re
         </Link>
         <Link
           to="/"
+          onClick={markOnboardingSeen}
           className="inline-flex min-h-11 items-center rounded-lg px-2 text-sm font-semibold text-primary"
         >
           Continue as guest
