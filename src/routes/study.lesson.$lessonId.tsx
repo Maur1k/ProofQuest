@@ -8,6 +8,7 @@ import { DemoBanner } from "@/demo/DemoBanner";
 import { useDemo } from "@/demo/DemoContext";
 import { getDemoLesson, type DemoLesson } from "@/demo/lessons";
 import { usePreviewQuestions } from "@/demo/usePreviewQuestions";
+import { LoopDiagram } from "@/demo/LoopDiagram";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/study/lesson/$lessonId")({
@@ -136,6 +137,7 @@ function Reader({ lesson }: { lesson: DemoLesson }) {
             <div className="mt-3">
               <CodeBlock code={s.example} language={lesson.language} />
             </div>
+            {s.diagram === "for-loop-flow" && <LoopDiagram />}
             <div className="mt-3 rounded-xl border border-border bg-card p-3">
               <h3 className="text-sm font-semibold text-foreground">Key points</h3>
               <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
