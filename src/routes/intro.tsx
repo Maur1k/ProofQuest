@@ -24,7 +24,7 @@ function Intro() {
   const [index, setIndex] = useState(0);
   const start = useRef<{ x: number; y: number; id: number } | null>(null);
   const total = INTRO_SLIDES.length;
-  const slide = INTRO_SLIDES[index];
+  const slide = INTRO_SLIDES[index] ?? INTRO_SLIDES[0]!;
   const last = index === total - 1;
 
   const finish = () => {

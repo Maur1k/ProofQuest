@@ -34,7 +34,7 @@ interface FieldProps {
   label: string;
   value: string;
   onChange: (v: string) => void;
-  error?: string;
+  error?: string | undefined;
   type?: "text" | "email";
   hint?: string;
   inputRef: (el: HTMLInputElement | null) => void;
