@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-10-24. Status: Phase 0 in progress; later phases require separate owner confirmation.
+Owner: Maur1k. Updated: 2026-10-25. Status: Phase 0 complete; Phase 1 awaits owner confirmation.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -183,4 +183,4 @@ OCR for scanned PDFs, accounts/cloud sync, installable PWA/offline startup, shar
 - Known limitations and unresolved decisions.
 - Exit criteria satisfied and next eligible phase.
 
-Planning and isolated baseline validation are completed activities, not completed development phases. Phase 0 was authorized on 2026-10-24. Do not start Phase 1 without further confirmation.
+Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Do not start Phase 1 without further confirmation.

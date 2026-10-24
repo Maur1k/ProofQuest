@@ -1,7 +1,7 @@
 # Phase 0 — source preservation and development baseline
 
 Owner: Maur1k. Updated 2026-10-25 (Asia/Singapore).
-Status: final verification in progress. Phase 1 is not authorized.
+Status: Phase 0 complete. Phase 1 is not authorized.
 
 ## Delivered
 
@@ -23,8 +23,8 @@ Status: final verification in progress. Phase 1 is not authorized.
 - Pinned Node 22.18.0 and Bun 1.4.4, added a typecheck script, contribution
   instructions, environment-file ignores and LF line-ending rules.
 - Added CI for frozen install, lint, types, tests and build, with official actions
-  pinned to commit SHAs and read-only repository permissions. The workflow is
-  prepared locally; no hosted CI run is claimed.
+  pinned to commit SHAs and read-only repository permissions. The workflow passed on GitHub for
+  baseline commit `6a9b6ef0f487aec87c12612603b0f657cd264398`.
 - Fixed 292 formatting errors in the faithful source export. Independent review
   confirmed all 36 changed source files are formatting-equivalent to the original.
   No product behavior, tests, lint rules or dependency versions were removed/relaxed.
@@ -43,7 +43,8 @@ Status: final verification in progress. Phase 1 is not authorized.
 | Source review | Formatting-only changes; all 34 public assets/reference screenshots match checksums |
 | Local browser smoke | Guest entry, manual quest creation, correct answer, completion, result reload and progress totals passed |
 | Artwork | Home image loaded; originals and derivatives preserved |
-| Fresh checkout verification | Pending final candidate check |
+| Fresh checkout verification | Pass: frozen install, lint (0 errors/9 warnings), types, 63 tests and build; clean Git tree afterward |
+| GitHub Actions (Linux) | [Baseline checks #1 passed](https://github.com/Maur1k/ProofQuest/actions/runs/40113596650), verify job 120930192853 |
 
 Browser smoke was performed at the default 1280×720 desktop viewport on
 `http://127.0.0.1:4173`. The synthetic “Phase 0 baseline check” quest lives only
@@ -64,14 +65,29 @@ restored by Git briefly caused additional lint failures; the formatter and
   QuestEditor, badge, button, form, navigation-menu, sidebar, toggle,
   DemoContext and store. They predate this work and do not fail the existing
   lint command. No unrelated module refactor was included merely to hide them.
-- GitHub contains the original exported source/history. Phase 0 setup and
-  formatting changes are local commits until an authorized push; production
-  was not published. The CI workflow has not run on GitHub yet.
+- GitHub contains the original history and verified Phase 0 setup/formatting changes.
+  CI passed on Linux; local fresh-checkout verification passed on Windows.
+  Production was not published. The closing documentation-only commit does not
+  change the tested application/configuration.
 - MIT applies to original code/documentation. Artwork provenance is preserved;
   redistribution terms remain a public-release decision.
 - The current build still depends on the Lovable wrapper/registry and targets
   Cloudflare. Vercel and Node portability, PDF feasibility and mobile limits
   belong to Phase 1 and have not been implemented here.
+
+## Recovery baseline
+
+The final Phase 0 tree is tagged locally as `phase0-baseline`. A Git bundle
+containing all local refs/history and a source ZIP are saved under
+`C:/Users/maurik/Documents/ChatGPT/ProofQuest/backups/` as
+`proofquest-phase0.bundle` and `proofquest-phase0.zip`. SHA-256 hashes are in
+`phase0-backups.sha256.txt` beside them. Bundle validity is checked with
+`git bundle verify`; the ZIP file list is checked against the tagged tree.
+The original untouched Lovable ZIP remains alongside these backups.
+
+The fresh Windows checkout reused the configured package cache. GitHub CI also
+installed the frozen graph on its Linux runner. Long-term independence from the
+Lovable-controlled package registry remains the Phase 1 portability question.
 
 **Next eligible phase:** Phase 1 — technical feasibility, only after Maur1k's
 explicit confirmation.

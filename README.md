@@ -10,7 +10,7 @@ optimized assets and reference screenshots. Programming quests and manual
 practice work; document study and account forms are still labeled demos.
 Real PDF import, AI generation and responsive expansion are later phases.
 
-Phase 0 prepares the source and development baseline. Every subsequent phase
+Phase 0 is complete: source, history, setup and baseline checks are preserved. Every subsequent phase
 requires Maur1k’s explicit confirmation. See the
 [phased roadmap](docs/development-phases.md),
 [implementation specification](docs/web-implementation-plan.md) and
@@ -47,7 +47,7 @@ requires later build/runtime and recovery verification. The baseline build
 targets Cloudflare; a successful build alone does not prove Vercel support.
 
 Source import details and checksums are in docs/source-import/manifest.json.
-The ZIP backup preserves source files but not original Git history.
+The original ZIP preserves files only; the separate Phase 0 Git bundle also preserves the retrieved history.
 Historical Flutter plans and handoff references remain for context; Flutter
 development is cancelled.
 

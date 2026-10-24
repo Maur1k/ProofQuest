@@ -1,6 +1,6 @@
 # ProofQuest — responsive web implementation plan
 
-Updated 2026-10-24. Owner: **Maur1k**. Status: Phase 0 in progress; later phases require explicit owner confirmation.
+Updated 2026-10-25. Owner: **Maur1k**. Status: Phase 0 complete; Phase 1 awaits explicit owner confirmation.
 
 This supersedes `flutter-implementation-plan.md`. Stop Flutter development. The owner requested cleanup and the Flutter starter was removed on 2026-10-23. Keep the historical plan for reference. Continue the existing Lovable web application as the actual product, preserving its useful code, assets, data contracts and tests.
 
@@ -176,7 +176,7 @@ The authoritative delivery sequence, dependencies, work packages and exit checks
 | 7 — Release and recovery | Integrated device checks, actual host verification, Vercel recovery drill and authorized public beta |
 | Later | OCR, accounts/sync, PWA/offline, sharing and richer questions |
 
-Phase 0 is in progress; Phases 1–7 are not started. The isolated baseline investigation informs Phase 0 but does not complete it. Work proceeds through exit checks. Local work can continue within the authorized phase; stop after EVERY phase and obtain Maur1k’s explicit confirmation before starting the next phase. Unresolved provider/budget choices are settled before Phase 6; publishing and paid provisioning remain separate actions.
+Phase 0 is complete; Phases 1–7 are not started. See [the Phase 0 handoff](phase-0-handoff.md) for evidence. The isolated baseline investigation informs Phase 0 but does not complete it. Work proceeds through exit checks. Local work can continue within the authorized phase; stop after EVERY phase and obtain Maur1k’s explicit confirmation before starting the next phase. Unresolved provider/budget choices are settled before Phase 6; publishing and paid provisioning remain separate actions.
 
 First complete core-product milestone is Phase 6: open the app on a phone or desktop, choose a real text PDF, generate five MCQs, finish a quiz, inspect explanations with page evidence, reload and retain the result. Existing manually created programming quests remain usable.
 
@@ -227,7 +227,7 @@ Continuity requirements before public release:
 1. AI provider and the operating budget/guest allowance for hosted generation.
 2. Confirm the proposed general-subject, MCQ-first scope; retain programming questions regardless.
 3. Artwork distribution terms separate from the confirmed MIT code license.
-4. Exact Lovable/GitHub connection path for the desired `Maur1k/ProofQuest` repository.
+4. Resolved in Phase 0: Lovable is connected to `Maur1k/ProofQuest`; the formerly empty repository is retained as `ProofQuest-reserved`.
 
 ## References
 
