@@ -9,9 +9,15 @@ export const Route = createFileRoute("/intro")({
   head: () => ({
     meta: [
       { title: "Introduction — ProofQuest" },
-      { name: "description", content: "A three-step introduction to studying and practicing with ProofQuest." },
+      {
+        name: "description",
+        content: "A three-step introduction to studying and practicing with ProofQuest.",
+      },
       { property: "og:title", content: "Introduction — ProofQuest" },
-      { property: "og:description", content: "Understand a topic, practice what you learn, and see your progress." },
+      {
+        property: "og:description",
+        content: "Understand a topic, practice what you learn, and see your progress.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -77,7 +83,10 @@ function Intro() {
           className="flex min-h-0 flex-1 touch-pan-y select-none flex-col animate-in fade-in duration-300 motion-reduce:animate-none"
         >
           <div className="relative flex min-h-0 flex-1 items-center justify-center">
-            <div aria-hidden className="absolute inset-x-8 bottom-4 top-10 rounded-full bg-primary/15 blur-3xl" />
+            <div
+              aria-hidden
+              className="absolute inset-x-8 bottom-4 top-10 rounded-full bg-primary/15 blur-3xl"
+            />
             <img
               src={slide.image}
               alt=""
@@ -120,7 +129,11 @@ function Intro() {
           </div>
           <div className="mt-3 flex gap-2">
             {index > 0 && (
-              <Button variant="outline" className="min-h-12 flex-1 text-base" onClick={() => go(-1)}>
+              <Button
+                variant="outline"
+                className="min-h-12 flex-1 text-base"
+                onClick={() => go(-1)}
+              >
                 Back
               </Button>
             )}

@@ -1,4 +1,13 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import { createSampleQuests } from "@/data/sample-quests";
 import { BACKUP_KEY_PREFIX, STORAGE_KEY, parseStoredData } from "@/domain/storage";
 import type { AnswerRecord, AppData, Attempt, QuestDraft } from "@/domain/types";
@@ -37,7 +46,10 @@ function cleanDraft(d: QuestDraft): QuestDraft {
       ...(q.type === "trace"
         ? {
             variables: q.variables.map((v) => v.trim()),
-            steps: q.steps.map((s) => ({ label: s.label.trim(), values: s.values.map((v) => v.trim()) })),
+            steps: q.steps.map((s) => ({
+              label: s.label.trim(),
+              values: s.values.map((v) => v.trim()),
+            })),
           }
         : {}),
     })) as QuestDraft["questions"],
@@ -57,7 +69,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     try {
       raw = window.localStorage.getItem(STORAGE_KEY);
     } catch {
-      setWarning("Browser storage is unavailable. Your changes will not be saved after you close this tab.");
+      setWarning(
+        "Browser storage is unavailable. Your changes will not be saved after you close this tab.",
+      );
       setData({ version: 1, quests: createSampleQuests(), attempts: [] });
       setReady(true);
       return;
@@ -112,7 +126,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       createQuest: (draft) => {
         const now = Date.now();
         const id = newId();
-        dispatch({ type: "createQuest", quest: { ...cleanDraft(draft), id, createdAt: now, updatedAt: now } });
+        dispatch({
+          type: "createQuest",
+          quest: { ...cleanDraft(draft), id, createdAt: now, updatedAt: now },
+        });
         return id;
       },
       updateQuest: (id, draft) => {
@@ -146,9 +163,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       showHint: (attemptId, questionId, count) =>
         dispatch({ type: "showHint", attemptId, questionId, count, now: Date.now() }),
       recordAnswer: (attemptId, record) =>
-        dispatch({ type: "recordAnswer", attemptId, record: { ...record, answeredAt: Date.now() } }),
-      setIndex: (attemptId, index) => dispatch({ type: "setIndex", attemptId, index, now: Date.now() }),
-      completeAttempt: (attemptId) => dispatch({ type: "completeAttempt", attemptId, now: Date.now() }),
+        dispatch({
+          type: "recordAnswer",
+          attemptId,
+          record: { ...record, answeredAt: Date.now() },
+        }),
+      setIndex: (attemptId, index) =>
+        dispatch({ type: "setIndex", attemptId, index, now: Date.now() }),
+      completeAttempt: (attemptId) =>
+        dispatch({ type: "completeAttempt", attemptId, now: Date.now() }),
     }),
     [ready, data, warning, dispatch],
   );

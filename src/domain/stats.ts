@@ -9,7 +9,11 @@ export const MASTERY_MAX = 5;
  * - incorrect or revealed            -> -1
  * Clamped to 0..MASTERY_MAX.
  */
-export function masteryDelta(a: { correct: boolean; hintsUsed: number; revealed: boolean }): number {
+export function masteryDelta(a: {
+  correct: boolean;
+  hintsUsed: number;
+  revealed: boolean;
+}): number {
   if (a.revealed || !a.correct) return -1;
   if (a.hintsUsed > 0) return 0;
   return 1;
@@ -59,7 +63,15 @@ export function computeTopicStats(attempts: Attempt[]): TopicStat[] {
     const key = topicKey(a.subjectId, a.topic);
     const s =
       map.get(key) ??
-      ({ subjectId: a.subjectId, topic: a.topic, answered: 0, correct: 0, accuracy: 0, mastery: 0, lastIncorrectAt: null } as TopicStat);
+      ({
+        subjectId: a.subjectId,
+        topic: a.topic,
+        answered: 0,
+        correct: 0,
+        accuracy: 0,
+        mastery: 0,
+        lastIncorrectAt: null,
+      } as TopicStat);
     s.answered += 1;
     if (a.correct) s.correct += 1;
     else s.lastIncorrectAt = a.answeredAt;
@@ -74,9 +86,11 @@ export function computeTopicStats(attempts: Attempt[]): TopicStat[] {
 export function suggestFocus(stats: TopicStat[]): TopicStat | null {
   const candidates = stats.filter((s) => s.mastery < MASTERY_MAX);
   if (!candidates.length) return null;
-  return [...candidates].sort(
-    (a, b) => a.accuracy - b.accuracy || (b.lastIncorrectAt ?? 0) - (a.lastIncorrectAt ?? 0),
-  )[0] ?? null;
+  return (
+    [...candidates].sort(
+      (a, b) => a.accuracy - b.accuracy || (b.lastIncorrectAt ?? 0) - (a.lastIncorrectAt ?? 0),
+    )[0] ?? null
+  );
 }
 
 export interface Summary {
@@ -89,7 +103,12 @@ export interface Summary {
 export function summarize(answers: { correct: boolean; revealed: boolean }[]): Summary {
   const answered = answers.length;
   const correct = answers.filter((a) => a.correct && !a.revealed).length;
-  return { answered, correct, incorrect: answered - correct, accuracy: answered ? correct / answered : 0 };
+  return {
+    answered,
+    correct,
+    incorrect: answered - correct,
+    accuracy: answered ? correct / answered : 0,
+  };
 }
 
 export function attemptSummary(attempt: Attempt): Summary {
@@ -120,7 +139,9 @@ export function continueTarget(
   quests: Quest[],
   attempts: Attempt[],
 ): { attempt: Attempt; quest: Quest } | null {
-  const sorted = attempts.filter((a) => a.completedAt === null).sort((a, b) => b.updatedAt - a.updatedAt);
+  const sorted = attempts
+    .filter((a) => a.completedAt === null)
+    .sort((a, b) => b.updatedAt - a.updatedAt);
   for (const attempt of sorted) {
     const quest = quests.find((q) => q.id === attempt.questId);
     if (quest && quest.questions.length) return { attempt, quest };

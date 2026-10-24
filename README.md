@@ -1,55 +1,59 @@
 # ProofQuest
 
-A responsive, open-source learning web app by [Maur1k](https://github.com/Maur1k),
-planned for desktop, mobile and tablet browsers.
+A responsive, open-source learning web app by [Maur1k](https://github.com/Maur1k).
+Planned core flow: **PDF → quiz/test → results with explanations**.
 
-Core flow: **PDF → quiz/test → results and explanations**.
+## Current state
 
-## Current direction
+The existing Lovable source is imported locally, including original artwork,
+optimized assets and reference screenshots. Programming quests and manual
+practice work; document study and account forms are still labeled demos.
+Real PDF import, AI generation and responsive expansion are later phases.
 
-Continue the existing [Lovable application](https://lovable.dev/projects/020eed6a-df65-4e71-b47f-c5ada619051b)
-using its React, TypeScript, TanStack Start and Tailwind source. Reuse its artwork,
-quest editor, programming practice engine, tests and development handoff.
+Phase 0 prepares the source and development baseline. Every subsequent phase
+requires Maur1k’s explicit confirmation. See the
+[phased roadmap](docs/development-phases.md),
+[implementation specification](docs/web-implementation-plan.md) and
+[Phase 0 handoff](docs/phase-0-handoff.md).
 
-The [published reference](https://proofquest.lovable.app/) currently supports real
-programming quests, with a sample-only document study flow. Real PDF import and
-AI quiz generation are planned; they are not implemented yet.
+## Development
 
-See the active [web implementation plan](docs/web-implementation-plan.md).
-Flutter development is cancelled. The starter was removed on 2026-10-23. The
-[earlier Flutter plan](docs/flutter-implementation-plan.md) remains as historical
-reference.
-
-## Local development status
-
-The Lovable source has been inspected remotely but has not yet been imported
-into this local repository. The first implementation step is to preserve/import
-that source and resolve its GitHub connection before modifying the product.
-
-Once the actual source and its lockfile are present at the repository root, the
-existing scripts provide this starting workflow:
+Use **Node 22.18.0** and **Bun 1.4.4**:
 
 ```sh
 bun install --frozen-lockfile
 bun run dev
-bun run test
+```
+
+Open the local URL printed by Vite. No API key or account is needed for the
+existing manual/sample app. No real account is created by the prototype forms.
+
+```sh
 bun run lint
+bun run typecheck
+bun run test
 bun run build
 ```
 
-A pinned typecheck
-command, source revision and verification results will be documented during
-baseline setup. No new app tests or build were run for the planning update.
+See [contributor instructions](CONTRIBUTING.md). Dependencies use the original
+frozen Bun lockfile; avoid installing with another package manager.
 
-The proposed first release requires no account and stores history locally.
-The hosted AI provider, budget and guest allowance remain undecided. Public
-source and website access do not imply unlimited free AI generation.
+## Source and hosting
+
+Reuse the [Lovable project](https://lovable.dev/projects/020eed6a-df65-4e71-b47f-c5ada619051b).
+All code editing/testing happens locally; no Lovable AI editing prompts.
+Lovable is the primary host and Vercel the planned backup. Backup readiness
+requires later build/runtime and recovery verification. The baseline build
+targets Cloudflare; a successful build alone does not prove Vercel support.
+
+Source import details and checksums are in docs/source-import/manifest.json.
+The ZIP backup preserves source files but not original Git history.
+Historical Flutter plans and handoff references remain for context; Flutter
+development is cancelled.
 
 ## License
 
-ProofQuest's original code and documentation are licensed under the
-[MIT License](LICENSE). Copyright (c) 2026 Maur1k.
-
-Third-party dependencies retain their own licenses. Reference illustrations and
-branding are not covered by this code license; their provenance and distribution
-terms must be documented separately before they are included in a public release.
+Original code and documentation: [MIT](LICENSE), copyright 2026 Maur1k.
+Dependencies retain their own licenses. Artwork and branding have separate
+provenance and terms in docs/development-handoff/asset-manifest.json; MIT does
+not grant artwork rights. Distribution terms must be resolved before release.

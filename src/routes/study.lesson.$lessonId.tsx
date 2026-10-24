@@ -166,7 +166,10 @@ function Reader({ lesson }: { lesson: DemoLesson }) {
         );
       })}
 
-      <section aria-labelledby="practice-h" className="mt-8 rounded-2xl border border-border bg-card p-4">
+      <section
+        aria-labelledby="practice-h"
+        className="mt-8 rounded-2xl border border-border bg-card p-4"
+      >
         <h2 id="practice-h" className="font-display text-base font-semibold text-foreground">
           Practice this lesson
         </h2>

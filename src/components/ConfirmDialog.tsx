@@ -37,7 +37,9 @@ export function ConfirmDialog({
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="gap-2">
-          <AlertDialogCancel className={buttonVariants({ variant: "outline" })}>{cancelLabel}</AlertDialogCancel>
+          <AlertDialogCancel className={buttonVariants({ variant: "outline" })}>
+            {cancelLabel}
+          </AlertDialogCancel>
           <AlertDialogAction
             className={buttonVariants({ variant: destructive ? "destructive" : "default" })}
             onClick={onConfirm}

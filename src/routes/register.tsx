@@ -7,7 +7,10 @@ export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
       { title: "Create account (demo) — ProofQuest" },
-      { name: "description", content: "Sample-only registration screen. No real account is created." },
+      {
+        name: "description",
+        content: "Sample-only registration screen. No real account is created.",
+      },
       { property: "og:title", content: "Create account (demo) — ProofQuest" },
       { property: "og:description", content: "Account demo: no real account is created." },
       { property: "og:type", content: "website" },
@@ -30,7 +33,10 @@ function RegisterPage() {
         footer={
           <p className="mt-4 text-center text-sm text-muted-foreground">
             Already have one?{" "}
-            <Link to="/login" className="inline-flex min-h-11 items-center font-semibold text-primary">
+            <Link
+              to="/login"
+              className="inline-flex min-h-11 items-center font-semibold text-primary"
+            >
               Log in
             </Link>
           </p>

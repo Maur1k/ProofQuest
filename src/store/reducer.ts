@@ -19,7 +19,10 @@ export function dataReducer(data: AppData, action: Action): AppData {
     case "createQuest":
       return { ...data, quests: [action.quest, ...data.quests] };
     case "updateQuest":
-      return { ...data, quests: data.quests.map((q) => (q.id === action.quest.id ? action.quest : q)) };
+      return {
+        ...data,
+        quests: data.quests.map((q) => (q.id === action.quest.id ? action.quest : q)),
+      };
     case "deleteQuest":
       // Attempts are kept (they carry snapshots) so progress history survives.
       // Unfinished attempts of a deleted quest can never be resumed, so drop those.
@@ -40,7 +43,11 @@ export function dataReducer(data: AppData, action: Action): AppData {
         if (a.completedAt !== null || a.answers[action.questionId]) return a;
         const prev = a.hintsShown[action.questionId] ?? 0;
         if (action.count <= prev) return a;
-        return { ...a, updatedAt: action.now, hintsShown: { ...a.hintsShown, [action.questionId]: action.count } };
+        return {
+          ...a,
+          updatedAt: action.now,
+          hintsShown: { ...a.hintsShown, [action.questionId]: action.count },
+        };
       });
     case "recordAnswer":
       return patchAttempt(data, action.attemptId, (a) => {
@@ -54,7 +61,9 @@ export function dataReducer(data: AppData, action: Action): AppData {
       });
     case "setIndex":
       return patchAttempt(data, action.attemptId, (a) =>
-        a.completedAt !== null ? a : { ...a, currentIndex: Math.max(0, action.index), updatedAt: action.now },
+        a.completedAt !== null
+          ? a
+          : { ...a, currentIndex: Math.max(0, action.index), updatedAt: action.now },
       );
     case "completeAttempt":
       return patchAttempt(data, action.attemptId, (a) =>

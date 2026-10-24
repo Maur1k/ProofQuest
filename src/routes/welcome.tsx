@@ -7,9 +7,15 @@ export const Route = createFileRoute("/welcome")({
   head: () => ({
     meta: [
       { title: "Welcome — ProofQuest" },
-      { name: "description", content: "Continue as a guest to study and practice programming in ProofQuest." },
+      {
+        name: "description",
+        content: "Continue as a guest to study and practice programming in ProofQuest.",
+      },
       { property: "og:title", content: "Welcome — ProofQuest" },
-      { property: "og:description", content: "Study a topic, practice it, and track your progress in your browser." },
+      {
+        property: "og:description",
+        content: "Study a topic, practice it, and track your progress in your browser.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -58,7 +64,9 @@ function Welcome() {
           Log in
         </Link>
       </div>
-      <p className="mt-2 text-center text-xs text-warning">Account screens are a demo. No account is created.</p>
+      <p className="mt-2 text-center text-xs text-warning">
+        Account screens are a demo. No account is created.
+      </p>
     </div>
   );
 }

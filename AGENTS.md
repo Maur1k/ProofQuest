@@ -10,11 +10,17 @@
 <!-- LOVABLE:END -->
 
 ## Architecture rules
-- Domain logic (types, answer checking, validation, stats/mastery, storage parsing) lives in `src/domain/` as pure functions; UI never re-implements it. Why: testable and portable to the planned Flutter rewrite.
+- Domain logic (types, answer checking, validation, stats/mastery, storage parsing) lives in `src/domain/` as pure functions; UI never re-implements it. Why: testable and portable to the responsive web implementation.
 - App state is one React context in `src/store/` persisted to localStorage, loaded only after hydration; malformed data is backed up under a `proofquest:backup:` key before being replaced. Why: no backend by design, and SSR has no storage.
 - State changes go through the pure reducer in `src/store/reducer.ts`, which enforces one unfinished attempt per quest and one answer per question. Why: prevents duplicate records regardless of UI double-clicks.
 - Attempts keep snapshots of quest title/subject/topic. Why: progress history survives quest edits and deletion.
 - Study-to-Quest is a UI-only demo in `src/demo/`: static sample lessons, pure deterministic generation/validation in `logic.ts`, and a memory-only `DemoProvider` that never touches the store, reducer or localStorage; sample drag-and-drop uses pointer events with capture (touch-safe), never reads real files. Why: preview the flow without real uploads, AI or persistence, and keep real progress untouched.
 - Onboarding/account demo lives in `src/onboarding/`: the only persisted value is the isolated `proofquest:onboarding:v1` key (pure read/write in `preference.ts`, in-memory fallback when storage fails); only Home decides to redirect to `/intro`, after hydration, so deep links and editor guards are untouched; login/register forms keep values in component state only and never submit, store or log them. Why: first-run polish without touching quest data or implying real auth.
 - Full-screen routes (`/intro`, `/welcome`, `/login`, `/register`) are listed in `BARE_PATHS` in `AppShell` and render without bottom nav. Why: no app navigation behind onboarding/auth screens.
-- Artwork originals live in `public/assets/proofquest/original/` and are never modified; the app uses resized WebP derivatives. `docs/development-handoff/` is the handoff package (tokens, specs, manifest, Flutter mapping, QA); update it when behavior or tokens change. Why: stable, project-owned assets and a spec the Flutter rewrite can follow.
+- Artwork originals live in `public/assets/proofquest/original/` and are never modified; the app uses resized WebP derivatives. `docs/development-handoff/` is the handoff package (tokens, specs, manifest, Flutter mapping, QA); update it when behavior or tokens change. Why: stable, project-owned assets and a verifiable source/design baseline.
+
+## Phase approval gates
+- Follow docs/development-phases.md. Phase 0 is the only phase currently authorized.
+- At the end of EVERY phase, report results and stop. Obtain explicit confirmation from Maur1k before starting the next phase.
+- All code edits and testing happen locally. Never send Lovable AI editing/build prompts. Git synchronization is separate from AI editing.
+- Do not rewrite published history. Keep historical handoff/Flutter documents as references; the active web plan governs future work.

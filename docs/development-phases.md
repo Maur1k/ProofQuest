@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-10-24. Status: planning complete enough for review; no implementation phase is complete.
+Owner: Maur1k. Updated: 2026-10-24. Status: Phase 0 in progress; later phases require separate owner confirmation.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -10,7 +10,7 @@ Read alongside [implementation specification](web-implementation-plan.md) and [v
 - Keep each phase small enough to review through focused changes. Preserve working programming quests and existing user data throughout.
 - Complete the phase's exit checks before dependent work proceeds. Record evidence and remaining issues in a phase handoff; a passing earlier baseline does not complete a new phase.
 - Tests, accessibility and error handling belong to each feature phase. Phase 7 verifies the integrated release.
-- Ordinary local implementation does not need repeated approval. Unresolved product/cost choices are settled at their stated decision point. Publishing, paid provisioning and domain changes remain separate actions.
+- Ordinary local work within an authorized phase does not need repeated approval. At the end of EVERY phase, stop and obtain explicit confirmation from Maur1k before starting the next phase. Unresolved product/cost choices are settled at their stated decision point. Publishing, paid provisioning and domain changes remain separate actions.
 - No calendar estimates until Phase 0 establishes the faithful source baseline. Track completion by demonstrated outcomes.
 
 ## Phase overview
@@ -45,7 +45,7 @@ The default execution order is sequential. Building the quiz lifecycle before co
 - All assets resolve; manual quest creation, practice and existing progress still work.
 - Setup is documented and the complete backup scope is recorded. The 137-file validation snapshot alone does not satisfy this gate.
 
-**Review deliverable:** preserved source baseline, setup instructions and check results. Current evidence is 63 passing tests/typecheck/build on an incomplete isolated snapshot; lint is unresolved.
+**Review deliverable:** preserved source baseline, setup instructions and check results. Current evidence is recorded in [the Phase 0 handoff](phase-0-handoff.md): complete source/history imported, setup prepared and baseline checks rerun.
 
 ## Phase 1 — Prove hosting portability and PDF feasibility
 
@@ -183,4 +183,4 @@ OCR for scanned PDFs, accounts/cloud sync, installable PWA/offline startup, shar
 - Known limitations and unresolved decisions.
 - Exit criteria satisfied and next eligible phase.
 
-Planning and isolated baseline validation are completed activities, not completed development phases. Start with Phase 0 when development is requested.
+Planning and isolated baseline validation are completed activities, not completed development phases. Phase 0 was authorized on 2026-10-24. Do not start Phase 1 without further confirmation.

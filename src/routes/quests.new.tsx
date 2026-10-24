@@ -6,14 +6,21 @@ import { getSubject } from "@/domain/subjects";
 import { SUBJECT_IDS, type QuestDraft, type SubjectId } from "@/domain/types";
 
 export const Route = createFileRoute("/quests/new")({
-  validateSearch: (s: Record<string, unknown>): { subject?: SubjectId | undefined; topic?: string | undefined } => ({
-    subject: (SUBJECT_IDS as readonly unknown[]).includes(s["subject"]) ? (s["subject"] as SubjectId) : undefined,
+  validateSearch: (
+    s: Record<string, unknown>,
+  ): { subject?: SubjectId | undefined; topic?: string | undefined } => ({
+    subject: (SUBJECT_IDS as readonly unknown[]).includes(s["subject"])
+      ? (s["subject"] as SubjectId)
+      : undefined,
     topic: typeof s["topic"] === "string" && s["topic"] ? s["topic"].slice(0, 40) : undefined,
   }),
   head: () => ({
     meta: [
       { title: "Create quest — ProofQuest" },
-      { name: "description", content: "Write your own predict-output, trace and fix-the-bug questions." },
+      {
+        name: "description",
+        content: "Write your own predict-output, trace and fix-the-bug questions.",
+      },
       { property: "og:title", content: "Create quest — ProofQuest" },
       { property: "og:description", content: "Write your own programming practice questions." },
     ],
@@ -33,5 +40,12 @@ function NewQuest() {
     difficulty: "easy",
     questions: [blankQuestion("predict")],
   };
-  return <QuestEditor key={`${subjectId}-${topic ?? ""}`} heading="New quest" initial={initial} onSave={createQuest} />;
+  return (
+    <QuestEditor
+      key={`${subjectId}-${topic ?? ""}`}
+      heading="New quest"
+      initial={initial}
+      onSave={createQuest}
+    />
+  );
 }

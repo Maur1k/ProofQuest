@@ -36,7 +36,8 @@ export function createSampleQuests(): Quest[] {
             { label: "After line 4", values: ["8", "3"] },
             { label: "After line 5", values: ["5", "3"] },
           ],
-          explanation: "This swaps a and b without a temporary variable: a becomes the sum, then each value is recovered by subtraction.",
+          explanation:
+            "This swaps a and b without a temporary variable: a becomes the sum, then each value is recovered by subtraction.",
           hints: ["Line 4 uses the new value of a (8)."],
         },
         {
@@ -45,8 +46,10 @@ export function createSampleQuests(): Quest[] {
           language: "javascript",
           prompt: "sum([1, 2, 3]) returns NaN. Fix the bug.",
           code: "function sum(nums) {\n  let s = 0;\n  for (let i = 0; i <= nums.length; i++) {\n    s += nums[i];\n  }\n  return s;\n}",
-          fixedCode: "function sum(nums) {\n  let s = 0;\n  for (let i = 0; i < nums.length; i++) {\n    s += nums[i];\n  }\n  return s;\n}",
-          explanation: "With <= the loop reads nums[nums.length], which is undefined, and adding undefined makes NaN. Use < instead.",
+          fixedCode:
+            "function sum(nums) {\n  let s = 0;\n  for (let i = 0; i < nums.length; i++) {\n    s += nums[i];\n  }\n  return s;\n}",
+          explanation:
+            "With <= the loop reads nums[nums.length], which is undefined, and adding undefined makes NaN. Use < instead.",
           hints: ["What is the last valid index of an array?", "Look at the loop condition."],
         },
       ],
@@ -67,7 +70,8 @@ export function createSampleQuests(): Quest[] {
           prompt: "What does this program print?",
           code: 'x = 7\nif x % 2 == 0:\n    print("even")\nelif x > 5:\n    print("big odd")\nelse:\n    print("small odd")',
           expectedOutput: "big odd",
-          explanation: "7 % 2 is 1, so the first branch fails. 7 > 5 is true, so the elif branch runs.",
+          explanation:
+            "7 % 2 is 1, so the first branch fails. 7 > 5 is true, so the elif branch runs.",
           hints: ["Only the first true branch runs."],
         },
         {
@@ -77,7 +81,8 @@ export function createSampleQuests(): Quest[] {
           prompt: "What does this program print? Write each line of output on its own line.",
           code: 'for word in ["hi", "hey"]:\n    print(word.upper())',
           expectedOutput: "HI\nHEY",
-          explanation: "upper() returns an uppercase copy of each word, and print adds a newline after each.",
+          explanation:
+            "upper() returns an uppercase copy of each word, and print adds a newline after each.",
           hints: [],
         },
       ],
@@ -113,7 +118,8 @@ export function createSampleQuests(): Quest[] {
             { label: "Step 2", values: ["20", "1"] },
             { label: "Step 3", values: ["20", "2"] },
           ],
-          explanation: "A queue is first-in, first-out: popleft removes 10, leaving 20 at the front. Appending 30 adds to the back.",
+          explanation:
+            "A queue is first-in, first-out: popleft removes 10, leaving 20 at the front. Appending 30 adds to the back.",
           hints: ["popleft() removes from the front."],
         },
       ],
@@ -134,7 +140,8 @@ export function createSampleQuests(): Quest[] {
           prompt: "What does this program print?",
           code: 'd = {"a": 1, "b": 2}\nd["a"] = 5\nd["c"] = d["a"] + d["b"]\nprint(len(d), d["c"])',
           expectedOutput: "3 7",
-          explanation: 'Assigning to "a" overwrites it with 5. "c" is a new key holding 5 + 2 = 7, so there are 3 keys.',
+          explanation:
+            'Assigning to "a" overwrites it with 5. "c" is a new key holding 5 + 2 = 7, so there are 3 keys.',
           hints: ["Assigning to an existing key does not add a new one."],
         },
         {
@@ -143,8 +150,10 @@ export function createSampleQuests(): Quest[] {
           language: "python",
           prompt: 'count_words(["a", "b", "a"]) raises a KeyError. Fix it.',
           code: "def count_words(words):\n    counts = {}\n    for w in words:\n        counts[w] += 1\n    return counts",
-          fixedCode: "def count_words(words):\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts",
-          explanation: "counts[w] += 1 reads a key that does not exist yet. counts.get(w, 0) supplies 0 the first time a word is seen.",
+          fixedCode:
+            "def count_words(words):\n    counts = {}\n    for w in words:\n        counts[w] = counts.get(w, 0) + 1\n    return counts",
+          explanation:
+            "counts[w] += 1 reads a key that does not exist yet. counts.get(w, 0) supplies 0 the first time a word is seen.",
           hints: ["What is counts[w] the first time you see w?", "dict.get takes a default value."],
         },
       ],
@@ -169,7 +178,8 @@ export function createSampleQuests(): Quest[] {
             { label: "Iteration 1", values: ["0", "5", "2"] },
             { label: "Iteration 2", values: ["3", "5", "4"] },
           ],
-          explanation: "arr[2] is 5 < 9, so lo moves to 3. Then mid = floor(8 / 2) = 4 and arr[4] is 9, so the loop breaks.",
+          explanation:
+            "arr[2] is 5 < 9, so lo moves to 3. Then mid = floor(8 / 2) = 4 and arr[4] is 9, so the loop breaks.",
           hints: ["hi starts at arr.length - 1 = 5."],
         },
         {
@@ -178,8 +188,10 @@ export function createSampleQuests(): Quest[] {
           language: "javascript",
           prompt: "factorial(4) should return 24 but returns 0. Fix the bug.",
           code: "function factorial(n) {\n  if (n === 0) return 0;\n  return n * factorial(n - 1);\n}",
-          fixedCode: "function factorial(n) {\n  if (n === 0) return 1;\n  return n * factorial(n - 1);\n}",
-          explanation: "Every product ends by multiplying by the base case. Returning 0 makes the whole product 0; 0! is defined as 1.",
+          fixedCode:
+            "function factorial(n) {\n  if (n === 0) return 1;\n  return n * factorial(n - 1);\n}",
+          explanation:
+            "Every product ends by multiplying by the base case. Returning 0 makes the whole product 0; 0! is defined as 1.",
           hints: ["Multiply anything by 0 and you get..."],
         },
       ],
@@ -210,14 +222,16 @@ export function createSampleQuests(): Quest[] {
           prompt: "What does this program print?",
           code: "print(6 & 3, 6 | 3)",
           expectedOutput: "2 7",
-          explanation: "6 is 110 and 3 is 011. AND keeps shared bits (010 = 2); OR keeps any set bit (111 = 7).",
+          explanation:
+            "6 is 110 and 3 is 011. AND keeps shared bits (010 = 2); OR keeps any set bit (111 = 7).",
           hints: ["Write both numbers in binary first."],
         },
         {
           id: "seed-bits-3",
           type: "trace",
           language: "python",
-          prompt: "This counts set bits in 13. Record n and count at the end of each loop iteration.",
+          prompt:
+            "This counts set bits in 13. Record n and count at the end of each loop iteration.",
           code: "n = 13\ncount = 0\nwhile n > 0:\n    count += n & 1\n    n >>= 1",
           variables: ["n", "count"],
           steps: [
@@ -226,7 +240,8 @@ export function createSampleQuests(): Quest[] {
             { label: "Iteration 3", values: ["1", "2"] },
             { label: "Iteration 4", values: ["0", "3"] },
           ],
-          explanation: "13 is 1101. Each iteration adds the lowest bit to count and shifts n right: bits read 1, 0, 1, 1.",
+          explanation:
+            "13 is 1101. Each iteration adds the lowest bit to count and shifts n right: bits read 1, 0, 1, 1.",
           hints: ["n & 1 is the lowest bit; n >>= 1 halves n (rounding down)."],
         },
       ],

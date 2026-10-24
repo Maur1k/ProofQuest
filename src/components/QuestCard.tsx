@@ -3,12 +3,26 @@ import { Link } from "@tanstack/react-router";
 import { Pencil, Play, Trash2 } from "lucide-react";
 import type { Attempt, Quest } from "@/domain/types";
 import { getSubject } from "@/domain/subjects";
-import { attemptSummary, latestCompleted, pct, questStatus, unfinishedAttempt } from "@/domain/stats";
+import {
+  attemptSummary,
+  latestCompleted,
+  pct,
+  questStatus,
+  unfinishedAttempt,
+} from "@/domain/stats";
 import { useStore } from "@/store/store";
 import { DifficultyPill, Pill, ProgressBar } from "./common";
 import { ConfirmDialog } from "./ConfirmDialog";
 
-export function QuestCard({ quest, attempts, showActions = true }: { quest: Quest; attempts: Attempt[]; showActions?: boolean }) {
+export function QuestCard({
+  quest,
+  attempts,
+  showActions = true,
+}: {
+  quest: Quest;
+  attempts: Attempt[];
+  showActions?: boolean;
+}) {
   const { deleteQuest } = useStore();
   const [confirm, setConfirm] = useState(false);
   const status = questStatus(quest.id, attempts);
@@ -23,14 +37,21 @@ export function QuestCard({ quest, attempts, showActions = true }: { quest: Ques
         <div className="min-w-0">
           <h3 className="truncate text-base font-semibold text-foreground">{quest.title}</h3>
           <p className="mt-0.5 text-xs text-muted-foreground">
-            {getSubject(quest.subjectId)?.short} · {quest.topic} · {total} question{total === 1 ? "" : "s"}
+            {getSubject(quest.subjectId)?.short} · {quest.topic} · {total} question
+            {total === 1 ? "" : "s"}
           </p>
         </div>
         <DifficultyPill difficulty={quest.difficulty} />
       </div>
       <div className="mt-3 flex items-center gap-2">
-        {status === "completed" && last && <Pill tone="success">Completed · {pct(attemptSummary(last).accuracy)}</Pill>}
-        {status === "in-progress" && <Pill tone="primary">In progress · {answered}/{total}</Pill>}
+        {status === "completed" && last && (
+          <Pill tone="success">Completed · {pct(attemptSummary(last).accuracy)}</Pill>
+        )}
+        {status === "in-progress" && (
+          <Pill tone="primary">
+            In progress · {answered}/{total}
+          </Pill>
+        )}
         {status === "new" && <Pill>Not started</Pill>}
       </div>
       {status === "in-progress" && (
@@ -46,7 +67,12 @@ export function QuestCard({ quest, attempts, showActions = true }: { quest: Ques
               params={{ questId: quest.id }}
               className="inline-flex min-h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-primary px-3 text-sm font-semibold text-primary-foreground"
             >
-              <Play className="h-4 w-4" aria-hidden /> {status === "in-progress" ? "Resume" : status === "completed" ? "Practice again" : "Start"}
+              <Play className="h-4 w-4" aria-hidden />{" "}
+              {status === "in-progress"
+                ? "Resume"
+                : status === "completed"
+                  ? "Practice again"
+                  : "Start"}
             </Link>
           ) : (
             <span className="flex-1 text-xs text-muted-foreground">Add questions to practice.</span>

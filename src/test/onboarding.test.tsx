@@ -81,14 +81,28 @@ describe("account demo validation", () => {
     expect(validateLogin({ email: "a@b.co", password: "12345678" })).toEqual({});
   });
   it("register checks name length, letter+number password and matching confirm", () => {
-    const ok = { displayName: "Ana", email: "ana@example.com", password: "abcd1234", confirm: "abcd1234" };
+    const ok = {
+      displayName: "Ana",
+      email: "ana@example.com",
+      password: "abcd1234",
+      confirm: "abcd1234",
+    };
     expect(validateRegister(ok)).toEqual({});
     expect(validateRegister({ ...ok, displayName: "A" }).displayName).toBeDefined();
-    expect(validateRegister({ ...ok, password: "abcdefgh", confirm: "abcdefgh" }).password).toBeDefined();
-    expect(validateRegister({ ...ok, confirm: "abcd12345" }).confirm).toBe("Passwords don't match.");
+    expect(
+      validateRegister({ ...ok, password: "abcdefgh", confirm: "abcdefgh" }).password,
+    ).toBeDefined();
+    expect(validateRegister({ ...ok, confirm: "abcd12345" }).confirm).toBe(
+      "Passwords don't match.",
+    );
   });
   it("focuses the first invalid field in form order", () => {
-    expect(firstErrorField<{ displayName: string; email: string; password: string }>(["displayName", "email", "password"], { password: "x", email: "y" })).toBe("email");
+    expect(
+      firstErrorField<{ displayName: string; email: string; password: string }>(
+        ["displayName", "email", "password"],
+        { password: "x", email: "y" },
+      ),
+    ).toBe("email");
   });
 });
 
@@ -104,7 +118,9 @@ describe("account demo forms never send or keep credentials", () => {
     fetchSpy = vi.fn();
     vi.stubGlobal("fetch", fetchSpy);
     xhrSpy = vi.spyOn(XMLHttpRequest.prototype, "open");
-    logSpies = (["log", "info", "warn", "error", "debug"] as const).map((m) => vi.spyOn(console, m));
+    logSpies = (["log", "info", "warn", "error", "debug"] as const).map((m) =>
+      vi.spyOn(console, m),
+    );
   });
   afterEach(() => {
     cleanup();

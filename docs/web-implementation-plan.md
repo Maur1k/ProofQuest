@@ -1,6 +1,6 @@
 # ProofQuest — responsive web implementation plan
 
-Updated 2026-10-24. Owner: **Maur1k**. Status: active plan; implementation has not started in this local repository.
+Updated 2026-10-24. Owner: **Maur1k**. Status: Phase 0 in progress; later phases require explicit owner confirmation.
 
 This supersedes `flutter-implementation-plan.md`. Stop Flutter development. The owner requested cleanup and the Flutter starter was removed on 2026-10-23. Keep the historical plan for reference. Continue the existing Lovable web application as the actual product, preserving its useful code, assets, data contracts and tests.
 
@@ -46,7 +46,7 @@ Important gaps verified in source:
 - Login/register are demo forms, not real accounts.
 - The shell limits main content and navigation to approximately 430px, including on desktop.
 
-Pre-implementation validation on 2026-10-24: an isolated text-source snapshot installed successfully; all 63 tests, TypeScript checking and the existing Cloudflare-target production build passed. Lint reported 404 errors and 9 warnings; export formatting may contribute. No new browser/device or deployment checks are claimed. The snapshot excludes binary assets and is not a complete backup. See [validation report](plan-validation-report.md). Source import into this repository remains pending.
+Pre-implementation validation on 2026-10-24: an isolated text-source snapshot installed successfully; all 63 tests, TypeScript checking and the existing Cloudflare-target production build passed. Lint reported 404 errors and 9 warnings; export formatting may contribute. No new browser/device or deployment checks are claimed. The snapshot excludes binary assets and is not a complete backup. See [validation report](plan-validation-report.md). The full source was subsequently imported during Phase 0; see [the Phase 0 handoff](phase-0-handoff.md) for current evidence.
 
 ## Repository and preservation strategy
 
@@ -176,7 +176,7 @@ The authoritative delivery sequence, dependencies, work packages and exit checks
 | 7 — Release and recovery | Integrated device checks, actual host verification, Vercel recovery drill and authorized public beta |
 | Later | OCR, accounts/sync, PWA/offline, sharing and richer questions |
 
-All development phases are currently not started. The isolated baseline investigation informs Phase 0 but does not complete it. Work proceeds through exit checks, with ordinary local development continuing without repeated approval. Unresolved provider/budget choices are settled before Phase 6; publishing and paid provisioning remain separate actions.
+Phase 0 is in progress; Phases 1–7 are not started. The isolated baseline investigation informs Phase 0 but does not complete it. Work proceeds through exit checks. Local work can continue within the authorized phase; stop after EVERY phase and obtain Maur1k’s explicit confirmation before starting the next phase. Unresolved provider/budget choices are settled before Phase 6; publishing and paid provisioning remain separate actions.
 
 First complete core-product milestone is Phase 6: open the app on a phone or desktop, choose a real text PDF, generate five MCQs, finish a quiz, inspect explanations with page evidence, reload and retain the result. Existing manually created programming quests remain usable.
 
@@ -213,7 +213,7 @@ Maintain a second portable build route using Nitro's Node server output, with do
 
 Continuity requirements before public release:
 
-1. Preserve complete source, lockfile, original assets and release tags in GitHub, plus a separate downloadable/local release backup. Source import/backup completion is still pending; remote inspection alone is not a backup.
+1. Preserve complete source, lockfile, original assets and release tags in GitHub, plus a separate downloadable/local release backup. Phase 0 preserved the full source and assets, original Git history and a separate local ZIP; see its handoff. Future release tags/backups must include subsequent changes.
 2. Recommend a custom domain controlled by the owner through independent registrar/DNS access. A `lovable.app` subdomain stays tied to Lovable and is not the portable address. A custom domain can be switched to the backup host after DNS/TLS and route checks. No domain purchase is authorized by this plan.
 3. Prepare deployment configuration and a repeatable build for both primary and backup hosts. Store secret values securely outside Git and the browser bundle; document variable names and recovery steps. Keep the AI provider endpoint and any future database/storage integrations replaceable.
 4. Test the same release on a backup deployment before calling it ready: routes/refresh, PDF worker assets, import/extraction, generation, saved quiz, restart, quota errors and responsive UI. A GitHub repository or a successful compile is not sufficient proof of recovery.
@@ -240,7 +240,7 @@ Continuity requirements before public release:
 - Vercel Hobby scope/limits: https://vercel.com/docs/plans/hobby
 - PDF.js: https://mozilla.github.io/pdf.js/getting_started/
 
-These references inform the plan. Baseline checks have been run as recorded in the validation report; complete source import, feature implementation, new feature tests and deployment are still pending.
+These references inform the plan. Baseline checks have been run as recorded in the validation report; complete source import is recorded in the Phase 0 handoff; feature implementation, new feature tests and deployment remain pending.
 
 - Vercel function limits: https://vercel.com/docs/functions/limitations
 

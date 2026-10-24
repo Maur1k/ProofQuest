@@ -131,7 +131,10 @@ export function SampleDropZone() {
           alt=""
           width={72}
           height={72}
-          className={cn("mx-auto h-[72px] w-[72px] object-contain transition-transform motion-reduce:transition-none", over && "scale-110")}
+          className={cn(
+            "mx-auto h-[72px] w-[72px] object-contain transition-transform motion-reduce:transition-none",
+            over && "scale-110",
+          )}
         />
         <h2 id="drop-h" className="mt-1 font-display text-base font-semibold text-foreground">
           {over ? "Release to start studying" : "Drop a sample to start studying"}

@@ -15,7 +15,9 @@ export function usePreviewQuestions(lesson: DemoLesson) {
   const [confirmOpen, setConfirmOpen] = useState(false);
   const action = previewAction(lesson.id, demo.generatedFor, demo.questions?.length ?? 0);
   const otherLesson =
-    action === "confirm-replace" && demo.generatedFor ? getDemoLesson(demo.generatedFor) : undefined;
+    action === "confirm-replace" && demo.generatedFor
+      ? getDemoLesson(demo.generatedFor)
+      : undefined;
 
   const generate = (c: DemoConfig) => {
     demo.setConfig(c);

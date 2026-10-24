@@ -45,14 +45,25 @@ export function CodeBlock({ code, language }: { code: string; language?: Languag
           {language}
         </figcaption>
       )}
-      <pre className="overflow-x-auto p-3 font-mono text-[13px] leading-relaxed text-code-foreground" tabIndex={0}>
+      <pre
+        className="overflow-x-auto p-3 font-mono text-[13px] leading-relaxed text-code-foreground"
+        tabIndex={0}
+      >
         <code>{code}</code>
       </pre>
     </figure>
   );
 }
 
-export function EmptyState({ title, body, action }: { title: string; body: string; action?: ReactNode }) {
+export function EmptyState({
+  title,
+  body,
+  action,
+}: {
+  title: string;
+  body: string;
+  action?: ReactNode;
+}) {
   return (
     <div className="rounded-2xl border border-dashed border-border px-5 py-10 text-center">
       <h2 className="text-base font-semibold text-foreground">{title}</h2>
@@ -62,7 +73,13 @@ export function EmptyState({ title, body, action }: { title: string; body: strin
   );
 }
 
-export function Pill({ children, tone = "default" }: { children: ReactNode; tone?: "default" | "primary" | "success" | "warning" | "danger" }) {
+export function Pill({
+  children,
+  tone = "default",
+}: {
+  children: ReactNode;
+  tone?: "default" | "primary" | "success" | "warning" | "danger";
+}) {
   return (
     <span
       className={cn(
@@ -95,16 +112,26 @@ export function ProgressBar({ value, label }: { value: number; label: string }) 
       aria-valuenow={Math.round(v * 100)}
       className="h-1.5 w-full overflow-hidden rounded-full bg-secondary"
     >
-      <div className="h-full rounded-full bg-gradient-primary transition-all" style={{ width: `${v * 100}%` }} />
+      <div
+        className="h-full rounded-full bg-gradient-primary transition-all"
+        style={{ width: `${v * 100}%` }}
+      />
     </div>
   );
 }
 
 export function MasteryDots({ mastery }: { mastery: number }) {
   return (
-    <span className="inline-flex items-center gap-1" aria-label={`Mastery ${mastery} of ${MASTERY_MAX}`} role="img">
+    <span
+      className="inline-flex items-center gap-1"
+      aria-label={`Mastery ${mastery} of ${MASTERY_MAX}`}
+      role="img"
+    >
       {Array.from({ length: MASTERY_MAX }, (_, i) => (
-        <span key={i} className={cn("h-2 w-2 rounded-full", i < mastery ? "bg-primary" : "bg-secondary")} />
+        <span
+          key={i}
+          className={cn("h-2 w-2 rounded-full", i < mastery ? "bg-primary" : "bg-secondary")}
+        />
       ))}
     </span>
   );
@@ -122,5 +149,7 @@ export function LoadingState() {
 }
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
-  return <div className={cn("rounded-2xl border border-border bg-card p-4", className)}>{children}</div>;
+  return (
+    <div className={cn("rounded-2xl border border-border bg-card p-4", className)}>{children}</div>
+  );
 }

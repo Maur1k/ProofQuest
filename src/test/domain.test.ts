@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { checkAnswer, checkFix, checkOutput, checkTrace, normalizeOutput } from "@/domain/checking";
 import { validateQuest } from "@/domain/validation";
-import { computeTopicStats, continueTarget, masteryDelta, suggestFocus, summarize } from "@/domain/stats";
+import {
+  computeTopicStats,
+  continueTarget,
+  masteryDelta,
+  suggestFocus,
+  summarize,
+} from "@/domain/stats";
 import { parseStoredData } from "@/domain/storage";
 import { dataReducer } from "@/store/reducer";
 import { createSampleQuests } from "@/data/sample-quests";
@@ -36,14 +42,31 @@ describe("output checking", () => {
 });
 
 describe("trace checking", () => {
-  const q = { variables: ["a", "b"], steps: [{ label: "1", values: ["8", "5"] }, { label: "2", values: ["8", "3"] }] };
+  const q = {
+    variables: ["a", "b"],
+    steps: [
+      { label: "1", values: ["8", "5"] },
+      { label: "2", values: ["8", "3"] },
+    ],
+  };
   it("accepts all cells correct with surrounding spaces", () => {
-    expect(checkTrace(q, [[" 8", "5 "], ["8", "3"]]).correct).toBe(true);
+    expect(
+      checkTrace(q, [
+        [" 8", "5 "],
+        ["8", "3"],
+      ]).correct,
+    ).toBe(true);
   });
   it("reports which cell is wrong", () => {
-    const r = checkTrace(q, [["8", "5"], ["8", "5"]]);
+    const r = checkTrace(q, [
+      ["8", "5"],
+      ["8", "5"],
+    ]);
     expect(r.correct).toBe(false);
-    expect(r.cellResults).toEqual([[true, true], [true, false]]);
+    expect(r.cellResults).toEqual([
+      [true, true],
+      [true, false],
+    ]);
   });
   it("treats missing cells as wrong", () => {
     expect(checkTrace(q, [["8"]]).correct).toBe(false);
@@ -76,9 +99,37 @@ const validDraft = (): QuestDraft => ({
   topic: "Loops",
   difficulty: "easy",
   questions: [
-    { id: "p", type: "predict", language: "python", prompt: "Print?", code: "print(1)", expectedOutput: "1", explanation: "Prints 1", hints: [] },
-    { id: "t", type: "trace", language: "python", prompt: "Trace", code: "x=1", variables: ["x"], steps: [{ label: "s1", values: ["1"] }], explanation: "e", hints: ["h"] },
-    { id: "f", type: "fix", language: "python", prompt: "Fix", code: "x = 0", fixedCode: "x = 1", explanation: "e", hints: [] },
+    {
+      id: "p",
+      type: "predict",
+      language: "python",
+      prompt: "Print?",
+      code: "print(1)",
+      expectedOutput: "1",
+      explanation: "Prints 1",
+      hints: [],
+    },
+    {
+      id: "t",
+      type: "trace",
+      language: "python",
+      prompt: "Trace",
+      code: "x=1",
+      variables: ["x"],
+      steps: [{ label: "s1", values: ["1"] }],
+      explanation: "e",
+      hints: ["h"],
+    },
+    {
+      id: "f",
+      type: "fix",
+      language: "python",
+      prompt: "Fix",
+      code: "x = 0",
+      fixedCode: "x = 1",
+      explanation: "e",
+      hints: [],
+    },
   ],
 });
 
@@ -98,13 +149,22 @@ describe("quest validation", () => {
     expect(validateQuest({ ...d, questions: qs })["questions"]).toBeDefined();
   });
   it("rejects an invalid subject and difficulty", () => {
-    const e = validateQuest({ ...validDraft(), subjectId: "nope" as never, difficulty: "x" as never });
+    const e = validateQuest({
+      ...validDraft(),
+      subjectId: "nope" as never,
+      difficulty: "x" as never,
+    });
     expect(e["subjectId"]).toBeDefined();
     expect(e["difficulty"]).toBeDefined();
   });
   it("requires code, expected answer and explanation", () => {
     const d = validDraft();
-    d.questions[0]! = { ...d.questions[0]!, code: " ", explanation: "", ...{ expectedOutput: "" } } as never;
+    d.questions[0]! = {
+      ...d.questions[0]!,
+      code: " ",
+      explanation: "",
+      ...{ expectedOutput: "" },
+    } as never;
     const e = validateQuest(d);
     expect(e["q.p.code"]).toBeDefined();
     expect(e["q.p.explanation"]).toBeDefined();
@@ -112,18 +172,37 @@ describe("quest validation", () => {
   });
   it("rejects empty hints and more than 3 hints", () => {
     const d = validDraft();
-    expect(validateQuest({ ...d, questions: [{ ...d.questions[0]!, hints: [" "] }] })["q.p.hints"]).toBeDefined();
-    expect(validateQuest({ ...d, questions: [{ ...d.questions[0]!, hints: ["a", "b", "c", "d"] }] })["q.p.hints"]).toBeDefined();
+    expect(
+      validateQuest({ ...d, questions: [{ ...d.questions[0]!, hints: [" "] }] })["q.p.hints"],
+    ).toBeDefined();
+    expect(
+      validateQuest({ ...d, questions: [{ ...d.questions[0]!, hints: ["a", "b", "c", "d"] }] })[
+        "q.p.hints"
+      ],
+    ).toBeDefined();
   });
   it("rejects duplicate trace variables and empty cells", () => {
     const d = validDraft();
     const t = d.questions[1]! as Extract<QuestDraft["questions"][number], { type: "trace" }>;
-    expect(validateQuest({ ...d, questions: [{ ...t, variables: ["x", "x"], steps: [{ label: "s", values: ["1", "2"] }] }] })["q.t.variables"]).toBeDefined();
-    expect(validateQuest({ ...d, questions: [{ ...t, steps: [{ label: "s", values: [""] }] }] })["q.t.steps"]).toBeDefined();
+    expect(
+      validateQuest({
+        ...d,
+        questions: [{ ...t, variables: ["x", "x"], steps: [{ label: "s", values: ["1", "2"] }] }],
+      })["q.t.variables"],
+    ).toBeDefined();
+    expect(
+      validateQuest({ ...d, questions: [{ ...t, steps: [{ label: "s", values: [""] }] }] })[
+        "q.t.steps"
+      ],
+    ).toBeDefined();
   });
   it("rejects a fix identical to the buggy code", () => {
     const d = validDraft();
-    expect(validateQuest({ ...d, questions: [{ ...d.questions[2]!, fixedCode: "x  =  0" } as never] })["q.f.expected"]).toBeDefined();
+    expect(
+      validateQuest({ ...d, questions: [{ ...d.questions[2]!, fixedCode: "x  =  0" } as never] })[
+        "q.f.expected"
+      ],
+    ).toBeDefined();
   });
   it("all sample quests are valid", () => {
     for (const q of createSampleQuests()) expect(validateQuest(q)).toEqual({});
@@ -133,9 +212,30 @@ describe("quest validation", () => {
 function attemptWith(answers: Partial<AnswerRecord>[], over: Partial<Attempt> = {}): Attempt {
   const recs: Record<string, AnswerRecord> = {};
   answers.forEach((a, i) => {
-    recs[`q${i}`] = { questionId: `q${i}`, response: { type: "predict", output: "x" }, correct: true, hintsUsed: 0, revealed: false, answeredAt: i + 1, ...a };
+    recs[`q${i}`] = {
+      questionId: `q${i}`,
+      response: { type: "predict", output: "x" },
+      correct: true,
+      hintsUsed: 0,
+      revealed: false,
+      answeredAt: i + 1,
+      ...a,
+    };
   });
-  return { id: "a1", questId: "quest", questTitle: "T", subjectId: "fundamentals", topic: "Loops", startedAt: 0, updatedAt: 0, completedAt: 1, currentIndex: 0, hintsShown: {}, answers: recs, ...over };
+  return {
+    id: "a1",
+    questId: "quest",
+    questTitle: "T",
+    subjectId: "fundamentals",
+    topic: "Loops",
+    startedAt: 0,
+    updatedAt: 0,
+    completedAt: 1,
+    currentIndex: 0,
+    hintsShown: {},
+    answers: recs,
+    ...over,
+  };
 }
 
 describe("mastery and accuracy", () => {
@@ -146,7 +246,9 @@ describe("mastery and accuracy", () => {
     expect(masteryDelta({ correct: false, hintsUsed: 0, revealed: false })).toBe(-1);
   });
   it("computes topic mastery and accuracy from recorded answers", () => {
-    const s = computeTopicStats([attemptWith([{}, {}, { hintsUsed: 1 }, { correct: false, revealed: true }])])[0]!;
+    const s = computeTopicStats([
+      attemptWith([{}, {}, { hintsUsed: 1 }, { correct: false, revealed: true }]),
+    ])[0]!;
     expect(s.answered).toBe(4);
     expect(s.correct).toBe(3);
     expect(s.accuracy).toBe(0.75);
@@ -156,8 +258,12 @@ describe("mastery and accuracy", () => {
     expect(summarize([{ correct: true, revealed: true }]).correct).toBe(0);
   });
   it("mastery is clamped between 0 and 5", () => {
-    expect(computeTopicStats([attemptWith([{ correct: false }, { correct: false }])])[0]!.mastery).toBe(0);
-    expect(computeTopicStats([attemptWith(Array.from({ length: 8 }, () => ({})))])[0]!.mastery).toBe(5);
+    expect(
+      computeTopicStats([attemptWith([{ correct: false }, { correct: false }])])[0]!.mastery,
+    ).toBe(0);
+    expect(
+      computeTopicStats([attemptWith(Array.from({ length: 8 }, () => ({})))])[0]!.mastery,
+    ).toBe(5);
   });
   it("suggests the lowest-accuracy topic", () => {
     const a = attemptWith([{}, {}], { id: "x", topic: "Loops" });
@@ -167,17 +273,35 @@ describe("mastery and accuracy", () => {
 });
 
 describe("attempt reducer", () => {
-  const base = (): AppData => ({ version: 1, quests: createSampleQuests(), attempts: [attemptWith([], { completedAt: null, answers: {} })] });
-  const rec: AnswerRecord = { questionId: "q", response: { type: "predict", output: "1" }, correct: true, hintsUsed: 0, revealed: false, answeredAt: 5 };
+  const base = (): AppData => ({
+    version: 1,
+    quests: createSampleQuests(),
+    attempts: [attemptWith([], { completedAt: null, answers: {} })],
+  });
+  const rec: AnswerRecord = {
+    questionId: "q",
+    response: { type: "predict", output: "1" },
+    correct: true,
+    hintsUsed: 0,
+    revealed: false,
+    answeredAt: 5,
+  };
 
   it("ignores a duplicate answer for the same question", () => {
     let d = dataReducer(base(), { type: "recordAnswer", attemptId: "a1", record: rec });
-    d = dataReducer(d, { type: "recordAnswer", attemptId: "a1", record: { ...rec, correct: false, answeredAt: 6 } });
+    d = dataReducer(d, {
+      type: "recordAnswer",
+      attemptId: "a1",
+      record: { ...rec, correct: false, answeredAt: 6 },
+    });
     expect(Object.keys(d.attempts[0]!.answers)).toHaveLength(1);
     expect(d.attempts[0]!.answers["q"]!.correct).toBe(true);
   });
   it("does not start a second unfinished attempt for the same quest", () => {
-    const d = dataReducer(base(), { type: "startAttempt", attempt: { ...base().attempts[0]!, id: "a2" } });
+    const d = dataReducer(base(), {
+      type: "startAttempt",
+      attempt: { ...base().attempts[0]!, id: "a2" },
+    });
     expect(d.attempts).toHaveLength(1);
   });
   it("retry after completion creates a new attempt and keeps history", () => {
@@ -187,8 +311,20 @@ describe("attempt reducer", () => {
   });
   it("continue target picks the most recent unfinished attempt", () => {
     const quests = createSampleQuests();
-    const a = attemptWith([], { id: "o", questId: quests[0]!.id, completedAt: null, updatedAt: 1, currentIndex: 1 });
-    const b = attemptWith([], { id: "n", questId: quests[1]!.id, completedAt: null, updatedAt: 2, currentIndex: 1 });
+    const a = attemptWith([], {
+      id: "o",
+      questId: quests[0]!.id,
+      completedAt: null,
+      updatedAt: 1,
+      currentIndex: 1,
+    });
+    const b = attemptWith([], {
+      id: "n",
+      questId: quests[1]!.id,
+      completedAt: null,
+      updatedAt: 2,
+      currentIndex: 1,
+    });
     expect(continueTarget(quests, [a, b])?.attempt.id).toBe("n");
   });
 });
@@ -212,7 +348,11 @@ describe("stored data parsing", () => {
     }
   });
   it("round-trips valid data", () => {
-    const data: AppData = { version: 1, quests: createSampleQuests(), attempts: [attemptWith([{}])] };
+    const data: AppData = {
+      version: 1,
+      quests: createSampleQuests(),
+      attempts: [attemptWith([{}])],
+    };
     const r = parseStoredData(JSON.stringify(data));
     expect(r.kind).toBe("ok");
   });

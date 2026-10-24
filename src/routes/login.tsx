@@ -30,7 +30,10 @@ function LoginPage() {
         footer={
           <p className="mt-4 text-center text-sm text-muted-foreground">
             New here?{" "}
-            <Link to="/register" className="inline-flex min-h-11 items-center font-semibold text-primary">
+            <Link
+              to="/register"
+              className="inline-flex min-h-11 items-center font-semibold text-primary"
+            >
               Create account
             </Link>
           </p>

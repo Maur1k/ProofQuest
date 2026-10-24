@@ -115,7 +115,11 @@ function PasswordField(props: Omit<FieldProps, "type">) {
           aria-label={shown ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`}
           className="absolute right-0.5 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          {shown ? <EyeOff className="h-5 w-5" aria-hidden /> : <Eye className="h-5 w-5" aria-hidden />}
+          {shown ? (
+            <EyeOff className="h-5 w-5" aria-hidden />
+          ) : (
+            <Eye className="h-5 w-5" aria-hidden />
+          )}
         </button>
       </div>
       {error && (
@@ -127,14 +131,20 @@ function PasswordField(props: Omit<FieldProps, "type">) {
   );
 }
 
-function DemoComplete({ onContinueAsGuest, what }: { onContinueAsGuest: () => void; what: string }) {
+function DemoComplete({
+  onContinueAsGuest,
+  what,
+}: {
+  onContinueAsGuest: () => void;
+  what: string;
+}) {
   return (
     <div role="status" className="rounded-2xl border border-border bg-card p-5 text-center">
       <CheckCircle2 className="mx-auto h-8 w-8 text-teal" aria-hidden />
       <h2 className="mt-2 font-display text-xl font-semibold text-foreground">Demo complete</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        That's how {what} would work. No account was created, you are not signed in, and the
-        details you typed were cleared.
+        That's how {what} would work. No account was created, you are not signed in, and the details
+        you typed were cleared.
       </p>
       <Button onClick={onContinueAsGuest} className="mt-4 min-h-12 w-full text-base">
         Continue as guest
@@ -191,8 +201,23 @@ export function LoginDemoForm({ onContinueAsGuest, footer }: FormProps) {
         }}
         className="space-y-4"
       >
-        <Field id={`${uid}-email`} label="Email" type="email" value={values.email} onChange={set("email")} error={errors.email} inputRef={bind("email")} />
-        <PasswordField id={`${uid}-pw`} label="Password" value={values.password} onChange={set("password")} error={errors.password} inputRef={bind("password")} />
+        <Field
+          id={`${uid}-email`}
+          label="Email"
+          type="email"
+          value={values.email}
+          onChange={set("email")}
+          error={errors.email}
+          inputRef={bind("email")}
+        />
+        <PasswordField
+          id={`${uid}-pw`}
+          label="Password"
+          value={values.password}
+          onChange={set("password")}
+          error={errors.password}
+          inputRef={bind("password")}
+        />
         <Button type="submit" className="min-h-12 w-full text-base">
           Log in (demo)
         </Button>
@@ -215,7 +240,8 @@ export function RegisterDemoForm({ onContinueAsGuest, footer }: FormProps) {
     if (errors[k]) setErrors((e) => ({ ...e, [k]: undefined }));
   };
 
-  if (done) return <DemoComplete onContinueAsGuest={onContinueAsGuest} what="creating an account" />;
+  if (done)
+    return <DemoComplete onContinueAsGuest={onContinueAsGuest} what="creating an account" />;
 
   return (
     <>
@@ -226,17 +252,50 @@ export function RegisterDemoForm({ onContinueAsGuest, footer }: FormProps) {
           e.preventDefault();
           const errs = validateRegister(values);
           setErrors(errs);
-          const first = firstErrorField<RegisterInput>(["displayName", "email", "password", "confirm"], errs);
+          const first = firstErrorField<RegisterInput>(
+            ["displayName", "email", "password", "confirm"],
+            errs,
+          );
           if (first) return focus(first);
           setValues(EMPTY_REGISTER);
           setDone(true);
         }}
         className="space-y-4"
       >
-        <Field id={`${uid}-name`} label="Display name" value={values.displayName} onChange={set("displayName")} error={errors.displayName} inputRef={bind("displayName")} />
-        <Field id={`${uid}-email`} label="Email" type="email" value={values.email} onChange={set("email")} error={errors.email} inputRef={bind("email")} />
-        <PasswordField id={`${uid}-pw`} label="Password" hint="At least 8 characters, with a letter and a number." value={values.password} onChange={set("password")} error={errors.password} inputRef={bind("password")} />
-        <PasswordField id={`${uid}-confirm`} label="Confirm password" value={values.confirm} onChange={set("confirm")} error={errors.confirm} inputRef={bind("confirm")} />
+        <Field
+          id={`${uid}-name`}
+          label="Display name"
+          value={values.displayName}
+          onChange={set("displayName")}
+          error={errors.displayName}
+          inputRef={bind("displayName")}
+        />
+        <Field
+          id={`${uid}-email`}
+          label="Email"
+          type="email"
+          value={values.email}
+          onChange={set("email")}
+          error={errors.email}
+          inputRef={bind("email")}
+        />
+        <PasswordField
+          id={`${uid}-pw`}
+          label="Password"
+          hint="At least 8 characters, with a letter and a number."
+          value={values.password}
+          onChange={set("password")}
+          error={errors.password}
+          inputRef={bind("password")}
+        />
+        <PasswordField
+          id={`${uid}-confirm`}
+          label="Confirm password"
+          value={values.confirm}
+          onChange={set("confirm")}
+          error={errors.confirm}
+          inputRef={bind("confirm")}
+        />
         <Button type="submit" className="min-h-12 w-full text-base">
           Create account (demo)
         </Button>

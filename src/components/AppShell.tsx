@@ -1,15 +1,6 @@
 import { useState, type ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  BarChart3,
-  BookOpen,
-  Home,
-  Library,
-  PenLine,
-  Plus,
-  Sparkles,
-  X,
-} from "lucide-react";
+import { BarChart3, BookOpen, Home, Library, PenLine, Plus, Sparkles, X } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -96,9 +87,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               <SheetHeader className="text-left">
                 <SheetTitle className="font-display">Create</SheetTitle>
-                <SheetDescription>
-                  Write your own quest, or study a sample lesson.
-                </SheetDescription>
+                <SheetDescription>Write your own quest, or study a sample lesson.</SheetDescription>
               </SheetHeader>
               <div className="mt-4 space-y-2">
                 <Link to="/quests/new" search={{}} onClick={close} className={choice}>

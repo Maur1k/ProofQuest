@@ -85,8 +85,8 @@ function Home() {
         <p className="mt-0.5 break-words text-base font-semibold">{cont.quest.title}</p>
         <div className="mt-3 flex items-center justify-between text-xs text-muted-foreground">
           <span>
-            Question {Math.min(cont.attempt.currentIndex, cont.quest.questions.length - 1) + 1}{" "}
-            of {cont.quest.questions.length}
+            Question {Math.min(cont.attempt.currentIndex, cont.quest.questions.length - 1) + 1} of{" "}
+            {cont.quest.questions.length}
           </span>
           <span className="inline-flex items-center gap-1 font-semibold text-primary">
             Resume <ArrowRight className="h-4 w-4" aria-hidden />
@@ -167,7 +167,9 @@ function Home() {
         <Card className="flex items-center gap-3">
           <Target className="h-5 w-5 shrink-0 text-warning" aria-hidden />
           <div className="min-w-0 flex-1">
-            <p className="text-xs text-muted-foreground">Suggested focus · lowest accuracy so far</p>
+            <p className="text-xs text-muted-foreground">
+              Suggested focus · lowest accuracy so far
+            </p>
             <p className="truncate text-sm font-semibold">
               {focus.topic} · {pct(focus.accuracy)} ({focus.correct}/{focus.answered})
             </p>
@@ -255,11 +257,20 @@ function Home() {
         )}
       </section>
 
-      <nav aria-label="More" className="flex flex-wrap items-center justify-center gap-x-4 border-t border-border pt-3 text-sm">
-        <Link to="/intro" className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground">
+      <nav
+        aria-label="More"
+        className="flex flex-wrap items-center justify-center gap-x-4 border-t border-border pt-3 text-sm"
+      >
+        <Link
+          to="/intro"
+          className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground"
+        >
           Replay introduction
         </Link>
-        <Link to="/welcome" className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground">
+        <Link
+          to="/welcome"
+          className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground"
+        >
           Account demo
         </Link>
       </nav>

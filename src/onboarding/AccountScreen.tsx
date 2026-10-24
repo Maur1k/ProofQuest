@@ -29,7 +29,13 @@ export function AccountScreen({ title, children }: { title: string; children: Re
           <Brand size="sm" />
           <h1 className="mt-3 text-2xl font-bold text-foreground">{title}</h1>
         </div>
-        <img src={ART.study} alt="" width={96} height={96} className="h-24 w-24 shrink-0 object-contain" />
+        <img
+          src={ART.study}
+          alt=""
+          width={96}
+          height={96}
+          className="h-24 w-24 shrink-0 object-contain"
+        />
       </div>
       <div className="mt-3">
         <AccountDemoNotice />

@@ -23,7 +23,15 @@ function EditQuest() {
   if (!quest)
     return (
       <div className="pt-10">
-        <EmptyState title="Quest not found" body="It may have been deleted." action={<Link to="/quests" search={{}} className="text-primary">Back to library</Link>} />
+        <EmptyState
+          title="Quest not found"
+          body="It may have been deleted."
+          action={
+            <Link to="/quests" search={{}} className="text-primary">
+              Back to library
+            </Link>
+          }
+        />
       </div>
     );
   const { id, createdAt, updatedAt, ...draft } = quest;

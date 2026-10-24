@@ -5,17 +5,45 @@ import { Button } from "@/components/ui/button";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { SUBJECTS, QUESTION_TYPE_LABEL, DIFFICULTY_LABEL, getSubject } from "@/domain/subjects";
 import { validateQuest, LIMITS, type ValidationErrors } from "@/domain/validation";
-import { DIFFICULTIES, LANGUAGES, type QuestDraft, type Question, type QuestionType } from "@/domain/types";
+import {
+  DIFFICULTIES,
+  LANGUAGES,
+  type QuestDraft,
+  type Question,
+  type QuestionType,
+} from "@/domain/types";
 import { newId } from "@/lib/id";
 
-export function blankQuestion(type: QuestionType, language: Question["language"] = "javascript"): Question {
-  const base = { id: newId(), prompt: "", language, code: "", explanation: "", hints: [] as string[] };
+export function blankQuestion(
+  type: QuestionType,
+  language: Question["language"] = "javascript",
+): Question {
+  const base = {
+    id: newId(),
+    prompt: "",
+    language,
+    code: "",
+    explanation: "",
+    hints: [] as string[],
+  };
   if (type === "predict") return { ...base, type, expectedOutput: "" };
   if (type === "fix") return { ...base, type, fixedCode: "" };
   return { ...base, type, variables: ["x"], steps: [{ label: "Step 1", values: [""] }] };
 }
 
-function Field({ label, error, children, hint, id }: { label: string; error?: string | undefined; hint?: string | undefined; children: ReactNode; id: string }) {
+function Field({
+  label,
+  error,
+  children,
+  hint,
+  id,
+}: {
+  label: string;
+  error?: string | undefined;
+  hint?: string | undefined;
+  children: ReactNode;
+  id: string;
+}) {
   return (
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm font-medium text-foreground">
@@ -67,7 +95,8 @@ export function QuestEditor({
   const errorCount = Object.keys(errors).length;
   const subject = getSubject(draft.subjectId);
 
-  const set = <K extends keyof QuestDraft>(k: K, v: QuestDraft[K]) => setDraft((d) => ({ ...d, [k]: v }));
+  const set = <K extends keyof QuestDraft>(k: K, v: QuestDraft[K]) =>
+    setDraft((d) => ({ ...d, [k]: v }));
   const setQ = (id: string, fn: (q: Question) => Question) =>
     setDraft((d) => ({ ...d, questions: d.questions.map((q) => (q.id === id ? fn(q) : q)) }));
   const move = (i: number, dir: -1 | 1) =>
@@ -110,18 +139,36 @@ export function QuestEditor({
       </div>
 
       {submitted && errorCount > 0 && (
-        <div id="form-errors" tabIndex={-1} role="alert" className="rounded-xl border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+        <div
+          id="form-errors"
+          tabIndex={-1}
+          role="alert"
+          className="rounded-xl border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+        >
           Fix {errorCount} issue{errorCount === 1 ? "" : "s"} below before saving.
         </div>
       )}
 
       <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
         <Field label="Title" id="title" error={shown["title"]}>
-          <input id="title" className="field" value={draft.title} maxLength={LIMITS.titleMax + 20} onChange={(e) => set("title", e.target.value)} placeholder="e.g. Loops & Accumulators" {...err(shown, "title")} />
+          <input
+            id="title"
+            className="field"
+            value={draft.title}
+            maxLength={LIMITS.titleMax + 20}
+            onChange={(e) => set("title", e.target.value)}
+            placeholder="e.g. Loops & Accumulators"
+            {...err(shown, "title")}
+          />
         </Field>
         <div className="grid grid-cols-2 gap-3">
           <Field label="Subject" id="subjectId" error={shown["subjectId"]}>
-            <select id="subjectId" className="field" value={draft.subjectId} onChange={(e) => set("subjectId", e.target.value as QuestDraft["subjectId"])}>
+            <select
+              id="subjectId"
+              className="field"
+              value={draft.subjectId}
+              onChange={(e) => set("subjectId", e.target.value as QuestDraft["subjectId"])}
+            >
               {SUBJECTS.map((s) => (
                 <option key={s.id} value={s.id}>
                   {s.short}
@@ -130,7 +177,12 @@ export function QuestEditor({
             </select>
           </Field>
           <Field label="Difficulty" id="difficulty" error={shown["difficulty"]}>
-            <select id="difficulty" className="field" value={draft.difficulty} onChange={(e) => set("difficulty", e.target.value as QuestDraft["difficulty"])}>
+            <select
+              id="difficulty"
+              className="field"
+              value={draft.difficulty}
+              onChange={(e) => set("difficulty", e.target.value as QuestDraft["difficulty"])}
+            >
               {DIFFICULTIES.map((d) => (
                 <option key={d} value={d}>
                   {DIFFICULTY_LABEL[d]}
@@ -139,10 +191,24 @@ export function QuestEditor({
             </select>
           </Field>
         </div>
-        <Field label="Topic" id="topic" error={shown["topic"]} hint="Pick a suggestion or type your own.">
-          <input id="topic" className="field" list="topic-options" value={draft.topic} onChange={(e) => set("topic", e.target.value)} {...err(shown, "topic")} />
+        <Field
+          label="Topic"
+          id="topic"
+          error={shown["topic"]}
+          hint="Pick a suggestion or type your own."
+        >
+          <input
+            id="topic"
+            className="field"
+            list="topic-options"
+            value={draft.topic}
+            onChange={(e) => set("topic", e.target.value)}
+            {...err(shown, "topic")}
+          />
           <datalist id="topic-options">
-            {subject?.topics.map((t) => <option key={t} value={t} />)}
+            {subject?.topics.map((t) => (
+              <option key={t} value={t} />
+            ))}
           </datalist>
         </Field>
       </section>
@@ -150,10 +216,15 @@ export function QuestEditor({
       <section aria-labelledby="questions-heading" className="space-y-3">
         <div className="flex items-center justify-between">
           <h2 id="questions-heading" className="text-lg font-semibold">
-            Questions <span className="text-sm font-normal text-muted-foreground">({draft.questions.length})</span>
+            Questions{" "}
+            <span className="text-sm font-normal text-muted-foreground">
+              ({draft.questions.length})
+            </span>
           </h2>
         </div>
-        {shown["questions"] && <p className="text-sm font-medium text-destructive">{shown["questions"]}</p>}
+        {shown["questions"] && (
+          <p className="text-sm font-medium text-destructive">{shown["questions"]}</p>
+        )}
 
         {draft.questions.map((q, i) => (
           <QuestionEditor
@@ -176,7 +247,12 @@ export function QuestEditor({
               variant="outline"
               className="h-auto min-h-11 flex-col gap-0.5 whitespace-normal py-2 text-xs"
               disabled={draft.questions.length >= LIMITS.questionsMax}
-              onClick={() => setDraft((d) => ({ ...d, questions: [...d.questions, blankQuestion(t, d.questions.at(-1)?.language)] }))}
+              onClick={() =>
+                setDraft((d) => ({
+                  ...d,
+                  questions: [...d.questions, blankQuestion(t, d.questions.at(-1)?.language)],
+                }))
+              }
             >
               <Plus aria-hidden /> {QUESTION_TYPE_LABEL[t]}
             </Button>
@@ -185,7 +261,12 @@ export function QuestEditor({
       </section>
 
       <div className="sticky bottom-24 z-10 flex gap-2 rounded-2xl border border-border bg-background/95 p-2 backdrop-blur">
-        <Button type="button" variant="outline" className="flex-1" onClick={() => navigate({ to: "/quests", search: {} })}>
+        <Button
+          type="button"
+          variant="outline"
+          className="flex-1"
+          onClick={() => navigate({ to: "/quests", search: {} })}
+        >
           Cancel
         </Button>
         <Button type="submit" className="flex-1">
@@ -242,19 +323,44 @@ function QuestionEditor({
   const hasErr = Object.keys(errors).some((e) => e.startsWith(`q.${q.id}.`));
 
   return (
-    <article className={`space-y-4 rounded-2xl border bg-card p-4 ${hasErr ? "border-destructive/60" : "border-border"}`} aria-label={`Question ${index + 1}`}>
+    <article
+      className={`space-y-4 rounded-2xl border bg-card p-4 ${hasErr ? "border-destructive/60" : "border-border"}`}
+      aria-label={`Question ${index + 1}`}
+    >
       <div className="flex items-center justify-between gap-2">
         <p className="text-sm font-semibold">
-          <span className="text-muted-foreground">Q{index + 1}</span> · {QUESTION_TYPE_LABEL[q.type]}
+          <span className="text-muted-foreground">Q{index + 1}</span> ·{" "}
+          {QUESTION_TYPE_LABEL[q.type]}
         </p>
         <div className="flex gap-1">
-          <Button type="button" variant="ghost" size="icon" aria-label={`Move question ${index + 1} up`} disabled={index === 0} onClick={() => onMove(-1)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={`Move question ${index + 1} up`}
+            disabled={index === 0}
+            onClick={() => onMove(-1)}
+          >
             <ArrowUp aria-hidden />
           </Button>
-          <Button type="button" variant="ghost" size="icon" aria-label={`Move question ${index + 1} down`} disabled={index === count - 1} onClick={() => onMove(1)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            aria-label={`Move question ${index + 1} down`}
+            disabled={index === count - 1}
+            onClick={() => onMove(1)}
+          >
             <ArrowDown aria-hidden />
           </Button>
-          <Button type="button" variant="ghost" size="icon" className="text-destructive" aria-label={`Remove question ${index + 1}`} onClick={onRemove}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="text-destructive"
+            aria-label={`Remove question ${index + 1}`}
+            onClick={onRemove}
+          >
             <Trash2 aria-hidden />
           </Button>
         </div>
@@ -268,7 +374,14 @@ function QuestionEditor({
             value={q.type}
             onChange={(e) => {
               const t = e.target.value as QuestionType;
-              onChange((x) => ({ ...blankQuestion(t, x.language), id: x.id, prompt: x.prompt, code: x.code, explanation: x.explanation, hints: x.hints }));
+              onChange((x) => ({
+                ...blankQuestion(t, x.language),
+                id: x.id,
+                prompt: x.prompt,
+                code: x.code,
+                explanation: x.explanation,
+                hints: x.hints,
+              }));
             }}
           >
             {(["predict", "trace", "fix"] as const).map((t) => (
@@ -279,7 +392,12 @@ function QuestionEditor({
           </select>
         </Field>
         <Field label="Language" id={fid("language")}>
-          <select id={fid("language")} className="field" value={q.language} onChange={(e) => upd({ language: e.target.value as Question["language"] })}>
+          <select
+            id={fid("language")}
+            className="field"
+            value={q.language}
+            onChange={(e) => upd({ language: e.target.value as Question["language"] })}
+          >
             {LANGUAGES.map((l) => (
               <option key={l} value={l}>
                 {l === "javascript" ? "JavaScript" : "Python"}
@@ -290,46 +408,121 @@ function QuestionEditor({
       </div>
 
       <Field label="Prompt" id={fid("prompt")} error={errors[k("prompt")]}>
-        <input id={fid("prompt")} className="field" value={q.prompt} onChange={(e) => upd({ prompt: e.target.value })} placeholder="What does this program print?" aria-invalid={errors[k("prompt")] ? true : undefined} />
+        <input
+          id={fid("prompt")}
+          className="field"
+          value={q.prompt}
+          onChange={(e) => upd({ prompt: e.target.value })}
+          placeholder="What does this program print?"
+          aria-invalid={errors[k("prompt")] ? true : undefined}
+        />
       </Field>
-      <Field label={q.type === "fix" ? "Buggy code" : "Code"} id={fid("code")} error={errors[k("code")]}>
-        <textarea id={fid("code")} className="field min-h-32 font-mono text-[13px]" spellCheck={false} value={q.code} onChange={(e) => upd({ code: e.target.value })} aria-invalid={errors[k("code")] ? true : undefined} />
+      <Field
+        label={q.type === "fix" ? "Buggy code" : "Code"}
+        id={fid("code")}
+        error={errors[k("code")]}
+      >
+        <textarea
+          id={fid("code")}
+          className="field min-h-32 font-mono text-[13px]"
+          spellCheck={false}
+          value={q.code}
+          onChange={(e) => upd({ code: e.target.value })}
+          aria-invalid={errors[k("code")] ? true : undefined}
+        />
       </Field>
 
       {q.type === "predict" && (
-        <Field label="Expected output" id={fid("expected")} error={errors[k("expected")]} hint="One line per printed line. Case matters; surrounding spaces don't.">
-          <textarea id={fid("expected")} className="field min-h-20 font-mono text-[13px]" spellCheck={false} value={q.expectedOutput} onChange={(e) => upd({ expectedOutput: e.target.value })} aria-invalid={errors[k("expected")] ? true : undefined} />
+        <Field
+          label="Expected output"
+          id={fid("expected")}
+          error={errors[k("expected")]}
+          hint="One line per printed line. Case matters; surrounding spaces don't."
+        >
+          <textarea
+            id={fid("expected")}
+            className="field min-h-20 font-mono text-[13px]"
+            spellCheck={false}
+            value={q.expectedOutput}
+            onChange={(e) => upd({ expectedOutput: e.target.value })}
+            aria-invalid={errors[k("expected")] ? true : undefined}
+          />
         </Field>
       )}
       {q.type === "fix" && (
-        <Field label="Corrected code" id={fid("expected")} error={errors[k("expected")]} hint="Answers are compared as normalized text (spacing and blank lines ignored), not by running the code.">
-          <textarea id={fid("expected")} className="field min-h-32 font-mono text-[13px]" spellCheck={false} value={q.fixedCode} onChange={(e) => upd({ fixedCode: e.target.value })} aria-invalid={errors[k("expected")] ? true : undefined} />
+        <Field
+          label="Corrected code"
+          id={fid("expected")}
+          error={errors[k("expected")]}
+          hint="Answers are compared as normalized text (spacing and blank lines ignored), not by running the code."
+        >
+          <textarea
+            id={fid("expected")}
+            className="field min-h-32 font-mono text-[13px]"
+            spellCheck={false}
+            value={q.fixedCode}
+            onChange={(e) => upd({ fixedCode: e.target.value })}
+            aria-invalid={errors[k("expected")] ? true : undefined}
+          />
         </Field>
       )}
-      {q.type === "trace" && <TraceEditor q={q} errors={errors} onChange={(next) => onChange(() => next)} />}
+      {q.type === "trace" && (
+        <TraceEditor q={q} errors={errors} onChange={(next) => onChange(() => next)} />
+      )}
 
-      <Field label="Explanation" id={fid("explanation")} error={errors[k("explanation")]} hint="Shown after the learner answers.">
-        <textarea id={fid("explanation")} className="field min-h-20" value={q.explanation} onChange={(e) => upd({ explanation: e.target.value })} aria-invalid={errors[k("explanation")] ? true : undefined} />
+      <Field
+        label="Explanation"
+        id={fid("explanation")}
+        error={errors[k("explanation")]}
+        hint="Shown after the learner answers."
+      >
+        <textarea
+          id={fid("explanation")}
+          className="field min-h-20"
+          value={q.explanation}
+          onChange={(e) => upd({ explanation: e.target.value })}
+          aria-invalid={errors[k("explanation")] ? true : undefined}
+        />
       </Field>
 
       <fieldset className="space-y-2">
-        <legend className="text-sm font-medium">Hints <span className="font-normal text-muted-foreground">(optional, up to {LIMITS.hintsMax})</span></legend>
+        <legend className="text-sm font-medium">
+          Hints{" "}
+          <span className="font-normal text-muted-foreground">
+            (optional, up to {LIMITS.hintsMax})
+          </span>
+        </legend>
         {q.hints.map((h, hi) => (
           <div key={hi} className="flex gap-2">
             <input
               className="field"
               aria-label={`Hint ${hi + 1}`}
               value={h}
-              onChange={(e) => upd({ hints: q.hints.map((x, j) => (j === hi ? e.target.value : x)) })}
+              onChange={(e) =>
+                upd({ hints: q.hints.map((x, j) => (j === hi ? e.target.value : x)) })
+              }
             />
-            <Button type="button" variant="ghost" size="icon" aria-label={`Remove hint ${hi + 1}`} onClick={() => upd({ hints: q.hints.filter((_, j) => j !== hi) })}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              aria-label={`Remove hint ${hi + 1}`}
+              onClick={() => upd({ hints: q.hints.filter((_, j) => j !== hi) })}
+            >
               <Trash2 aria-hidden />
             </Button>
           </div>
         ))}
-        {errors[k("hints")] && <p className="text-xs font-medium text-destructive">{errors[k("hints")]}</p>}
+        {errors[k("hints")] && (
+          <p className="text-xs font-medium text-destructive">{errors[k("hints")]}</p>
+        )}
         {q.hints.length < LIMITS.hintsMax && (
-          <Button type="button" variant="ghost" size="sm" onClick={() => upd({ hints: [...q.hints, ""] })}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => upd({ hints: [...q.hints, ""] })}
+          >
             <Plus aria-hidden /> Add hint
           </Button>
         )}
@@ -338,14 +531,37 @@ function QuestionEditor({
   );
 }
 
-function TraceEditor({ q, errors, onChange }: { q: Extract<Question, { type: "trace" }>; errors: ValidationErrors; onChange: (q: Question) => void }) {
+function TraceEditor({
+  q,
+  errors,
+  onChange,
+}: {
+  q: Extract<Question, { type: "trace" }>;
+  errors: ValidationErrors;
+  onChange: (q: Question) => void;
+}) {
   const k = (f: string) => `q.${q.id}.${f}`;
-  const setVar = (j: number, name: string) => onChange({ ...q, variables: q.variables.map((v, i) => (i === j ? name : v)) });
-  const addVar = () => onChange({ ...q, variables: [...q.variables, ""], steps: q.steps.map((s) => ({ ...s, values: [...s.values, ""] })) });
+  const setVar = (j: number, name: string) =>
+    onChange({ ...q, variables: q.variables.map((v, i) => (i === j ? name : v)) });
+  const addVar = () =>
+    onChange({
+      ...q,
+      variables: [...q.variables, ""],
+      steps: q.steps.map((s) => ({ ...s, values: [...s.values, ""] })),
+    });
   const removeVar = (j: number) =>
-    onChange({ ...q, variables: q.variables.filter((_, i) => i !== j), steps: q.steps.map((s) => ({ ...s, values: s.values.filter((_, i) => i !== j) })) });
+    onChange({
+      ...q,
+      variables: q.variables.filter((_, i) => i !== j),
+      steps: q.steps.map((s) => ({ ...s, values: s.values.filter((_, i) => i !== j) })),
+    });
   const setCell = (si: number, j: number, v: string) =>
-    onChange({ ...q, steps: q.steps.map((s, i) => (i === si ? { ...s, values: s.values.map((x, c) => (c === j ? v : x)) } : s)) });
+    onChange({
+      ...q,
+      steps: q.steps.map((s, i) =>
+        i === si ? { ...s, values: s.values.map((x, c) => (c === j ? v : x)) } : s,
+      ),
+    });
 
   return (
     <div className="space-y-3">
@@ -354,9 +570,20 @@ function TraceEditor({ q, errors, onChange }: { q: Extract<Question, { type: "tr
         <div className="flex flex-wrap gap-2">
           {q.variables.map((v, j) => (
             <div key={j} className="flex items-center gap-1">
-              <input className="field w-24 font-mono text-[13px]" aria-label={`Variable ${j + 1} name`} value={v} onChange={(e) => setVar(j, e.target.value)} />
+              <input
+                className="field w-24 font-mono text-[13px]"
+                aria-label={`Variable ${j + 1} name`}
+                value={v}
+                onChange={(e) => setVar(j, e.target.value)}
+              />
               {q.variables.length > 1 && (
-                <Button type="button" variant="ghost" size="icon" aria-label={`Remove variable ${v || j + 1}`} onClick={() => removeVar(j)}>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`Remove variable ${v || j + 1}`}
+                  onClick={() => removeVar(j)}
+                >
                   <Trash2 aria-hidden />
                 </Button>
               )}
@@ -366,7 +593,9 @@ function TraceEditor({ q, errors, onChange }: { q: Extract<Question, { type: "tr
             <Plus aria-hidden /> Variable
           </Button>
         </div>
-        {errors[k("variables")] && <p className="text-xs font-medium text-destructive">{errors[k("variables")]}</p>}
+        {errors[k("variables")] && (
+          <p className="text-xs font-medium text-destructive">{errors[k("variables")]}</p>
+        )}
       </fieldset>
       <fieldset className="space-y-2">
         <legend className="text-sm font-medium">Expected values per step</legend>
@@ -374,8 +603,27 @@ function TraceEditor({ q, errors, onChange }: { q: Extract<Question, { type: "tr
           {q.steps.map((s, si) => (
             <div key={si} className="rounded-xl border border-border p-2">
               <div className="flex gap-2">
-                <input className="field" aria-label={`Step ${si + 1} label`} value={s.label} onChange={(e) => onChange({ ...q, steps: q.steps.map((x, i) => (i === si ? { ...x, label: e.target.value } : x)) })} />
-                <Button type="button" variant="ghost" size="icon" aria-label={`Remove step ${si + 1}`} disabled={q.steps.length === 1} onClick={() => onChange({ ...q, steps: q.steps.filter((_, i) => i !== si) })}>
+                <input
+                  className="field"
+                  aria-label={`Step ${si + 1} label`}
+                  value={s.label}
+                  onChange={(e) =>
+                    onChange({
+                      ...q,
+                      steps: q.steps.map((x, i) =>
+                        i === si ? { ...x, label: e.target.value } : x,
+                      ),
+                    })
+                  }
+                />
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  aria-label={`Remove step ${si + 1}`}
+                  disabled={q.steps.length === 1}
+                  onClick={() => onChange({ ...q, steps: q.steps.filter((_, i) => i !== si) })}
+                >
                   <Trash2 aria-hidden />
                 </Button>
               </div>
@@ -383,7 +631,11 @@ function TraceEditor({ q, errors, onChange }: { q: Extract<Question, { type: "tr
                 {q.variables.map((v, j) => (
                   <label key={j} className="text-xs text-muted-foreground">
                     <span className="font-mono">{v || `var ${j + 1}`}</span>
-                    <input className="field mt-1 font-mono text-[13px]" value={s.values[j] ?? ""} onChange={(e) => setCell(si, j, e.target.value)} />
+                    <input
+                      className="field mt-1 font-mono text-[13px]"
+                      value={s.values[j] ?? ""}
+                      onChange={(e) => setCell(si, j, e.target.value)}
+                    />
                   </label>
                 ))}
               </div>
@@ -394,11 +646,21 @@ function TraceEditor({ q, errors, onChange }: { q: Extract<Question, { type: "tr
           type="button"
           variant="outline"
           size="sm"
-          onClick={() => onChange({ ...q, steps: [...q.steps, { label: `Step ${q.steps.length + 1}`, values: q.variables.map(() => "") }] })}
+          onClick={() =>
+            onChange({
+              ...q,
+              steps: [
+                ...q.steps,
+                { label: `Step ${q.steps.length + 1}`, values: q.variables.map(() => "") },
+              ],
+            })
+          }
         >
           <Plus aria-hidden /> Step
         </Button>
-        {errors[k("steps")] && <p className="text-xs font-medium text-destructive">{errors[k("steps")]}</p>}
+        {errors[k("steps")] && (
+          <p className="text-xs font-medium text-destructive">{errors[k("steps")]}</p>
+        )}
       </fieldset>
     </div>
   );

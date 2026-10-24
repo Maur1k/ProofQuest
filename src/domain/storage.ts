@@ -1,5 +1,12 @@
 import { z } from "zod";
-import { DIFFICULTIES, LANGUAGES, SUBJECT_IDS, type AppData, type Attempt, type Quest } from "./types";
+import {
+  DIFFICULTIES,
+  LANGUAGES,
+  SUBJECT_IDS,
+  type AppData,
+  type Attempt,
+  type Quest,
+} from "./types";
 
 export const STORAGE_KEY = "proofquest:data:v1";
 export const BACKUP_KEY_PREFIX = "proofquest:backup:";
