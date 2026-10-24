@@ -1,0 +1,62 @@
+{
+  "provenance": {
+    "origin": "AI-generated images supplied by the project owner (Maurik Angelo Fernandez), created specifically for ProofQuest with OpenAI's built-in image generation, and uploaded to this project on 2026-10-22.",
+    "license": "No open-source or Creative Commons license is granted by this repository. Rights follow the owner's agreement with OpenAI's terms of use for generated output; confirm with the owner before reuse outside ProofQuest.",
+    "modifications": "Originals are stored byte-for-byte. Derivatives are proportional resizes only (no repainting, cropping of the subject, or recoloring). The favicon.svg is a separate, hand-coded companion mark inspired by the icon."
+  },
+  "assets": [
+    {
+      "id": "welcome",
+      "original": "public/assets/proofquest/original/proofquest-welcome.png",
+      "sha256": "ec41bf4c547634d0e4e3f10f4d1d3afe8b7acec560c27d56c51626fe7cfa2e1d",
+      "pixels": "1254x1254", "format": "PNG RGBA", "alpha": true,
+      "derivatives": [{ "path": "public/assets/proofquest/proofquest-welcome-640.webp", "pixels": "640x640", "format": "WebP RGBA" }],
+      "subject": "Hooded explorer with open glowing book, welcoming gesture",
+      "uses": ["Intro slide 1", "Welcome access screen"],
+      "alt": "Decorative (alt=\"\"): adjacent heading carries the meaning."
+    },
+    {
+      "id": "study",
+      "original": "public/assets/proofquest/original/proofquest-study.png",
+      "sha256": "3af83f3ef24eb47bd2ab767c1e92702fa46419a6f132fb5940d397323c5127ba",
+      "pixels": "1254x1254", "format": "PNG RGBA", "alpha": true,
+      "derivatives": [{ "path": "public/assets/proofquest/proofquest-study-640.webp", "pixels": "640x640", "format": "WebP RGBA" }],
+      "subject": "Explorer seated reading with floating documents",
+      "uses": ["Intro slide 2", "Home study card", "Study drop zone", "Login/Register header"],
+      "alt": "Decorative (alt=\"\")."
+    },
+    {
+      "id": "practice",
+      "original": "public/assets/proofquest/original/proofquest-practice.png",
+      "sha256": "e3119a129bc4f0b1a82f1fe03c05136cba26fd54585a54e3c552934a88798895",
+      "pixels": "1254x1254", "format": "PNG RGBA", "alpha": true,
+      "derivatives": [{ "path": "public/assets/proofquest/proofquest-practice-640.webp", "pixels": "640x640", "format": "WebP RGBA" }],
+      "subject": "Explorer pointing along a path of question/answer cards",
+      "uses": ["Intro slide 3"],
+      "alt": "Decorative (alt=\"\")."
+    },
+    {
+      "id": "icon",
+      "original": "public/assets/proofquest/original/proofquest-icon.png",
+      "sha256": "a463bdc1d562d5cec5f671503dbc735677f9ecef97c2c0a97179d483d270476d",
+      "pixels": "1254x1254", "format": "PNG RGBA", "alpha": true,
+      "derivatives": [
+        { "path": "public/assets/proofquest/proofquest-icon-640.webp", "pixels": "640x640", "format": "WebP RGBA", "use": "Wordmark icon (28-40px rendered)" },
+        { "path": "public/assets/proofquest/proofquest-icon-192.png", "pixels": "192x192", "format": "PNG RGBA", "use": "apple-touch-icon / launcher" },
+        { "path": "public/favicon.png", "pixels": "64x64", "format": "PNG RGBA", "use": "PNG favicon fallback" }
+      ],
+      "subject": "Open navy book with gold corners and teal spark",
+      "uses": ["Brand wordmark", "Touch icon"],
+      "alt": "Decorative next to the text wordmark 'ProofQuest'."
+    },
+    {
+      "id": "favicon-mark",
+      "original": "public/favicon.svg",
+      "pixels": "vector (32x32 viewBox)", "format": "SVG", "alpha": false,
+      "subject": "Code-native simplified mark: cream open book with gold spark on navy tile",
+      "uses": ["Browser tab icon at 16-32px, where the detailed artwork is illegible"],
+      "provenance": "Hand-written SVG in this repository; not AI-generated."
+    }
+  ],
+  "regenerateDerivatives": "magick public/assets/proofquest/original/proofquest-<id>.png -resize 640x640 -quality 82 -define webp:alpha-quality=100 public/assets/proofquest/proofquest-<id>-640.webp"
+}

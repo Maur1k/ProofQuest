@@ -1,0 +1,20 @@
+{
+  "$comment": "Platform-neutral copies of the demo fixtures. Canonical sources: src/onboarding/slides.ts, src/demo/lessons.ts (DEMO_SAMPLE_FILES, DEMO_LESSONS). Lesson bodies/question banks are long; read them from lessons.ts.",
+  "onboardingPreference": { "key": "proofquest:onboarding:v1", "seenValue": "seen" },
+  "introSlides": [
+    { "id": "welcome", "title": "Welcome to ProofQuest", "body": "Understand a topic, practice what you learn, and see your progress.", "image": "welcome" },
+    { "id": "study", "title": "Start studying in one step", "body": "Tap or drag a sample document to open a lesson.", "note": "Demo: built-in sample documents only. Your own files aren't opened or uploaded.", "image": "study" },
+    { "id": "practice", "title": "Turn understanding into practice", "body": "Preview questions and explore how practice works.", "note": "Demo: question previews come from a fixed sample set, not AI.", "image": "practice" }
+  ],
+  "sampleFiles": [
+    { "id": "f-loops", "name": "week3-loops-notes.pdf", "sizeBytes": 1240000, "extension": "pdf", "pages": 12, "lessonId": "loops-js" },
+    { "id": "f-stacks", "name": "stacks-lecture.md", "sizeBytes": 18400, "extension": "md", "pages": null, "lessonId": "stacks-arrays" },
+    { "id": "f-search", "name": "binary-search-handout.pdf", "sizeBytes": 860000, "extension": "pdf", "pages": 6, "lessonId": "binary-search" },
+    { "id": "f-video", "name": "lecture-recording.mp4", "sizeBytes": 48000000, "extension": "mp4", "pages": null, "lessonId": null },
+    { "id": "f-big", "name": "full-textbook-scan.pdf", "sizeBytes": 64500000, "extension": "pdf", "pages": 410, "lessonId": null }
+  ],
+  "accountDemoValidation": {
+    "login": { "email": "required, name@domain.tld, <=254", "password": "required, >=8 chars" },
+    "register": { "displayName": "trimmed 2..40", "email": "as login", "password": ">=8, >=1 letter and >=1 digit", "confirm": "equals password" }
+  }
+}
