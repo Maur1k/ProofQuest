@@ -20,7 +20,7 @@
 - Artwork originals live in `public/assets/proofquest/original/` and are never modified; the app uses resized WebP derivatives. `docs/development-handoff/` is the handoff package (tokens, specs, manifest, Flutter mapping, QA); update it when behavior or tokens change. Why: stable, project-owned assets and a verifiable source/design baseline.
 
 ## Phase approval gates
-- Follow docs/development-phases.md. Phase 1 desktop scope is complete as of 2026-10-25; physical-phone validation is pending by owner instruction. Phase 2 remains unauthorized; obtain confirmation before starting it.
+- Follow docs/development-phases.md. Phase 1 desktop scope is complete as of 2026-10-25; physical-phone validation is pending by owner instruction. Maur1k authorized only the first approximately 30% of Phase 2, now completed in docs/phase-2-checkpoint.md. Stop here; obtain further authorization before the remaining Phase 2 work.
 - At the end of EVERY phase, report results and stop. Obtain explicit confirmation from Maur1k before starting the next phase.
 - All code edits and testing happen locally. Never send Lovable AI editing/build prompts. Git synchronization is separate from AI editing.
 - Do not rewrite published history. Keep historical handoff/Flutter documents as references; the active web plan governs future work.

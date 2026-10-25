@@ -12,7 +12,7 @@ import {
 import { useStore } from "@/store/store";
 
 const navItem =
-  "flex min-h-14 min-w-14 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground";
+  "app-nav-link flex min-h-14 min-w-11 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground";
 const choice =
   "flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm transition-colors hover:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
 const BARE_PATHS = ["/intro", "/welcome", "/login", "/register"];
@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     );
   }
   return (
-    <div className="min-h-screen">
+    <div className="app-shell min-h-screen">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-primary focus:px-3 focus:py-2 focus:text-primary-foreground"
@@ -44,7 +44,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       {warning && (
         <div
           role="alert"
-          className="mx-auto flex max-w-[430px] items-start gap-2 bg-warning/15 px-4 py-3 text-sm text-warning"
+          className="app-content flex items-start gap-2 bg-warning/15 px-4 py-3 text-sm text-warning"
         >
           <p className="flex-1">{warning}</p>
           <button
@@ -56,15 +56,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           </button>
         </div>
       )}
-      <main id="main" className="mx-auto max-w-[430px] px-4 pb-32">
+      <main id="main" tabIndex={-1} className="app-content app-main">
         {children}
       </main>
       <nav
         aria-label="Primary"
-        className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-md"
+        className="app-nav fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/90 backdrop-blur-md"
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
-        <div className="mx-auto flex max-w-[430px] items-center justify-between gap-1 px-2 py-1.5">
+        <span className="app-nav-brand font-display text-xl font-bold">ProofQuest</span>
+        <div className="app-nav-items mx-auto flex max-w-[430px] items-center justify-between gap-1 px-2 py-1.5">
           <Link to="/" className={navItem} activeProps={active} activeOptions={{ exact: true }}>
             <Home className="h-5 w-5" aria-hidden /> Home
           </Link>
@@ -76,14 +77,15 @@ export function AppShell({ children }: { children: ReactNode }) {
               <button
                 type="button"
                 aria-label="Create"
-                className="mx-1 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow transition-transform hover:scale-105"
+                className="app-create mx-1 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow transition-transform hover:scale-105"
               >
                 <Plus className="h-6 w-6" aria-hidden />
+                <span className="hidden lg:inline">Create</span>
               </button>
             </SheetTrigger>
             <SheetContent
               side="bottom"
-              className="mx-auto max-w-[430px] rounded-t-2xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
+              className="mx-auto max-w-[430px] md:max-w-xl max-h-[90dvh] overflow-y-auto rounded-t-2xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
             >
               <SheetHeader className="text-left">
                 <SheetTitle className="font-display">Create</SheetTitle>
@@ -104,7 +106,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 <Link to="/study" onClick={close} className={choice}>
                   <Sparkles className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   <span className="min-w-0">
-                    <span className="flex items-center gap-2 font-semibold text-foreground">
+                    <span className="flex flex-wrap items-center gap-2 font-semibold text-foreground">
                       Study a sample lesson{" "}
                       <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-medium text-warning">
                         Demo

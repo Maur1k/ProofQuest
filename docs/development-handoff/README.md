@@ -83,3 +83,7 @@ Bottom nav: Home · Subjects · [+ Create sheet: manual quest | sample lesson] �
 
 Deep links to any app route open directly, never redirected to the introduction; only
 `/` decides whether to show it (see `screen-specs.md` → Onboarding rules).
+
+## Responsive web shell checkpoint — 2026-10-25
+
+The shared shell now uses phone bottom navigation (<768px), tablet top navigation (768–1023px) and desktop side navigation (>=1024px). This supersedes the original fixed 430px shell only. Colors, original artwork and product behavior are unchanged. Page-specific responsive design is still pending. See [Phase 2 checkpoint](../phase-2-checkpoint.md) for verified scope and remaining work.
