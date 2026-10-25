@@ -30,7 +30,7 @@ function Subjects() {
   return (
     <div>
       <PageHeader title="Subjects" subtitle="Pick a subject to see its topics and quests." />
-      <ul className="space-y-3">
+      <ul className="grid gap-3 md:grid-cols-2">
         {SUBJECTS.map((s) => {
           const quests = data.quests.filter((q) => q.subjectId === s.id);
           const sum = summarize(flattenAnswers(data.attempts.filter((a) => a.subjectId === s.id)));
@@ -40,7 +40,7 @@ function Subjects() {
               <Link
                 to="/subjects/$subjectId"
                 params={{ subjectId: s.id }}
-                className="block rounded-2xl border border-border bg-card p-4 transition-colors hover:border-primary/60"
+                className="block h-full min-w-0 rounded-2xl border border-border bg-card p-4 transition-colors hover:border-primary/60"
               >
                 <div className="flex items-center justify-between gap-2">
                   <h2 className="text-base font-semibold">{s.name}</h2>

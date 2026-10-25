@@ -28,8 +28,14 @@ export function PageHeader({
       )}
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <h1 className="text-2xl font-bold text-foreground">{title}</h1>
-          {subtitle && <p className="mt-1 text-sm text-muted-foreground">{subtitle}</p>}
+          <h1 className="break-words [overflow-wrap:anywhere] text-2xl font-bold text-foreground">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="mt-1 break-words [overflow-wrap:anywhere] text-sm text-muted-foreground">
+              {subtitle}
+            </p>
+          )}
         </div>
         {action}
       </div>
@@ -39,7 +45,7 @@ export function PageHeader({
 
 export function CodeBlock({ code, language }: { code: string; language?: Language }) {
   return (
-    <figure className="overflow-hidden rounded-xl border border-border bg-code">
+    <figure className="min-w-0 max-w-full overflow-hidden rounded-xl border border-border bg-code">
       {language && (
         <figcaption className="border-b border-border px-3 py-1.5 font-mono text-[11px] uppercase tracking-wider text-muted-foreground">
           {language}
@@ -83,7 +89,7 @@ export function Pill({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-medium",
+        "inline-flex max-w-full items-center break-words [overflow-wrap:anywhere] rounded-full px-2 py-0.5 text-[11px] font-medium",
         tone === "default" && "bg-secondary text-secondary-foreground",
         tone === "primary" && "bg-accent text-accent-foreground",
         tone === "success" && "bg-success/15 text-success",
@@ -123,7 +129,7 @@ export function ProgressBar({ value, label }: { value: number; label: string }) 
 export function MasteryDots({ mastery }: { mastery: number }) {
   return (
     <span
-      className="inline-flex items-center gap-1"
+      className="inline-flex shrink-0 items-center gap-1"
       aria-label={`Mastery ${mastery} of ${MASTERY_MAX}`}
       role="img"
     >
@@ -150,6 +156,13 @@ export function LoadingState() {
 
 export function Card({ className, children }: { className?: string; children: ReactNode }) {
   return (
-    <div className={cn("rounded-2xl border border-border bg-card p-4", className)}>{children}</div>
+    <div
+      className={cn(
+        "min-w-0 break-words [overflow-wrap:anywhere] rounded-2xl border border-border bg-card p-4",
+        className,
+      )}
+    >
+      {children}
+    </div>
   );
 }

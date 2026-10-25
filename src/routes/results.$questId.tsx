@@ -66,7 +66,7 @@ function Results() {
   const questions = quest ? quest.questions.filter((q) => attempt.answers[q.id]) : [];
 
   return (
-    <div className="space-y-5">
+    <div className="mx-auto max-w-4xl space-y-5 break-words [overflow-wrap:anywhere]">
       <PageHeader
         title="Results"
         subtitle={attempt.questTitle}
@@ -90,7 +90,7 @@ function Results() {
         </div>
       </section>
 
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {quest && quest.questions.length > 0 ? (
           <Button
             onClick={() => {
@@ -137,7 +137,7 @@ function Results() {
                 ) : (
                   <XCircle className="h-5 w-5 shrink-0 text-destructive" aria-label="Incorrect" />
                 )}
-                <span className="flex-1 text-sm font-medium">
+                <span className="min-w-0 flex-1 text-sm font-medium">
                   Q{i + 1}. {q.prompt}
                 </span>
                 {r.hintsUsed > 0 && (

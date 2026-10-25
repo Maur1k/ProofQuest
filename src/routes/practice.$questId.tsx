@@ -88,7 +88,7 @@ function Practice() {
   };
 
   return (
-    <div>
+    <div className="mx-auto max-w-3xl">
       <PageHeader
         title={quest.title}
         subtitle={`Question ${index + 1} of ${total}`}

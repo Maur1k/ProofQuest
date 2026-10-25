@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-10-25. Status: Phase 1 desktop scope complete as of 2026-10-25; physical-phone validation pending by owner instruction. Phase 2 approximately 60% complete; stopped at the owner-requested checkpoint.
+Owner: Maur1k. Updated: 2026-10-25. Status: Phase 1 desktop scope complete as of 2026-10-25; physical-phone validation pending by owner instruction. Phase 2 final implementation prepared; browser acceptance review pending.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -66,7 +66,7 @@ The default execution order is sequential. Building the quiz lifecycle before co
 
 ## Phase 2 — Responsive guest experience
 
-**Partial authorization:** work through approximately 60% is complete on 2026-10-25: shared shell/navigation, guest entry and responsive home/library. See [60% checkpoint](phase-2-60-checkpoint.md) and [earlier 30% checkpoint](phase-2-checkpoint.md). Stop before the remaining 40% until Maur1k authorizes continuation.
+**Partial authorization:** work through approximately 60% is complete on 2026-10-25: shared shell/navigation, guest entry and responsive home/library. See [60% checkpoint](phase-2-60-checkpoint.md) and [earlier 30% checkpoint](phase-2-checkpoint.md). Maur1k subsequently authorized finishing Phase 2. See [final review](phase-2-final-review.md) for implemented changes and pending browser checks.
 
 **Work**
 
@@ -185,4 +185,4 @@ OCR for scanned PDFs, accounts/cloud sync, installable PWA/offline startup, shar
 - Known limitations and unresolved decisions.
 - Exit criteria satisfied and next eligible phase.
 
-Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Phase 1 was authorized and its desktop scope completed on 2026-10-25. Physical-phone validation remains pending by owner instruction. Phase 2 through approximately 60% was subsequently authorized and completed. Do not continue beyond that checkpoint without further instruction.
+Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Phase 1 was authorized and its desktop scope completed on 2026-10-25. Physical-phone validation remains pending by owner instruction. Phase 2 through approximately 60% was subsequently authorized and completed. Finishing Phase 2 is now authorized; do not begin Phase 3 without separate confirmation.

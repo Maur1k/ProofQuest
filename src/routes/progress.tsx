@@ -93,12 +93,12 @@ function Progress() {
         <h2 id="by-subject" className="text-lg font-semibold">
           By subject
         </h2>
-        <div className="space-y-2">
+        <div className="grid gap-3 md:grid-cols-2">
           {SUBJECTS.map((s) => {
             const sum = summarize(answers.filter((a) => a.subjectId === s.id));
             return (
               <Card key={s.id} className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
                   <span className="font-medium">{s.name}</span>
                   <span className="text-muted-foreground">
                     {sum.answered ? `${pct(sum.accuracy)} · ${sum.correct}/${sum.answered}` : "—"}
@@ -122,7 +122,7 @@ function Progress() {
                 key={`${t.subjectId}-${t.topic}`}
                 className="flex items-center justify-between gap-2 px-4 py-3"
               >
-                <div>
+                <div className="min-w-0 break-words [overflow-wrap:anywhere]">
                   <p className="text-sm font-medium">{t.topic}</p>
                   <p className="text-xs text-muted-foreground">
                     {getSubject(t.subjectId)?.short} · {pct(t.accuracy)} ({t.correct}/{t.answered})
@@ -141,13 +141,15 @@ function Progress() {
         <h2 id="history" className="text-lg font-semibold">
           Attempt history
         </h2>
-        <ul className="space-y-2">
+        <ul className="grid gap-3 md:grid-cols-2">
           {history.map((a) => {
             const s = attemptSummary(a);
             const inner = (
               <>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{a.questTitle}</p>
+                  <p className="break-words [overflow-wrap:anywhere] text-sm font-medium">
+                    {a.questTitle}
+                  </p>
                   <p className="text-xs text-muted-foreground">
                     {fmt(a.updatedAt)} · {s.correct}/{s.answered} correct
                   </p>

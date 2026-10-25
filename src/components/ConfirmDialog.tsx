@@ -31,7 +31,7 @@ export function ConfirmDialog({
 }) {
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
-      <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm rounded-2xl border-border bg-popover">
+      <AlertDialogContent className="w-[calc(100%-2rem)] max-w-sm max-h-[90dvh] overflow-y-auto break-words [overflow-wrap:anywhere] rounded-2xl border-border bg-popover">
         <AlertDialogHeader>
           <AlertDialogTitle className="font-display">{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

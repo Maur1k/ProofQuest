@@ -42,7 +42,7 @@ export function QuestionPractice({
   };
 
   return (
-    <div className="space-y-4">
+    <div className="min-w-0 space-y-4 break-words [overflow-wrap:anywhere]">
       <div>
         <p className="text-xs font-medium uppercase tracking-wider text-primary">
           {QUESTION_TYPE_LABEL[question.type]}
@@ -78,7 +78,12 @@ export function QuestionPractice({
         )}
 
         {question.type === "trace" && response.type === "trace" && (
-          <div className="overflow-x-auto rounded-xl border border-border">
+          <div
+            tabIndex={0}
+            role="region"
+            aria-label="Scrollable trace table"
+            className="max-w-full overflow-x-auto rounded-xl border border-border"
+          >
             <table className="w-full text-sm">
               <caption className="sr-only">Trace table</caption>
               <thead className="bg-muted">
@@ -187,7 +192,7 @@ export function QuestionPractice({
             <Button type="submit" className="w-full" disabled={isResponseEmpty(response)}>
               Check answer
             </Button>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
               <Button
                 type="button"
                 variant="outline"
@@ -274,7 +279,12 @@ export function ExpectedAnswer({ question }: { question: Question }) {
       </div>
     );
   return (
-    <div className="overflow-x-auto rounded-xl border border-border">
+    <div
+      tabIndex={0}
+      role="region"
+      aria-label="Scrollable trace table"
+      className="max-w-full overflow-x-auto rounded-xl border border-border"
+    >
       <table className="w-full text-sm">
         <caption className="px-2 py-1.5 text-left text-xs font-medium uppercase tracking-wider text-muted-foreground">
           Expected trace

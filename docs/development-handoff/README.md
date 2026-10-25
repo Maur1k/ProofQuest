@@ -91,3 +91,7 @@ The shared shell now uses phone bottom navigation (<768px), tablet top navigatio
 ## Guest entry and home/library checkpoint — 2026-10-25
 
 Home is now the direct guest entry. Introduction is optional; old account URLs redirect to Home. Home and library have responsive layouts, with stacked compact filters and tablet/desktop card grids. Original account components remain unused reference code. See [60% checkpoint](../phase-2-60-checkpoint.md); other feature screens and integrated accessibility acceptance remain pending.
+
+## Final Phase 2 layouts — acceptance pending
+
+Editor/practice/results now use bounded reading widths; subject/progress lists use responsive grids. Shared labels and controls wrap, long code scrolls internally, and confirmation dialogs fit short viewports. See [final review](../phase-2-final-review.md) for completed checks and the browser-automation block. This entry does not declare Phase 2 accepted.

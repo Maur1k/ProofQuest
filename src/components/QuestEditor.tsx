@@ -45,7 +45,7 @@ function Field({
   id: string;
 }) {
   return (
-    <div className="space-y-1.5">
+    <div className="min-w-0 space-y-1.5">
       <label htmlFor={id} className="block text-sm font-medium text-foreground">
         {label}
       </label>
@@ -131,9 +131,9 @@ export function QuestEditor({
         e.preventDefault();
         save();
       }}
-      className="space-y-5 pt-6"
+      className="mx-auto max-w-4xl space-y-5 pt-6"
     >
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-y-2">
         <h1 className="text-2xl font-bold">{heading}</h1>
         {dirty && <span className="text-xs text-muted-foreground">Unsaved changes</span>}
       </div>
@@ -153,7 +153,7 @@ export function QuestEditor({
         <Field label="Title" id="title" error={shown["title"]}>
           <input
             id="title"
-            className="field"
+            className="field min-w-0"
             value={draft.title}
             maxLength={LIMITS.titleMax + 20}
             onChange={(e) => set("title", e.target.value)}
@@ -161,7 +161,7 @@ export function QuestEditor({
             {...err(shown, "title")}
           />
         </Field>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <Field label="Subject" id="subjectId" error={shown["subjectId"]}>
             <select
               id="subjectId"
@@ -214,7 +214,7 @@ export function QuestEditor({
       </section>
 
       <section aria-labelledby="questions-heading" className="space-y-3">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-wrap items-center justify-between gap-y-2">
           <h2 id="questions-heading" className="text-lg font-semibold">
             Questions{" "}
             <span className="text-sm font-normal text-muted-foreground">
@@ -260,7 +260,7 @@ export function QuestEditor({
         </div>
       </section>
 
-      <div className="sticky bottom-24 z-10 flex gap-2 rounded-2xl border border-border bg-background/95 p-2 backdrop-blur">
+      <div className="sticky bottom-[calc(6rem+env(safe-area-inset-bottom))] md:bottom-4 z-10 flex gap-2 rounded-2xl border border-border bg-background/95 p-2 backdrop-blur">
         <Button
           type="button"
           variant="outline"
@@ -327,7 +327,7 @@ function QuestionEditor({
       className={`space-y-4 rounded-2xl border bg-card p-4 ${hasErr ? "border-destructive/60" : "border-border"}`}
       aria-label={`Question ${index + 1}`}
     >
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-y-2 gap-2">
         <p className="text-sm font-semibold">
           <span className="text-muted-foreground">Q{index + 1}</span> ·{" "}
           {QUESTION_TYPE_LABEL[q.type]}
@@ -366,7 +366,7 @@ function QuestionEditor({
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <Field label="Type" id={fid("type")}>
           <select
             id={fid("type")}

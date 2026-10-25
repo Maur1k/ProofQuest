@@ -82,7 +82,7 @@ function SubjectDetail() {
                     selected && "bg-accent",
                   )}
                 >
-                  <span>
+                  <span className="min-w-0 break-words [overflow-wrap:anywhere]">
                     <span className="block text-sm font-medium">{t}</span>
                     <span className="text-xs text-muted-foreground">
                       {count} quest{count === 1 ? "" : "s"}
@@ -98,11 +98,15 @@ function SubjectDetail() {
       </section>
 
       <section aria-labelledby="sq-heading" className="space-y-2">
-        <h2 id="sq-heading" className="text-lg font-semibold">
+        <h2 id="sq-heading" className="break-words [overflow-wrap:anywhere] text-lg font-semibold">
           {topic ? `${topic} quests` : "All quests"}
         </h2>
         {shown.length ? (
-          shown.map((q) => <QuestCard key={q.id} quest={q} attempts={data.attempts} />)
+          <div className="grid gap-3 md:grid-cols-2">
+            {shown.map((q) => (
+              <QuestCard key={q.id} quest={q} attempts={data.attempts} />
+            ))}
+          </div>
         ) : (
           <EmptyState
             title={topic ? `No ${topic} quests yet` : "No quests in this subject yet"}
