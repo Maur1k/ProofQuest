@@ -39,6 +39,18 @@ try {
       assert.equal((await fetch(origin + asset)).status, 200, asset);
     console.log(`PASS ${path}: SSR and linked assets`);
   }
+  for (const path of ["/login", "/register", "/welcome"]) {
+    const response = await fetch(origin + path + "?redirect=https://example.com", {
+      redirect: "manual",
+    });
+    assert.equal(response.status, 307, path);
+    assert.equal(
+      response.headers.get("location"),
+      "/",
+      "Legacy account URL must redirect only to Home",
+    );
+    console.log(`PASS ${path}: safe guest redirect`);
+  }
 } finally {
   server.kill();
 }

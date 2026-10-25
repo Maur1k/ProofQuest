@@ -32,16 +32,20 @@ export function QuestCard({
   const answered = open ? Object.keys(open.answers).length : 0;
 
   return (
-    <article className="rounded-2xl border border-border bg-card p-4">
+    <article className="flex min-w-0 flex-col rounded-2xl border border-border bg-card p-4">
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0">
-          <h3 className="truncate text-base font-semibold text-foreground">{quest.title}</h3>
-          <p className="mt-0.5 text-xs text-muted-foreground">
+          <h3 className="break-words [overflow-wrap:anywhere] text-base font-semibold text-foreground">
+            {quest.title}
+          </h3>
+          <p className="mt-0.5 break-words [overflow-wrap:anywhere] text-xs text-muted-foreground">
             {getSubject(quest.subjectId)?.short} · {quest.topic} · {total} question
             {total === 1 ? "" : "s"}
           </p>
         </div>
-        <DifficultyPill difficulty={quest.difficulty} />
+        <span className="shrink-0">
+          <DifficultyPill difficulty={quest.difficulty} />
+        </span>
       </div>
       <div className="mt-3 flex items-center gap-2">
         {status === "completed" && last && (
@@ -60,7 +64,7 @@ export function QuestCard({
         </div>
       )}
       {showActions && (
-        <div className="mt-3 flex items-center gap-2">
+        <div className="mt-auto flex items-center gap-2 pt-3">
           {total > 0 ? (
             <Link
               to="/practice/$questId"
@@ -81,14 +85,14 @@ export function QuestCard({
             to="/quests/$questId/edit"
             params={{ questId: quest.id }}
             aria-label={`Edit ${quest.title}`}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-input text-foreground hover:bg-accent"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-input text-foreground hover:bg-accent"
           >
             <Pencil className="h-4 w-4" aria-hidden />
           </Link>
           <button
             onClick={() => setConfirm(true)}
             aria-label={`Delete ${quest.title}`}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-xl border border-input text-destructive hover:bg-destructive/10"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-input text-destructive hover:bg-destructive/10"
           >
             <Trash2 className="h-4 w-4" aria-hidden />
           </button>

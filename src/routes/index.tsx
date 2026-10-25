@@ -1,8 +1,6 @@
-import { useEffect } from "react";
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpenText, Plus, Target } from "lucide-react";
 import { ART } from "@/onboarding/slides";
-import { useIntroDecision } from "@/onboarding/useOnboarding";
 import { useStore } from "@/store/store";
 import { Card, EmptyState, LoadingState, MasteryDots, ProgressBar } from "@/components/common";
 import { QuestCard } from "@/components/QuestCard";
@@ -47,13 +45,7 @@ function greeting() {
 
 function Home() {
   const { ready, data } = useStore();
-  const navigate = useNavigate();
-  const intro = useIntroDecision();
-  useEffect(() => {
-    // First launch only: Home is the app's entry, so the introduction is shown from here.
-    if (intro === "intro") void navigate({ to: "/intro", replace: true });
-  }, [intro, navigate]);
-  if (!ready || intro !== "home") return <LoadingState />;
+  if (!ready) return <LoadingState />;
   const { quests, attempts } = data;
   const overall = summarize(flattenAnswers(attempts));
   const completed = attempts.filter((a) => a.completedAt !== null).length;
@@ -111,11 +103,15 @@ function Home() {
         </div>
       </header>
 
+      <p className="text-sm text-muted-foreground">
+        No account needed. Your quests and progress stay in this browser.
+      </p>
+
       {continueCard}
 
       <section
         aria-labelledby="study-intro-h"
-        className="relative flex items-center gap-3 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-4"
+        className="relative flex items-center gap-3 overflow-hidden rounded-2xl border border-border bg-gradient-surface p-4 md:p-6"
       >
         <div className="min-w-0 flex-1">
           <h2 id="study-intro-h" className="text-lg font-semibold">
@@ -141,11 +137,11 @@ function Home() {
           alt=""
           width={112}
           height={112}
-          className="h-28 w-28 shrink-0 object-contain"
+          className="h-20 w-20 shrink-0 object-contain sm:h-28 sm:w-28 md:h-40 md:w-40"
         />
       </section>
 
-      <section aria-label="Study summary" className="grid grid-cols-3 gap-2">
+      <section aria-label="Study summary" className="grid grid-cols-3 gap-2 md:gap-4">
         {[
           { label: "Answered", value: String(overall.answered) },
           { label: "Accuracy", value: overall.answered ? pct(overall.accuracy) : "—" },
@@ -189,73 +185,75 @@ function Home() {
       <Link
         to="/quests/new"
         search={{}}
-        className="flex min-h-12 items-center justify-center gap-2 rounded-2xl border border-input bg-card text-sm font-semibold text-foreground hover:border-primary/60"
+        className="flex min-h-12 flex-wrap items-center justify-center gap-2 rounded-2xl px-4 py-3 border border-input bg-card text-sm font-semibold text-foreground hover:border-primary/60"
       >
         <Plus className="h-5 w-5 text-primary" aria-hidden /> Create quest manually
         <span className="text-xs font-normal text-muted-foreground">· saved to your library</span>
       </Link>
 
-      <section aria-labelledby="subjects-heading" className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h2 id="subjects-heading" className="text-lg font-semibold">
-            Subjects
-          </h2>
-          <Link to="/subjects" className="inline-flex min-h-11 items-center text-sm text-primary">
-            See all
-          </Link>
-        </div>
-        <div className="grid grid-cols-2 gap-2">
-          {SUBJECTS.map((s) => {
-            const count = quests.filter((q) => q.subjectId === s.id).length;
-            const ts = topicStats.filter((t) => t.subjectId === s.id);
-            const sum = summarize(flattenAnswers(attempts.filter((a) => a.subjectId === s.id)));
-            const mastery = ts.length
-              ? Math.round(ts.reduce((n, t) => n + t.mastery, 0) / ts.length)
-              : 0;
-            return (
-              <Link
-                key={s.id}
-                to="/subjects/$subjectId"
-                params={{ subjectId: s.id }}
-                className="rounded-2xl border border-border bg-card p-3 transition-colors hover:border-primary/60"
-              >
-                <p className="text-sm font-semibold leading-tight">{s.name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  {count} quest{count === 1 ? "" : "s"}
-                  {sum.answered > 0 && ` · ${pct(sum.accuracy)}`}
-                </p>
-                <div className="mt-2">
-                  <MasteryDots mastery={mastery} />
-                </div>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section aria-labelledby="recent-heading" className="space-y-2">
-        <div className="flex items-center justify-between">
-          <h2 id="recent-heading" className="text-lg font-semibold">
-            Recent quests
-          </h2>
-          <Link
-            to="/quests"
-            search={{}}
-            className="inline-flex min-h-11 items-center text-sm text-primary"
-          >
-            Library
-          </Link>
-        </div>
-        {recent.length ? (
-          <div className="space-y-2">
-            {recent.map((q) => (
-              <QuestCard key={q.id} quest={q} attempts={attempts} showActions={false} />
-            ))}
+      <div className="grid gap-6 xl:grid-cols-2">
+        <section aria-labelledby="subjects-heading" className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h2 id="subjects-heading" className="text-lg font-semibold">
+              Subjects
+            </h2>
+            <Link to="/subjects" className="inline-flex min-h-11 items-center text-sm text-primary">
+              See all
+            </Link>
           </div>
-        ) : (
-          <EmptyState title="No quests yet" body="Create your first quest to start practicing." />
-        )}
-      </section>
+          <div className="grid grid-cols-2 gap-2">
+            {SUBJECTS.map((s) => {
+              const count = quests.filter((q) => q.subjectId === s.id).length;
+              const ts = topicStats.filter((t) => t.subjectId === s.id);
+              const sum = summarize(flattenAnswers(attempts.filter((a) => a.subjectId === s.id)));
+              const mastery = ts.length
+                ? Math.round(ts.reduce((n, t) => n + t.mastery, 0) / ts.length)
+                : 0;
+              return (
+                <Link
+                  key={s.id}
+                  to="/subjects/$subjectId"
+                  params={{ subjectId: s.id }}
+                  className="rounded-2xl border border-border bg-card p-3 transition-colors hover:border-primary/60"
+                >
+                  <p className="text-sm font-semibold leading-tight">{s.name}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    {count} quest{count === 1 ? "" : "s"}
+                    {sum.answered > 0 && ` · ${pct(sum.accuracy)}`}
+                  </p>
+                  <div className="mt-2">
+                    <MasteryDots mastery={mastery} />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        <section aria-labelledby="recent-heading" className="space-y-2">
+          <div className="flex items-center justify-between">
+            <h2 id="recent-heading" className="text-lg font-semibold">
+              Recent quests
+            </h2>
+            <Link
+              to="/quests"
+              search={{}}
+              className="inline-flex min-h-11 items-center text-sm text-primary"
+            >
+              Library
+            </Link>
+          </div>
+          {recent.length ? (
+            <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-1">
+              {recent.map((q) => (
+                <QuestCard key={q.id} quest={q} attempts={attempts} showActions={false} />
+              ))}
+            </div>
+          ) : (
+            <EmptyState title="No quests yet" body="Create your first quest to start practicing." />
+          )}
+        </section>
+      </div>
 
       <nav
         aria-label="More"
@@ -266,12 +264,6 @@ function Home() {
           className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground"
         >
           Replay introduction
-        </Link>
-        <Link
-          to="/welcome"
-          className="inline-flex min-h-11 items-center text-muted-foreground hover:text-foreground"
-        >
-          Account demo
         </Link>
       </nav>
     </div>

@@ -87,3 +87,7 @@ Deep links to any app route open directly, never redirected to the introduction;
 ## Responsive web shell checkpoint — 2026-10-25
 
 The shared shell now uses phone bottom navigation (<768px), tablet top navigation (768–1023px) and desktop side navigation (>=1024px). This supersedes the original fixed 430px shell only. Colors, original artwork and product behavior are unchanged. Page-specific responsive design is still pending. See [Phase 2 checkpoint](../phase-2-checkpoint.md) for verified scope and remaining work.
+
+## Guest entry and home/library checkpoint — 2026-10-25
+
+Home is now the direct guest entry. Introduction is optional; old account URLs redirect to Home. Home and library have responsive layouts, with stacked compact filters and tablet/desktop card grids. Original account components remain unused reference code. See [60% checkpoint](../phase-2-60-checkpoint.md); other feature screens and integrated accessibility acceptance remain pending.

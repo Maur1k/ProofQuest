@@ -35,7 +35,7 @@ function Intro() {
 
   const finish = () => {
     markOnboardingSeen();
-    void navigate({ to: "/welcome" });
+    void navigate({ to: "/" });
   };
   const go = (delta: number) => setIndex((i) => nextSlideIndex(i, delta, total));
 

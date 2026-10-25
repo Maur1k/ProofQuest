@@ -101,9 +101,9 @@ function Library() {
             onChange={(e) => update({ q: e.target.value || undefined })}
           />
         </label>
-        <div className="grid grid-cols-3 gap-2">
-          <label>
-            <span className="sr-only">Filter by subject</span>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <label className="min-w-0">
+            <span className="mb-1 block text-xs text-muted-foreground">Filter by subject</span>
             <select
               className="field px-2 text-sm"
               value={search.subject ?? ""}
@@ -119,7 +119,7 @@ function Library() {
               ))}
             </select>
           </label>
-          <label>
+          <label className="min-w-0">
             <span className="sr-only">Filter by difficulty</span>
             <select
               className="field px-2 text-sm"
@@ -136,7 +136,7 @@ function Library() {
               ))}
             </select>
           </label>
-          <label>
+          <label className="min-w-0">
             <span className="sr-only">Filter by status</span>
             <select
               className="field px-2 text-sm"
@@ -182,9 +182,9 @@ function Library() {
           }
         />
       ) : (
-        <div className="space-y-3">
+        <div className="grid gap-3 md:grid-cols-2">
           {hasFilters && (
-            <p className="text-xs text-muted-foreground">
+            <p className="text-xs text-muted-foreground md:col-span-2">
               {filtered.length} of {data.quests.length} shown
             </p>
           )}
