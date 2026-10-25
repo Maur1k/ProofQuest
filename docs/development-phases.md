@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-10-25. Status: Phase 0 complete; Phase 1 awaits owner confirmation.
+Owner: Maur1k. Updated: 2026-10-25. Status: Phase 1 desktop scope complete as of 2026-10-25; physical-phone validation pending by owner instruction. Phase 2 awaits confirmation.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -62,7 +62,7 @@ The default execution order is sequential. Building the quiz lifecycle before co
 - PDF text retains page mapping, worker paths resolve in production output and unsupported files fail clearly.
 - Findings are recorded as short architecture decisions. Live host verification remains Phase 7; local builds are not called a ready backup.
 
-**Review deliverable:** runtime/build instructions and PDF feasibility report. Any unsupported dependency or mobile limit is resolved before feature work relies on it.
+**Review deliverable:** runtime/build instructions and PDF feasibility report. See [Phase 1 handoff](phase-1-handoff.md). The owner explicitly approved finishing desktop checks with phone validation pending. Limits remain provisional and must be validated before Phase 4 depends on them; Phase 2 layout work can proceed after separate approval.
 
 ## Phase 2 — Responsive guest experience
 
@@ -183,4 +183,4 @@ OCR for scanned PDFs, accounts/cloud sync, installable PWA/offline startup, shar
 - Known limitations and unresolved decisions.
 - Exit criteria satisfied and next eligible phase.
 
-Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Do not start Phase 1 without further confirmation.
+Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Phase 1 was authorized and its desktop scope completed on 2026-10-25. Physical-phone validation remains pending by owner instruction. Do not start Phase 2 without further confirmation.

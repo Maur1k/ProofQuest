@@ -24,3 +24,14 @@ jobs:
       - run: bun run typecheck
       - run: bun run test
       - run: bun run build
+      - run: bun run build:cloudflare
+      - run: bun run build:lovable
+      - run: bun run build:vercel
+      - run: bun run build:node
+      - run: bun run test:node
+      - name: PDF feasibility fixtures and production worker bundle
+        working-directory: experiments/pdf-feasibility
+        run: |
+          bun install --frozen-lockfile
+          bun run test
+          bun run build

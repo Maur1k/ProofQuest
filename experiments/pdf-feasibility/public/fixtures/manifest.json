@@ -1,0 +1,31 @@
+{
+  "license": "MIT, copyright 2026 Maur1k",
+  "source": "Synthetic fixtures created for ProofQuest; no third-party source documents",
+  "files": [
+    {
+      "file": "image-only.pdf",
+      "bytes": 17964,
+      "sha256": "cfd4574f0b518e5c093075f8577f8b16f0d9608b3ff0848f58e50f144ff4913a"
+    },
+    {
+      "file": "malformed.pdf",
+      "bytes": 71,
+      "sha256": "d294159214feefbe15659113d83160144ea1b64b52dfc9e8d51979c444a769b2"
+    },
+    {
+      "file": "password-protected.pdf",
+      "bytes": 3315,
+      "sha256": "b70ba65885deabb2f1492c30344101ade2778ede104da21c39b6dfa10a830d13"
+    },
+    {
+      "file": "text-thirty-pages.pdf",
+      "bytes": 29643,
+      "sha256": "e4d4fda0d46a88afd0070be8fc637b84f01b2e9d8f442dfefe0caa63567e7579"
+    },
+    {
+      "file": "text-three-pages.pdf",
+      "bytes": 3177,
+      "sha256": "56fa36479f4c4e4e4b55c63a0d3025562209209d177b6732dda94549424c940c"
+    }
+  ]
+}

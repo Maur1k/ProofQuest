@@ -12,7 +12,12 @@
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "build:node": "node scripts/build-target.mjs node && node scripts/verify-build.mjs node",
+    "build:vercel": "node scripts/build-target.mjs vercel && node scripts/verify-build.mjs vercel",
+    "build:cloudflare": "node scripts/build-target.mjs cloudflare && node scripts/verify-build.mjs cloudflare",
+    "build:lovable": "node scripts/build-target.mjs lovable && node scripts/verify-build.mjs lovable",
+    "test:node": "node scripts/smoke-node.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"

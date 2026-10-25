@@ -1,0 +1,85 @@
+:root {
+  font-family: system-ui, sans-serif;
+  color: #e8edf8;
+  background: #0b1222;
+  color-scheme: dark;
+}
+body {
+  margin: 0;
+}
+main {
+  max-width: 980px;
+  margin: auto;
+  padding: 32px 20px;
+}
+header {
+  margin-bottom: 28px;
+}
+h1 {
+  font-size: clamp(28px, 5vw, 42px);
+  margin: 8px 0;
+}
+h2 {
+  font-size: 20px;
+}
+p {
+  line-height: 1.6;
+  color: #c4cce0;
+}
+.eyebrow {
+  color: #86ead4;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+}
+section {
+  border: 1px solid #34425c;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 18px 0;
+}
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 12px 0;
+}
+button {
+  min-height: 44px;
+  padding: 10px 15px;
+  font: inherit;
+  cursor: pointer;
+  border: 1px solid #526486;
+  background: #243858;
+  color: white;
+  border-radius: 8px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #86ead4;
+  outline-offset: 3px;
+}
+.file-label {
+  display: grid;
+  gap: 10px;
+  margin: 20px 0;
+}
+input {
+  max-width: 100%;
+  font: inherit;
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  line-height: 1.5;
+}
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  background: white;
+}

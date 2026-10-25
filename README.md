@@ -57,3 +57,7 @@ Original code and documentation: [MIT](LICENSE), copyright 2026 Maur1k.
 Dependencies retain their own licenses. Artwork and branding have separate
 provenance and terms in docs/development-handoff/asset-manifest.json; MIT does
 not grant artwork rights. Distribution terms must be resolved before release.
+
+## Portable builds and PDF feasibility
+
+See [Phase 1 handoff](docs/phase-1-handoff.md) for verification and pending phone validation, and [hosting commands](docs/decisions/001-hosting-portability.md) for explicit Node, Vercel and Lovable build targets. The [PDF experiment](experiments/pdf-feasibility/README.md) is separate from the current sample-only study flow. Live backup deployment remains a later release step.
