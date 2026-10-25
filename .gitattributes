@@ -2,3 +2,6 @@
 *.png binary
 *.webp binary
 *.zip binary
+
+# PDF byte offsets must survive checkout unchanged.
+*.pdf binary
