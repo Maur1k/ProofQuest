@@ -19,7 +19,7 @@ const BARE_PATHS = ["/intro", "/welcome", "/login", "/register"];
 const active = { className: "text-foreground [&_svg]:text-primary" };
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { warning, dismissWarning } = useStore();
+  const { warning, dismissWarning, persistence } = useStore();
   const [createOpen, setCreateOpen] = useState(false);
   const close = () => setCreateOpen(false);
   // Onboarding and account demo screens are full-screen: no app navigation behind them.
@@ -46,7 +46,12 @@ export function AppShell({ children }: { children: ReactNode }) {
           role="alert"
           className="app-content flex items-start gap-2 bg-warning/15 px-4 py-3 text-sm text-warning"
         >
-          <p className="flex-1">{warning}</p>
+          <div className="flex-1">
+            <p>{warning}</p>
+            <Link to="/" hash="data-backup" className="inline-flex min-h-11 items-center underline">
+              Data &amp; backup
+            </Link>
+          </div>
           <button
             onClick={dismissWarning}
             className="-m-2 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
@@ -55,6 +60,11 @@ export function AppShell({ children }: { children: ReactNode }) {
             <X className="h-4 w-4" />
           </button>
         </div>
+      )}
+      {persistence === "temporary" && (
+        <p role="status" className="app-content bg-warning/15 px-4 py-2 text-sm">
+          Temporary session — export before closing this tab.
+        </p>
       )}
       <main id="main" tabIndex={-1} className="app-content app-main">
         {children}

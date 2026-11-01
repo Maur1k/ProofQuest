@@ -1,3 +1,4 @@
+import { DataControls } from "@/components/DataControls";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpenText, Plus, Target } from "lucide-react";
 import { ART } from "@/onboarding/slides";
@@ -255,6 +256,7 @@ function Home() {
         </section>
       </div>
 
+      <DataControls />
       <nav
         aria-label="More"
         className="flex flex-wrap items-center justify-center gap-x-4 border-t border-border pt-3 text-sm"

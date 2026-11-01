@@ -26,16 +26,39 @@ export const Route = createFileRoute("/practice/$questId")({
 function Practice() {
   const { questId } = Route.useParams();
   const navigate = useNavigate();
-  const { ready, data, startAttempt, showHint, recordAnswer, setIndex, completeAttempt } =
-    useStore();
-  const quest = data.quests.find((q) => q.id === questId);
+  const {
+    ready,
+    data,
+    snapshots,
+    busy,
+    persistence,
+    startAttempt,
+    showHint,
+    recordAnswer,
+    setIndex,
+    completeAttempt,
+  } = useStore();
   const attempt = unfinishedAttempt(questId, data.attempts);
+  const quest =
+    (attempt ? snapshots[attempt.id]?.quest : null) ?? data.quests.find((q) => q.id === questId);
   const finishing = useRef(false);
+  const autoStarted = useRef<string | null>(null);
 
   useEffect(() => {
-    if (ready && quest && quest.questions.length > 0 && !attempt && !finishing.current)
-      startAttempt(quest.id);
-  }, [ready, quest, attempt, startAttempt]);
+    if (
+      ready &&
+      !busy &&
+      persistence !== "blocked" &&
+      quest &&
+      quest.questions.length > 0 &&
+      !attempt &&
+      !finishing.current &&
+      autoStarted.current !== quest.id
+    ) {
+      autoStarted.current = quest.id;
+      void startAttempt(quest.id);
+    }
+  }, [ready, busy, persistence, quest, attempt, startAttempt]);
 
   if (!ready) return <LoadingState />;
   if (!quest)
@@ -66,7 +89,22 @@ function Practice() {
         />
       </div>
     );
-  if (!attempt) return <LoadingState />;
+  if (!attempt)
+    return (
+      <EmptyState
+        title="Start practice"
+        body="Your answers will be saved after each successful write."
+        action={
+          <button
+            className="min-h-11 text-primary"
+            disabled={busy || persistence === "blocked"}
+            onClick={() => void startAttempt(quest.id)}
+          >
+            Start or retry
+          </button>
+        }
+      />
+    );
 
   const total = quest.questions.length;
   const index = Math.min(attempt.currentIndex, total - 1);
@@ -76,14 +114,17 @@ function Practice() {
   const hintsShown = record ? record.hintsUsed : (attempt.hintsShown[question.id] ?? 0);
   const answeredCount = quest.questions.filter((q) => attempt.answers[q.id]).length;
 
-  const next = () => {
+  const next = async () => {
+    if (busy || finishing.current) return;
     if (index >= total - 1) {
       finishing.current = true;
-      completeAttempt(attempt.id);
+      if (!(await completeAttempt(attempt.id))) {
+        finishing.current = false;
+        return;
+      }
       navigate({ to: "/results/$questId", params: { questId }, search: { attempt: attempt.id } });
     } else {
-      setIndex(attempt.id, index + 1);
-      window.scrollTo({ top: 0 });
+      if (await setIndex(attempt.id, index + 1)) window.scrollTo({ top: 0 });
     }
   };
 
@@ -97,24 +138,26 @@ function Practice() {
       <div className="mb-5">
         <ProgressBar value={answeredCount / total} label="Quest progress" />
       </div>
-      <QuestionPractice
-        key={`${attempt.id}-${question.id}`}
-        question={question}
-        record={record}
-        hintsShown={hintsShown}
-        isLast={index >= total - 1}
-        onHint={(count) => showHint(attempt.id, question.id, count)}
-        onSubmit={({ response, correct, revealed }) =>
-          recordAnswer(attempt.id, {
-            questionId: question.id,
-            response,
-            correct,
-            revealed,
-            hintsUsed: hintsShown,
-          })
-        }
-        onNext={next}
-      />
+      <fieldset disabled={busy} className="min-w-0">
+        <QuestionPractice
+          key={`${attempt.id}-${question.id}`}
+          question={question}
+          record={record}
+          hintsShown={hintsShown}
+          isLast={index >= total - 1}
+          onHint={(count) => showHint(attempt.id, question.id, count)}
+          onSubmit={({ response, correct, revealed }) =>
+            recordAnswer(attempt.id, {
+              questionId: question.id,
+              response,
+              correct,
+              revealed,
+              hintsUsed: hintsShown,
+            })
+          }
+          onNext={next}
+        />
+      </fieldset>
     </div>
   );
 }

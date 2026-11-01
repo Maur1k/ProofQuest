@@ -37,7 +37,7 @@ function Results() {
   const { questId } = Route.useParams();
   const { attempt: attemptId } = Route.useSearch();
   const navigate = useNavigate();
-  const { ready, data, startAttempt } = useStore();
+  const { ready, data, snapshots, busy, startAttempt } = useStore();
   if (!ready) return <LoadingState />;
 
   const quest = data.quests.find((q) => q.id === questId);
@@ -63,7 +63,12 @@ function Results() {
     );
 
   const s = attemptSummary(attempt);
-  const questions = quest ? quest.questions.filter((q) => attempt.answers[q.id]) : [];
+  const snapshot = snapshots[attempt.id];
+  const reviewQuest = snapshot?.quest;
+  const questions = reviewQuest ? reviewQuest.questions.filter((q) => attempt.answers[q.id]) : [];
+  const missingDetails = Object.keys(attempt.answers).filter(
+    (id) => !questions.some((q) => q.id === id),
+  ).length;
 
   return (
     <div className="mx-auto max-w-4xl space-y-5 break-words [overflow-wrap:anywhere]">
@@ -93,8 +98,9 @@ function Results() {
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {quest && quest.questions.length > 0 ? (
           <Button
-            onClick={() => {
-              startAttempt(quest.id);
+            disabled={busy}
+            onClick={async () => {
+              if (!(await startAttempt(quest.id))) return;
               navigate({ to: "/practice/$questId", params: { questId: quest.id } });
             }}
           >
@@ -114,9 +120,21 @@ function Results() {
         <h2 id="review-heading" className="text-lg font-semibold">
           Review
         </h2>
-        {!quest && (
+        {snapshot?.provenance === "reconstructed" && (
+          <Card className="text-sm">
+            These question details were reconstructed from the quest available during migration.
+            They may differ from the original attempt. Your recorded score has not been changed.
+          </Card>
+        )}
+        {missingDetails > 0 && (
+          <Card className="text-sm">
+            Original details are unavailable for {missingDetails} recorded answer(s). Their outcomes
+            remain included in your score.
+          </Card>
+        )}
+        {!reviewQuest && (
           <Card className="text-sm text-muted-foreground">
-            This quest was deleted, so individual questions can't be shown.
+            Original question details are unavailable. Your recorded answers and score are retained.
           </Card>
         )}
         {questions.map((q, i) => {

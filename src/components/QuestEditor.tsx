@@ -72,9 +72,12 @@ export function QuestEditor({
 }: {
   initial: QuestDraft;
   heading: string;
-  onSave: (draft: QuestDraft) => string;
+  onSave: (draft: QuestDraft) => Promise<string | null>;
 }) {
   const navigate = useNavigate();
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState(false);
+  const savingRef = useRef(false);
   const [draft, setDraft] = useState<QuestDraft>(initial);
   const [submitted, setSubmitted] = useState(false);
   const [removeId, setRemoveId] = useState<string | null>(null);
@@ -112,16 +115,30 @@ export function QuestEditor({
       return { ...d, questions: qs };
     });
 
-  const save = () => {
+  const save = async () => {
+    if (savingRef.current) return;
     setSubmitted(true);
     if (errorCount > 0) {
       requestAnimationFrame(() => document.getElementById("form-errors")?.focus());
       return;
     }
-    const id = onSave(draft);
-    skipBlock.current = true;
-    void id;
-    navigate({ to: "/quests", search: {} });
+    savingRef.current = true;
+    setSaving(true);
+    setSaveError(false);
+    try {
+      const id = await onSave(draft);
+      if (!id) {
+        setSaveError(true);
+        return;
+      }
+      skipBlock.current = true;
+      await navigate({ to: "/quests", search: {} });
+    } catch {
+      setSaveError(true);
+    } finally {
+      savingRef.current = false;
+      setSaving(false);
+    }
   };
 
   return (
@@ -133,169 +150,177 @@ export function QuestEditor({
       }}
       className="mx-auto max-w-4xl space-y-5 pt-6"
     >
-      <div className="flex flex-wrap items-center justify-between gap-y-2">
-        <h1 className="text-2xl font-bold">{heading}</h1>
-        {dirty && <span className="text-xs text-muted-foreground">Unsaved changes</span>}
-      </div>
-
-      {submitted && errorCount > 0 && (
-        <div
-          id="form-errors"
-          tabIndex={-1}
-          role="alert"
-          className="rounded-xl border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
-        >
-          Fix {errorCount} issue{errorCount === 1 ? "" : "s"} below before saving.
-        </div>
-      )}
-
-      <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
-        <Field label="Title" id="title" error={shown["title"]}>
-          <input
-            id="title"
-            className="field min-w-0"
-            value={draft.title}
-            maxLength={LIMITS.titleMax + 20}
-            onChange={(e) => set("title", e.target.value)}
-            placeholder="e.g. Loops & Accumulators"
-            {...err(shown, "title")}
-          />
-        </Field>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Field label="Subject" id="subjectId" error={shown["subjectId"]}>
-            <select
-              id="subjectId"
-              className="field"
-              value={draft.subjectId}
-              onChange={(e) => set("subjectId", e.target.value as QuestDraft["subjectId"])}
-            >
-              {SUBJECTS.map((s) => (
-                <option key={s.id} value={s.id}>
-                  {s.short}
-                </option>
-              ))}
-            </select>
-          </Field>
-          <Field label="Difficulty" id="difficulty" error={shown["difficulty"]}>
-            <select
-              id="difficulty"
-              className="field"
-              value={draft.difficulty}
-              onChange={(e) => set("difficulty", e.target.value as QuestDraft["difficulty"])}
-            >
-              {DIFFICULTIES.map((d) => (
-                <option key={d} value={d}>
-                  {DIFFICULTY_LABEL[d]}
-                </option>
-              ))}
-            </select>
-          </Field>
-        </div>
-        <Field
-          label="Topic"
-          id="topic"
-          error={shown["topic"]}
-          hint="Pick a suggestion or type your own."
-        >
-          <input
-            id="topic"
-            className="field"
-            list="topic-options"
-            value={draft.topic}
-            onChange={(e) => set("topic", e.target.value)}
-            {...err(shown, "topic")}
-          />
-          <datalist id="topic-options">
-            {subject?.topics.map((t) => (
-              <option key={t} value={t} />
-            ))}
-          </datalist>
-        </Field>
-      </section>
-
-      <section aria-labelledby="questions-heading" className="space-y-3">
+      <fieldset disabled={saving} className="min-w-0 space-y-5">
         <div className="flex flex-wrap items-center justify-between gap-y-2">
-          <h2 id="questions-heading" className="text-lg font-semibold">
-            Questions{" "}
-            <span className="text-sm font-normal text-muted-foreground">
-              ({draft.questions.length})
-            </span>
-          </h2>
+          <h1 className="text-2xl font-bold">{heading}</h1>
+          {dirty && <span className="text-xs text-muted-foreground">Unsaved changes</span>}
         </div>
-        {shown["questions"] && (
-          <p className="text-sm font-medium text-destructive">{shown["questions"]}</p>
+
+        {saveError && (
+          <p role="alert" className="text-destructive">
+            Your quest was not saved. Your draft is still here; resolve the storage warning and
+            retry.
+          </p>
+        )}
+        {submitted && errorCount > 0 && (
+          <div
+            id="form-errors"
+            tabIndex={-1}
+            role="alert"
+            className="rounded-xl border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive"
+          >
+            Fix {errorCount} issue{errorCount === 1 ? "" : "s"} below before saving.
+          </div>
         )}
 
-        {draft.questions.map((q, i) => (
-          <QuestionEditor
-            key={q.id}
-            q={q}
-            index={i}
-            count={draft.questions.length}
-            errors={shown}
-            onChange={(fn) => setQ(q.id, fn)}
-            onMove={(dir) => move(i, dir)}
-            onRemove={() => setRemoveId(q.id)}
-          />
-        ))}
+        <section className="space-y-4 rounded-2xl border border-border bg-card p-4">
+          <Field label="Title" id="title" error={shown["title"]}>
+            <input
+              id="title"
+              className="field min-w-0"
+              value={draft.title}
+              maxLength={LIMITS.titleMax + 20}
+              onChange={(e) => set("title", e.target.value)}
+              placeholder="e.g. Loops & Accumulators"
+              {...err(shown, "title")}
+            />
+          </Field>
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <Field label="Subject" id="subjectId" error={shown["subjectId"]}>
+              <select
+                id="subjectId"
+                className="field"
+                value={draft.subjectId}
+                onChange={(e) => set("subjectId", e.target.value as QuestDraft["subjectId"])}
+              >
+                {SUBJECTS.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.short}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field label="Difficulty" id="difficulty" error={shown["difficulty"]}>
+              <select
+                id="difficulty"
+                className="field"
+                value={draft.difficulty}
+                onChange={(e) => set("difficulty", e.target.value as QuestDraft["difficulty"])}
+              >
+                {DIFFICULTIES.map((d) => (
+                  <option key={d} value={d}>
+                    {DIFFICULTY_LABEL[d]}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </div>
+          <Field
+            label="Topic"
+            id="topic"
+            error={shown["topic"]}
+            hint="Pick a suggestion or type your own."
+          >
+            <input
+              id="topic"
+              className="field"
+              list="topic-options"
+              value={draft.topic}
+              onChange={(e) => set("topic", e.target.value)}
+              {...err(shown, "topic")}
+            />
+            <datalist id="topic-options">
+              {subject?.topics.map((t) => (
+                <option key={t} value={t} />
+              ))}
+            </datalist>
+          </Field>
+        </section>
 
-        <div className="grid grid-cols-3 gap-2">
-          {(["predict", "trace", "fix"] as const).map((t) => (
-            <Button
-              key={t}
-              type="button"
-              variant="outline"
-              className="h-auto min-h-11 flex-col gap-0.5 whitespace-normal py-2 text-xs"
-              disabled={draft.questions.length >= LIMITS.questionsMax}
-              onClick={() =>
-                setDraft((d) => ({
-                  ...d,
-                  questions: [...d.questions, blankQuestion(t, d.questions.at(-1)?.language)],
-                }))
-              }
-            >
-              <Plus aria-hidden /> {QUESTION_TYPE_LABEL[t]}
-            </Button>
+        <section aria-labelledby="questions-heading" className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-y-2">
+            <h2 id="questions-heading" className="text-lg font-semibold">
+              Questions{" "}
+              <span className="text-sm font-normal text-muted-foreground">
+                ({draft.questions.length})
+              </span>
+            </h2>
+          </div>
+          {shown["questions"] && (
+            <p className="text-sm font-medium text-destructive">{shown["questions"]}</p>
+          )}
+
+          {draft.questions.map((q, i) => (
+            <QuestionEditor
+              key={q.id}
+              q={q}
+              index={i}
+              count={draft.questions.length}
+              errors={shown}
+              onChange={(fn) => setQ(q.id, fn)}
+              onMove={(dir) => move(i, dir)}
+              onRemove={() => setRemoveId(q.id)}
+            />
           ))}
+
+          <div className="grid grid-cols-3 gap-2">
+            {(["predict", "trace", "fix"] as const).map((t) => (
+              <Button
+                key={t}
+                type="button"
+                variant="outline"
+                className="h-auto min-h-11 flex-col gap-0.5 whitespace-normal py-2 text-xs"
+                disabled={draft.questions.length >= LIMITS.questionsMax}
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    questions: [...d.questions, blankQuestion(t, d.questions.at(-1)?.language)],
+                  }))
+                }
+              >
+                <Plus aria-hidden /> {QUESTION_TYPE_LABEL[t]}
+              </Button>
+            ))}
+          </div>
+        </section>
+
+        <div className="sticky bottom-[calc(6rem+env(safe-area-inset-bottom))] md:bottom-4 z-10 flex gap-2 rounded-2xl border border-border bg-background/95 p-2 backdrop-blur">
+          <Button
+            type="button"
+            variant="outline"
+            className="flex-1"
+            onClick={() => navigate({ to: "/quests", search: {} })}
+          >
+            Cancel
+          </Button>
+          <Button disabled={saving} type="submit" className="flex-1">
+            Save quest
+          </Button>
         </div>
-      </section>
 
-      <div className="sticky bottom-[calc(6rem+env(safe-area-inset-bottom))] md:bottom-4 z-10 flex gap-2 rounded-2xl border border-border bg-background/95 p-2 backdrop-blur">
-        <Button
-          type="button"
-          variant="outline"
-          className="flex-1"
-          onClick={() => navigate({ to: "/quests", search: {} })}
-        >
-          Cancel
-        </Button>
-        <Button type="submit" className="flex-1">
-          Save quest
-        </Button>
-      </div>
-
-      <ConfirmDialog
-        open={removeId !== null}
-        onOpenChange={(o) => !o && setRemoveId(null)}
-        title="Remove this question?"
-        description="The question will be removed from this quest when you save."
-        confirmLabel="Remove"
-        destructive
-        onConfirm={() => {
-          setDraft((d) => ({ ...d, questions: d.questions.filter((q) => q.id !== removeId) }));
-          setRemoveId(null);
-        }}
-      />
-      <ConfirmDialog
-        open={blocker.status === "blocked"}
-        onOpenChange={(o) => !o && blocker.status === "blocked" && blocker.reset()}
-        title="Discard unsaved changes?"
-        description="You have changes that haven't been saved. Leaving now will discard them."
-        confirmLabel="Discard changes"
-        cancelLabel="Keep editing"
-        destructive
-        onConfirm={() => blocker.status === "blocked" && blocker.proceed()}
-      />
+        <ConfirmDialog
+          open={removeId !== null}
+          onOpenChange={(o) => !o && setRemoveId(null)}
+          title="Remove this question?"
+          description="The question will be removed from this quest when you save."
+          confirmLabel="Remove"
+          destructive
+          onConfirm={() => {
+            setDraft((d) => ({ ...d, questions: d.questions.filter((q) => q.id !== removeId) }));
+            setRemoveId(null);
+          }}
+        />
+        <ConfirmDialog
+          open={blocker.status === "blocked"}
+          onOpenChange={(o) => !o && blocker.status === "blocked" && blocker.reset()}
+          title="Discard unsaved changes?"
+          description="You have changes that haven't been saved. Leaving now will discard them."
+          confirmLabel="Discard changes"
+          cancelLabel="Keep editing"
+          destructive
+          onConfirm={() => blocker.status === "blocked" && blocker.proceed()}
+        />
+      </fieldset>
     </form>
   );
 }

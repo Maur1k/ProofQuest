@@ -42,7 +42,7 @@ export const questSchema = z.object({
   updatedAt: z.number(),
 });
 
-const responseSchema = z.discriminatedUnion("type", [
+export const responseSchema = z.discriminatedUnion("type", [
   z.object({ type: z.literal("predict"), output: z.string() }),
   z.object({ type: z.literal("trace"), cells: z.array(z.array(z.string())) }),
   z.object({ type: z.literal("fix"), code: z.string() }),

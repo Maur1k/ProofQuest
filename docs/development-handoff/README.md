@@ -95,3 +95,13 @@ Home is now the direct guest entry. Introduction is optional; old account URLs r
 ## Final Phase 2 layouts — acceptance pending
 
 Editor/practice/results now use bounded reading widths; subject/progress lists use responsive grids. Shared labels and controls wrap, long code scrolls internally, and confirmation dialogs fit short viewports. See [final review](../phase-2-final-review.md) for completed checks and the browser-automation block. This entry does not declare Phase 2 accepted.
+
+## Current phase handoff — 2026-10-30
+
+Phase 2 is accepted for advancement by the owner; the native 200% zoom check is handed to the owner, not reported as an automated pass. The remaining desktop route/keyboard checks and 44px sheet-close fix are recorded in [Phase 2 final review](../phase-2-final-review.md). This supersedes the pending-acceptance notes above.
+
+Phase 3 is authorized and in progress. Pure quiz contracts and migration preparation are tested; IndexedDB integration and recovery remain outstanding. See [Phase 3 checkpoint](../phase-3-checkpoint.md). Historical Flutter and account-demo descriptions above are reference material; the active web roadmap governs implementation.
+
+## Phase 3 completion — 2026-11-01
+
+IndexedDB persistence, atomic migration, immutable question history, backup/import and explicit temporary-session recovery are implemented. Existing programming pages use committed writes and saved history; the new MCQ/Test contracts are tested for later UI integration. See [completed handoff](../phase-3-handoff.md) and [data contracts](../phase-3-data-contracts.md), which supersede the initial checkpoint above. Phase 4 awaits owner confirmation.

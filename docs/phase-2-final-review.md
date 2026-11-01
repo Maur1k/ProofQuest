@@ -1,6 +1,6 @@
-# Phase 2 final implementation — acceptance review pending
+# Phase 2 final implementation — owner accepted
 
-Owner: Maur1k. Date: 2026-10-25. The owner authorized finishing Phase 2. Phase 3 is not authorized.
+Owner: Maur1k. Updated: 2026-10-30. The owner accepted proceeding and explicitly authorized Phase 3. Native zoom verification is assigned to the owner, not claimed as an automated pass.
 
 ## Implemented beyond the 60% checkpoint
 
@@ -20,10 +20,12 @@ Owner: Maur1k. Date: 2026-10-25. The owner authorized finishing Phase 2. Phase 3
 
 The local test quest remains in the 127.0.0.1 browser data, identified by `631f2960-e5e8-4b4c-a985-35ec40031bd0`. No user data was deleted.
 
-## Blocking acceptance checks
+## Final browser evidence and owner handoff
 
-The in-app browser did not change native zoom in response to the zoom shortcut. A separate native-browser attempt was stopped by Computer Use because it could not verify the current browser URL. No further browser actions were attempted after that stop. Native zoom was not verified or changed. The Brave window was restored from minimized before the stop.
+On 2026-10-26, subject list/detail, progress, study library/lesson/configure/review/ready and intro passed 45 viewport checks across 320, 390, 768, 1024 and 1440 CSS pixels without page-level horizontal overflow. Keyboard checks covered topic selection, sample navigation, intro skip, skip-to-main, sheet Escape/focus return, and unsaved-draft discard. Back/Forward and discarded-draft behavior passed. The Create sheet close control was increased from 16×16 to 44×44 pixels and measured in-browser. The viewport override was reset.
 
-Remaining: actual 200% zoom; final subject/progress and sample-route viewport review; full keyboard/touch-target review; Back/Forward and discard-path regression checks. A desktop viewport override remained at 1440x900 when automation stopped and should be reset on resumption. Physical-phone validation remains pending under the previously accepted exception.
+Evidence is retained in the chat workspace under `validation/phase2-acceptance-metrics.json` and `validation/phase2-final-home.png`. This was a focused interaction review, not a complete accessibility certification.
 
-Do not mark Phase 2 complete until these acceptance checks are resolved. Continuing Phase 2 is already authorized; Phase 3 still requires separate confirmation. No push or deployment was performed.
+Native 200% zoom automation remained blocked on 2026-10-30 because Computer Use could not determine the browser URL. The owner replied, “I can verify and you may start phase 3 now.” This accepts advancement with owner-side zoom verification; it does not establish an automated zoom pass. Physical-phone validation remains pending under the previously accepted exception.
+
+No push or deployment was performed. Phase 3 is now authorized; Phase 4 requires separate confirmation.
