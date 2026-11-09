@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-01. Status: Phase 2 accepted by the owner with native zoom verification handed to the owner. Physical-phone validation remains pending. Phase 3 complete; Phase 4 awaits explicit approval.
+Owner: Maur1k. Updated: 2026-11-10. Status: Phase 2 accepted by the owner with native zoom verification handed to the owner. Physical-phone validation remains pending. Phase 3 pushed; Phase 4 first 20% checkpoint complete. Stopped at the owner-authorized limit.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -84,7 +84,7 @@ The default execution order is sequential. Building the quiz lifecycle before co
 
 ## Phase 3 — Durable data and quiz contracts
 
-**Status:** Complete on 2026-11-01. See [Phase 3 handoff](phase-3-handoff.md) and [data contracts](phase-3-data-contracts.md). Phase 4 is not authorized.
+**Status:** Complete on 2026-11-01. See [Phase 3 handoff](phase-3-handoff.md) and [data contracts](phase-3-data-contracts.md). Phase 4 was subsequently authorized through approximately 20% only on 2026-11-10.
 
 **Work**
 
@@ -104,6 +104,8 @@ The default execution order is sequential. Building the quiz lifecycle before co
 **Review deliverable:** schema/transition documentation, migration fixtures and data recovery tests.
 
 ## Phase 4 — Real local PDF import and reader
+
+**Status:** First approximately 20% complete on 2026-11-10. See [checkpoint](phase-4-20-checkpoint.md). Stop here until the owner authorizes further work.
 
 **Work**
 
@@ -187,4 +189,4 @@ OCR for scanned PDFs, accounts/cloud sync, installable PWA/offline startup, shar
 - Known limitations and unresolved decisions.
 - Exit criteria satisfied and next eligible phase.
 
-Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Phase 1 was authorized and its desktop scope completed on 2026-10-25. Physical-phone validation remains pending by owner instruction. Phase 2 through approximately 60% was subsequently authorized and completed. Phase 2 was accepted for advancement on 2026-10-30; native zoom verification is assigned to the owner. Phase 3 is complete as of 2026-11-01. Do not begin Phase 4 without separate confirmation.
+Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Phase 1 was authorized and its desktop scope completed on 2026-10-25. Physical-phone validation remains pending by owner instruction. Phase 2 through approximately 60% was subsequently authorized and completed. Phase 2 was accepted for advancement on 2026-10-30; native zoom verification is assigned to the owner. Phase 3 is complete as of 2026-11-01. Phase 4 was authorized through approximately 20% on 2026-11-10, after pushing Phase 3. That checkpoint is complete; obtain confirmation before continuing further.

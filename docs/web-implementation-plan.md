@@ -1,6 +1,6 @@
 # ProofQuest — responsive web implementation plan
 
-Updated 2026-11-01. Owner: **Maur1k**. Status: Phases 0–2 accepted within documented verification limits; Phase 3 complete; Phase 4 awaits approval. See the active roadmap and phase handoffs.
+Updated 2026-11-10. Owner: **Maur1k**. Status: Phases 0–2 accepted within documented verification limits; Phase 3 pushed; Phase 4 first 20% checkpoint complete and stopped at the owner-authorized limit. See the active roadmap and phase handoffs.
 
 This supersedes `flutter-implementation-plan.md`. Stop Flutter development. The owner requested cleanup and the Flutter starter was removed on 2026-10-23. Keep the historical plan for reference. Continue the existing Lovable web application as the actual product, preserving its useful code, assets, data contracts and tests.
 
@@ -176,7 +176,7 @@ The authoritative delivery sequence, dependencies, work packages and exit checks
 | 7 — Release and recovery | Integrated device checks, actual host verification, Vercel recovery drill and authorized public beta |
 | Later | OCR, accounts/sync, PWA/offline, sharing and richer questions |
 
-Phases 0–2 are accepted within the documented phone/owner-zoom verification limits. Phase 3 is complete; Phases 4–7 have not started. See [the Phase 0 handoff](phase-0-handoff.md) for evidence. The isolated baseline investigation informs Phase 0 but does not complete it. Work proceeds through exit checks. Local work can continue within the authorized phase; stop after EVERY phase and obtain Maur1k’s explicit confirmation before starting the next phase. Unresolved provider/budget choices are settled before Phase 6; publishing and paid provisioning remain separate actions.
+Phases 0–2 are accepted within the documented phone/owner-zoom verification limits. Phase 3 is complete and pushed. Phase 4 is at its authorized 20% checkpoint; Phases 5–7 have not started. See [the Phase 0 handoff](phase-0-handoff.md) for evidence. The isolated baseline investigation informs Phase 0 but does not complete it. Work proceeds through exit checks. Local work can continue within the authorized phase; stop after EVERY phase and obtain Maur1k’s explicit confirmation before starting the next phase. Unresolved provider/budget choices are settled before Phase 6; publishing and paid provisioning remain separate actions.
 
 First complete core-product milestone is Phase 6: open the app on a phone or desktop, choose a real text PDF, generate five MCQs, finish a quiz, inspect explanations with page evidence, reload and retain the result. Existing manually created programming quests remain usable.
 
