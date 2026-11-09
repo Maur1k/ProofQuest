@@ -99,9 +99,20 @@ export function AppShell({ children }: { children: ReactNode }) {
             >
               <SheetHeader className="text-left">
                 <SheetTitle className="font-display">Create</SheetTitle>
-                <SheetDescription>Write your own quest, or study a sample lesson.</SheetDescription>
+                <SheetDescription>
+                  Import a PDF, write a quest, or study a sample lesson.
+                </SheetDescription>
               </SheetHeader>
               <div className="mt-4 space-y-2">
+                <Link to="/documents" onClick={close} className={choice}>
+                  <BookOpen className="h-5 w-5 shrink-0 text-primary" aria-hidden />
+                  <span>
+                    <span className="block font-semibold">Import a PDF</span>
+                    <span className="block text-xs text-muted-foreground">
+                      Read selected pages. Saved in this browser.
+                    </span>
+                  </span>
+                </Link>
                 <Link to="/quests/new" search={{}} onClick={close} className={choice}>
                   <PenLine className="h-5 w-5 shrink-0 text-primary" aria-hidden />
                   <span className="min-w-0">

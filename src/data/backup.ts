@@ -2,6 +2,7 @@ import { z } from "zod";
 import { quizVersionSchema } from "@/domain/quiz";
 import {
   documentSchema,
+  validateDocumentPages,
   jobSchema,
   legacyStateSchema,
   migrationSchema,
@@ -108,8 +109,7 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
     )
       throw new Error("PDF backup checksum mismatch");
     const pages = backup.pages.filter((page) => page.documentId === document.id);
-    if (pages.length !== document.pageCount || pages.some((page) => page.page > document.pageCount))
-      throw new Error("Incomplete document page mapping");
+    validateDocumentPages(document, pages);
     documents.push({ ...document, blob });
   }
   if (backup.pages.some((page) => !documents.some((document) => document.id === page.documentId)))

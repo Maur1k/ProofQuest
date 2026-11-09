@@ -15,6 +15,7 @@ import { prepareLegacyMigration } from "./legacy-migration";
 import {
   appDataSchema,
   documentSchema,
+  validateDocumentPages,
   jobSchema,
   legacyStateSchema,
   migrationSchema,
@@ -28,6 +29,10 @@ import {
 import { requestValue, transact } from "./indexed-db";
 
 export interface DocumentRepository {
+  listDocuments(): Promise<DocumentRecord[]>;
+  getDocumentBundle(
+    id: string,
+  ): Promise<{ document: DocumentRecord; pages: PageRecord[] } | undefined>;
   addDocument(document: DocumentRecord, pages: PageRecord[]): Promise<void>;
   getDocument(id: string): Promise<DocumentRecord | undefined>;
   getPages(documentId: string): Promise<PageRecord[]>;
@@ -146,16 +151,32 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
   async addDocument(input: DocumentRecord, inputPages: PageRecord[]): Promise<void> {
     const document = documentSchema.parse(input);
     const pages = z.array(pageSchema).parse(inputPages);
-    if (
-      pages.length !== document.pageCount ||
-      new Set(pages.map((p) => p.page)).size !== pages.length ||
-      pages.some((p) => p.documentId !== document.id || p.page > document.pageCount)
-    )
-      throw new Error("Document page mapping is incomplete");
+    validateDocumentPages(document, pages);
     await transact(this.database, ["documents", "pages"], "readwrite", async (tx) => {
       await requestValue(tx.objectStore("documents").add(document));
       for (const page of pages) await requestValue(tx.objectStore("pages").add(page));
     });
+  }
+  getDocumentBundle(id: string) {
+    return transact(this.database, ["documents", "pages"], "readonly", async (tx) => {
+      const document = await read(tx, "documents", id, documentSchema);
+      if (!document) return undefined;
+      const pages = z
+        .array(pageSchema)
+        .parse(
+          await requestValue(
+            tx.objectStore("pages").getAll(IDBKeyRange.bound([id, 1], [id, document.pageCount])),
+          ),
+        )
+        .sort((a, b) => a.page - b.page);
+      validateDocumentPages(document, pages);
+      return { document, pages };
+    });
+  }
+  listDocuments(): Promise<DocumentRecord[]> {
+    return transact(this.database, ["documents"], "readonly", async (tx) =>
+      z.array(documentSchema).parse(await requestValue(tx.objectStore("documents").getAll())),
+    );
   }
   getDocument(id: string) {
     return transact(this.database, ["documents"], "readonly", (tx) =>

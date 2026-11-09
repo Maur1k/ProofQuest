@@ -108,6 +108,15 @@ function Home() {
         No account needed. Your quests and progress stay in this browser.
       </p>
 
+      <Link
+        to="/documents"
+        className="block rounded-2xl border border-primary/50 bg-card p-5 hover:border-primary"
+      >
+        <span className="block text-lg font-semibold">Read your own PDF</span>
+        <span className="mt-1 block text-sm text-muted-foreground">
+          Choose a PDF, extract selected pages, and save it in this browser.
+        </span>
+      </Link>
       {continueCard}
 
       <section

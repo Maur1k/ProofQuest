@@ -26,7 +26,15 @@ try {
       }
     });
   });
-  for (const path of ["/", "/intro", "/quests", "/progress", "/study"]) {
+  for (const path of [
+    "/",
+    "/intro",
+    "/quests",
+    "/progress",
+    "/study",
+    "/documents",
+    "/documents/check-missing",
+  ]) {
     const response = await fetch(origin + path);
     assert.equal(response.status, 200, path);
     const html = await response.text();

@@ -15,6 +15,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as DocumentsIndexRouteImport } from './routes/documents.index'
+import { Route as DocumentsDocumentIdRouteImport } from './routes/documents.$documentId'
 import { Route as PracticeQuestIdRouteImport } from './routes/practice.$questId'
 import { Route as QuestsIndexRouteImport } from './routes/quests.index'
 import { Route as QuestsNewRouteImport } from './routes/quests.new'
@@ -56,6 +58,16 @@ const RegisterRoute = RegisterRouteImport.update({
 const WelcomeRoute = WelcomeRouteImport.update({
   id: '/welcome',
   path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsIndexRoute = DocumentsIndexRouteImport.update({
+  id: '/documents/',
+  path: '/documents/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocumentsDocumentIdRoute = DocumentsDocumentIdRouteImport.update({
+  id: '/documents/$documentId',
+  path: '/documents/$documentId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PracticeQuestIdRoute = PracticeQuestIdRouteImport.update({
@@ -126,12 +138,14 @@ export interface FileRoutesByFullPath {
   '/progress': typeof ProgressRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
+  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/results/$questId': typeof ResultsQuestIdRoute
   '/study/ready': typeof StudyReadyRoute
   '/study/review': typeof StudyReviewRoute
   '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
+  '/documents/': typeof DocumentsIndexRoute
   '/quests/': typeof QuestsIndexRoute
   '/study/': typeof StudyIndexRoute
   '/subjects/': typeof SubjectsIndexRoute
@@ -146,12 +160,14 @@ export interface FileRoutesByTo {
   '/progress': typeof ProgressRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
+  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/results/$questId': typeof ResultsQuestIdRoute
   '/study/ready': typeof StudyReadyRoute
   '/study/review': typeof StudyReviewRoute
   '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
+  '/documents': typeof DocumentsIndexRoute
   '/quests': typeof QuestsIndexRoute
   '/study': typeof StudyIndexRoute
   '/subjects': typeof SubjectsIndexRoute
@@ -167,12 +183,14 @@ export interface FileRoutesById {
   '/progress': typeof ProgressRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
+  '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/results/$questId': typeof ResultsQuestIdRoute
   '/study/ready': typeof StudyReadyRoute
   '/study/review': typeof StudyReviewRoute
   '/subjects/$subjectId': typeof SubjectsSubjectIdRoute
+  '/documents/': typeof DocumentsIndexRoute
   '/quests/': typeof QuestsIndexRoute
   '/study/': typeof StudyIndexRoute
   '/subjects/': typeof SubjectsIndexRoute
@@ -189,12 +207,14 @@ export interface FileRouteTypes {
     | '/progress'
     | '/register'
     | '/welcome'
+    | '/documents/$documentId'
     | '/practice/$questId'
     | '/quests/new'
     | '/results/$questId'
     | '/study/ready'
     | '/study/review'
     | '/subjects/$subjectId'
+    | '/documents/'
     | '/quests/'
     | '/study/'
     | '/subjects/'
@@ -209,12 +229,14 @@ export interface FileRouteTypes {
     | '/progress'
     | '/register'
     | '/welcome'
+    | '/documents/$documentId'
     | '/practice/$questId'
     | '/quests/new'
     | '/results/$questId'
     | '/study/ready'
     | '/study/review'
     | '/subjects/$subjectId'
+    | '/documents'
     | '/quests'
     | '/study'
     | '/subjects'
@@ -229,12 +251,14 @@ export interface FileRouteTypes {
     | '/progress'
     | '/register'
     | '/welcome'
+    | '/documents/$documentId'
     | '/practice/$questId'
     | '/quests/new'
     | '/results/$questId'
     | '/study/ready'
     | '/study/review'
     | '/subjects/$subjectId'
+    | '/documents/'
     | '/quests/'
     | '/study/'
     | '/subjects/'
@@ -250,12 +274,14 @@ export interface RootRouteChildren {
   ProgressRoute: typeof ProgressRoute
   RegisterRoute: typeof RegisterRoute
   WelcomeRoute: typeof WelcomeRoute
+  DocumentsDocumentIdRoute: typeof DocumentsDocumentIdRoute
   PracticeQuestIdRoute: typeof PracticeQuestIdRoute
   QuestsNewRoute: typeof QuestsNewRoute
   ResultsQuestIdRoute: typeof ResultsQuestIdRoute
   StudyReadyRoute: typeof StudyReadyRoute
   StudyReviewRoute: typeof StudyReviewRoute
   SubjectsSubjectIdRoute: typeof SubjectsSubjectIdRoute
+  DocumentsIndexRoute: typeof DocumentsIndexRoute
   QuestsIndexRoute: typeof QuestsIndexRoute
   StudyIndexRoute: typeof StudyIndexRoute
   SubjectsIndexRoute: typeof SubjectsIndexRoute
@@ -306,6 +332,20 @@ declare module '@tanstack/react-router' {
       path: '/welcome'
       fullPath: '/welcome'
       preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents/': {
+      id: '/documents/'
+      path: '/documents'
+      fullPath: '/documents/'
+      preLoaderRoute: typeof DocumentsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/documents/$documentId': {
+      id: '/documents/$documentId'
+      path: '/documents/$documentId'
+      fullPath: '/documents/$documentId'
+      preLoaderRoute: typeof DocumentsDocumentIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/practice/$questId': {
@@ -402,12 +442,14 @@ const rootRouteChildren: RootRouteChildren = {
   ProgressRoute: ProgressRoute,
   RegisterRoute: RegisterRoute,
   WelcomeRoute: WelcomeRoute,
+  DocumentsDocumentIdRoute: DocumentsDocumentIdRoute,
   PracticeQuestIdRoute: PracticeQuestIdRoute,
   QuestsNewRoute: QuestsNewRoute,
   ResultsQuestIdRoute: ResultsQuestIdRoute,
   StudyReadyRoute: StudyReadyRoute,
   StudyReviewRoute: StudyReviewRoute,
   SubjectsSubjectIdRoute: SubjectsSubjectIdRoute,
+  DocumentsIndexRoute: DocumentsIndexRoute,
   QuestsIndexRoute: QuestsIndexRoute,
   StudyIndexRoute: StudyIndexRoute,
   SubjectsIndexRoute: SubjectsIndexRoute,

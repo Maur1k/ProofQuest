@@ -1,6 +1,6 @@
 // @vitest-environment node
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { IDBFactory, IDBObjectStore } from "fake-indexeddb";
+import { IDBFactory, IDBObjectStore, IDBKeyRange } from "fake-indexeddb";
 import { openDatabase } from "@/data/indexed-db";
 import { ProofQuestRepository } from "@/data/repository";
 import { clearLibrary, exportBackup, importBackup } from "@/data/backup";
@@ -374,5 +374,38 @@ describe("generation job records", () => {
     await expect(
       repo.saveJob({ ...job, revision: 2, status: "running", updatedAt: 3 }, 1),
     ).rejects.toThrow("finished");
+  });
+});
+
+describe("selected PDF pages", () => {
+  it("reopens sparse imports atomically and restores their original page mapping from backup", async () => {
+    vi.stubGlobal("IDBKeyRange", IDBKeyRange);
+    try {
+      const repo = await repository();
+      await repo.initializeLegacy(null, empty);
+      await addDocument(repo);
+      const original = (await repo.getDocument("doc"))!;
+      const document = { ...original, id: "sparse", pageCount: 3, extractedPages: [1, 3] };
+      const pages = [1, 3].map((page) => ({
+        documentId: "sparse",
+        page,
+        text: `Original page ${page}`,
+        warnings: [],
+      }));
+      await repo.addDocument(document, pages);
+      expect((await repo.getDocumentBundle("sparse"))?.pages).toEqual(pages);
+      expect(await repo.listDocuments()).toHaveLength(2);
+      const backup = await exportBackup(repo.database);
+      const restored = await repository(new IDBFactory(), "restored");
+      await importBackup(restored.database, backup);
+      expect((await restored.getDocumentBundle("sparse"))?.document.extractedPages).toEqual([1, 3]);
+      expect((await restored.getDocumentBundle("doc"))?.pages).toHaveLength(1);
+      await expect(
+        repo.addDocument({ ...document, id: "bad" }, [{ ...pages[0]!, documentId: "bad" }]),
+      ).rejects.toThrow("mapping");
+      expect(await repo.getDocument("bad")).toBeUndefined();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

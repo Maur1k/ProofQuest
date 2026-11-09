@@ -1,8 +1,10 @@
+> Current implementation update (2026-11-10): the active project is responsive web; Flutter mapping below is historical reference. Real local PDF import, selected-page extraction and saved reader now exist. See [Phase 4 80% checkpoint](../phase-4-80-checkpoint.md) for current behavior, evidence and limitations. No AI generation or accounts are implemented.
+
 # ProofQuest — development handoff
 
 Reference package for continuing ProofQuest (web) and for the planned Flutter rewrite.
 Everything described as **working** runs in this repository today. Everything marked
-**demo** or **future** is UI only: no backend, accounts, AI or document processing exist.
+**demo** or **future** is UI only: no generation backend, accounts or AI exist; the historical demo remains separate from real document processing.
 
 | File | Contents |
 | --- | --- |

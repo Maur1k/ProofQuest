@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { access, readFile } from "node:fs/promises";
+import { access, readFile, readdir } from "node:fs/promises";
 import { join } from "node:path";
 
 const target = process.argv[2];
@@ -32,3 +32,15 @@ if (target === "vercel") {
   if (target === "lovable") assert.equal(manifest.publicDir, "client");
 }
 console.log(`PASS ${target}: expected runtime, server entry and assets`);
+
+const publicRoot = target === "vercel" ? join(root, "static") : join(root, manifest.publicDir);
+const pdfVersion = (await readJson("node_modules/pdfjs-dist/package.json")).version;
+const pdfRoot = join(publicRoot, "pdfjs", pdfVersion);
+await access(join(pdfRoot, "LICENSE"));
+for (const directory of ["cmaps", "standard_fonts", "wasm"])
+  assert.ok((await readdir(join(pdfRoot, directory))).length, `Missing PDF ${directory}`);
+assert.ok(
+  (await readdir(join(publicRoot, "assets"))).some((name) => /^pdf\.worker.*\.mjs$/.test(name)),
+  "Missing real PDF worker",
+);
+console.log(`PASS ${target}: PDF worker, local character maps, fonts, decoders and license`);

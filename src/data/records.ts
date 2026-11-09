@@ -65,6 +65,7 @@ export const documentSchema = z
     name: z.string().min(1).max(500),
     checksum: z.string().regex(/^[a-f0-9]{64}$/),
     pageCount: z.number().int().positive(),
+    extractedPages: z.array(z.number().int().positive()).min(1).max(30).optional(),
     createdAt: time,
     blob: z.instanceof(Blob),
   })
@@ -238,3 +239,23 @@ export const migrationSchema = z
     attemptIds: z.array(id),
   })
   .strict();
+
+/** Older records omit extractedPages and contain every page; new imports name every extracted page. */
+export function validateDocumentPages(
+  document: Pick<DocumentRecord, "id" | "pageCount" | "extractedPages">,
+  pages: PageRecord[],
+): void {
+  const selected = document.extractedPages;
+  if (
+    new Set(pages.map((page) => page.page)).size !== pages.length ||
+    pages.some((page) => page.documentId !== document.id || page.page > document.pageCount) ||
+    (selected
+      ? new Set(selected).size !== selected.length ||
+        pages.length !== selected.length ||
+        selected.some(
+          (number) => number > document.pageCount || !pages.some((page) => page.page === number),
+        )
+      : pages.length !== document.pageCount)
+  )
+    throw new Error("Document page mapping is incomplete");
+}

@@ -38,3 +38,6 @@ dist-ssr
 coverage/
 
 .vercel/
+
+# Generated from the pinned PDF.js package during Vite startup/build
+public/pdfjs/
