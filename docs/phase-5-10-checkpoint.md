@@ -1,5 +1,7 @@
 # Phase 5 — approximately 10% checkpoint
 
+Historical checkpoint. Subsequent owner authorization and delivery through 50% are recorded in [the current checkpoint](phase-5-50-checkpoint.md).
+
 Owner: Maur1k. Date: 2026-11-10. Status: foundation package implemented; stop at the explicitly authorized 10% limit. This percentage is an approximate scope checkpoint, not an effort estimate.
 
 ## Phase 4 pushed first

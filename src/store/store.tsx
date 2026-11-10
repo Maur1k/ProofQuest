@@ -17,10 +17,19 @@ import { openDatabase } from "@/data/indexed-db";
 import { ProofQuestRepository } from "@/data/repository";
 import type { LegacyState } from "@/data/records";
 import { clearLibrary, exportBackup, importBackup } from "@/data/backup";
+import { createSampleMcqVersion } from "@/data/sample-mcq";
+import type { QuizSession } from "@/domain/quiz-session";
 import { RevisionConflict } from "@/domain/quiz-session";
 
 type Persistence = "loading" | "durable" | "blocked" | "temporary";
 interface StoreValue {
+  startSamplePractice: () => Promise<QuizSession>;
+  loadQuizSession: (id: string) => Promise<QuizSession | null>;
+  submitPractice: (
+    session: QuizSession,
+    questionId: string,
+    optionId: string,
+  ) => Promise<QuizSession>;
   ready: boolean;
   data: AppData;
   snapshots: LegacyState["snapshots"];
@@ -260,8 +269,58 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     },
     [apply],
   );
+  const runQuiz = useCallback(
+    async <T,>(work: (repo: ProofQuestRepository) => Promise<T>): Promise<T> => {
+      if (busyRef.current || modeRef.current !== "durable" || !repository.current)
+        throw new Error("Saved storage must be available and idle. Please retry.");
+      busyRef.current = true;
+      setBusy(true);
+      try {
+        return await work(repository.current);
+      } finally {
+        busyRef.current = false;
+        setBusy(false);
+      }
+    },
+    [],
+  );
+  const startSamplePractice = useCallback(
+    () =>
+      runQuiz(async (repo) => {
+        const version = createSampleMcqVersion();
+        await repo.addVersion(version);
+        return repo.startSession(newId(), version.id, "practice", Date.now());
+      }),
+    [runQuiz],
+  );
+  const loadQuizSession = useCallback(async (id: string) => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage is unavailable.");
+    return (await repository.current.getSession(id)) ?? null;
+  }, []);
+  const submitPractice = useCallback(
+    (session: QuizSession, questionId: string, optionId: string) =>
+      runQuiz((repo) =>
+        repo.changeSession(
+          session.id,
+          session.revision,
+          {
+            type: "practice",
+            questionId,
+            response: { type: "mcq", optionId },
+            hintsUsed: 0,
+            revealed: false,
+          },
+          Math.max(Date.now(), session.updatedAt),
+        ),
+      ),
+    [runQuiz],
+  );
   const value = useMemo<StoreValue>(
     () => ({
+      startSamplePractice,
+      loadQuizSession,
+      submitPractice,
       ready,
       data: state.data,
       snapshots: state.snapshots,
@@ -373,7 +432,19 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       completeAttempt: (attemptId) =>
         dispatch({ type: "completeAttempt", attemptId, now: Date.now() }),
     }),
-    [ready, state, warning, persistence, busy, dispatch, runRecovery, setMode],
+    [
+      ready,
+      state,
+      warning,
+      persistence,
+      busy,
+      dispatch,
+      runRecovery,
+      setMode,
+      startSamplePractice,
+      loadQuizSession,
+      submitPractice,
+    ],
   );
   return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>;
 }

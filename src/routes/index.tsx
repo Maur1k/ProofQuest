@@ -1,3 +1,4 @@
+import { SamplePracticeEntry } from "@/features/quizzes/SamplePracticeEntry";
 import { DataControls } from "@/components/DataControls";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowRight, BookOpenText, Plus, Target } from "lucide-react";
@@ -117,6 +118,7 @@ function Home() {
           Choose a PDF, extract selected pages, and save it in this browser.
         </span>
       </Link>
+      <SamplePracticeEntry />
       {continueCard}
 
       <section

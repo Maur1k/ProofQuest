@@ -5,16 +5,20 @@ Planned core flow: **PDF → quiz/test → results with explanations**.
 
 ## Current state
 
-The existing Lovable source is imported locally, including original artwork,
-optimized assets and reference screenshots. Programming quests and manual
-practice work; document study and account forms are still labeled demos.
-Real PDF import, AI generation and responsive expansion are later phases.
+ProofQuest reuses the original Lovable source and artwork. Guest access, manual
+programming quests, local PDF import, selected-page text extraction, original-page
+previews and browser-based document saving are implemented.
 
-Phase 0 is complete: source, history, setup and baseline checks are preserved. Every subsequent phase
-requires Maur1k’s explicit confirmation. See the
+Phase 5 is approximately 50% complete locally: the labeled five-question sample
+MCQ Practice quiz supports durable start/resume, submitted-answer feedback and
+save recovery. It is not PDF-generated. Test-mode UI, new quiz results/history
+and AI generation remain in development. This local checkpoint has not been
+pushed or published.
+
+Development stops at owner-approved checkpoints. See the
 [phased roadmap](docs/development-phases.md),
-[implementation specification](docs/web-implementation-plan.md) and
-[Phase 0 handoff](docs/phase-0-handoff.md).
+[current Phase 5 checkpoint](docs/phase-5-50-checkpoint.md) and
+[implementation specification](docs/web-implementation-plan.md).
 
 ## Development
 
@@ -26,7 +30,7 @@ bun run dev
 ```
 
 Open the local URL printed by Vite. No API key or account is needed for the
-existing manual/sample app. No real account is created by the prototype forms.
+manual/sample app. Account routes redirect to guest Home.
 
 ```sh
 bun run lint

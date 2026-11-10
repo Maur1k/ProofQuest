@@ -194,3 +194,5 @@ Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion
 On 2026-11-10 the owner authorized finishing Phase 4 without physical-phone testing. That scoped phase is complete; see docs/phase-4-handoff.md. No Phase 5 authorization is implied.
 
 The owner subsequently authorized pushing Phase 4 and starting Phase 5 through approximately 10%. Phase 4 is pushed at 030f0fc; the first Phase 5 foundation package is complete locally. Stop at that checkpoint.
+
+On 2026-11-10 the owner authorized Phase 5 through approximately 50%. Packages 1–3 are complete locally: labeled sample entry, durable start/resume, accessible MCQ selection, Practice feedback, save retry and revision-conflict recovery. See [50% checkpoint](phase-5-50-checkpoint.md). Stop before Test-mode UI; do not push or publish this checkpoint without authorization.
