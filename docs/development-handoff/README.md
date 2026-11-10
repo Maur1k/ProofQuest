@@ -1,3 +1,5 @@
+> Current phase update (2026-11-11): Phase 5 is complete locally. MCQ Practice/Test, finalization, results, retry and history are implemented. See [Phase 5 handoff](../phase-5-handoff.md); older checkpoint notes below are historical. Phase 6 generation has not started.
+
 > Phase 5 update (2026-11-10): Home now offers a clearly labeled five-question sample MCQ Practice quiz with durable start/resume, saved feedback and save/conflict recovery. See [50% checkpoint](../phase-5-50-checkpoint.md). Test-mode UI, final results and generation remain pending.
 
 > Current implementation update (2026-11-10): the active project is responsive web; Flutter mapping below is historical reference. Real local PDF import, selected-page extraction and saved reader now exist. See [completed Phase 4 handoff](../phase-4-handoff.md) for current behavior, evidence and limitations. No AI generation or accounts are implemented.
@@ -60,7 +62,10 @@ Screenshots: with the dev server running, `python3 docs/development-handoff/capt
 | `/quests` | Quest library | working | shown |
 | `/quests/new`, `/quests/$questId/edit` | Quest editor (unsaved-change guard) | working | shown |
 | `/practice/$questId` | Legacy programming Practice | working | shown |
-| `/quiz-practice/$sessionId` | Saved sample MCQ Practice | working through Phase 5 50%; no final results yet | shown |
+| `/quiz-practice/$sessionId` | Saved MCQ Practice and completed result | working | shown |
+| `/quiz-test/$sessionId` | Editable MCQ Test and final submission | working | shown |
+| `/quiz-results/$sessionId` | Immutable completed MCQ result | working | shown |
+| `/quiz-history` | Saved MCQ attempts and resume/review | working | shown |
 | `/results/$questId` | Results | working | shown |
 | `/progress` | Progress | working | shown |
 | `/study` | Study library + sample drop zone | **demo** | shown |

@@ -9,16 +9,16 @@ ProofQuest reuses the original Lovable source and artwork. Guest access, manual
 programming quests, local PDF import, selected-page text extraction, original-page
 previews and browser-based document saving are implemented.
 
-Phase 5 is approximately 55% complete locally: the labeled five-question sample
-MCQ Practice quiz supports durable start/resume, submitted-answer feedback and
-save recovery. It is not PDF-generated. Test-mode UI, new quiz results/history
-and AI generation remain in development. Test-mode start/resume and editable draft
-storage are integrated internally; no Test screen is exposed yet. This local checkpoint has not been
-pushed or published.
+Phase 5 is complete locally: labeled sample MCQ quizzes support Practice feedback,
+editable Test drafts, final submission, results with explanations, saved history
+and new attempts. Referenced PDFs open at the cited page when available; missing
+sources retain their saved excerpt and result. Imported compatible MCQ sessions
+also work through history. The sample quiz is not PDF-generated. AI generation
+remains Phase 6. Phase 5 has not been pushed or published.
 
 Development stops at owner-approved checkpoints. See the
 [phased roadmap](docs/development-phases.md),
-[current Phase 5 checkpoint](docs/phase-5-55-checkpoint.md) and
+[Phase 5 handoff](docs/phase-5-handoff.md) and
 [implementation specification](docs/web-implementation-plan.md).
 
 ## Development

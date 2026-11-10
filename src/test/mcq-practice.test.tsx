@@ -122,7 +122,7 @@ it("lets all saved answers be reviewed without fabricating final results", () =>
       session.updatedAt + 1,
     );
   render(<PracticeSession initial={session} save={vi.fn()} reload={vi.fn()} />);
-  expect(screen.getByText(/All sample answers are saved/)).toBeVisible();
+  expect(screen.getByText(/All answers are saved/)).toBeVisible();
   expect(screen.getByRole("button", { name: "Next question" })).toBeEnabled();
 });
 it("only creates the sample on explicit start and navigates after persistence", async () => {

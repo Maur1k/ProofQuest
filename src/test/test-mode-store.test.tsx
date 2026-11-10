@@ -93,3 +93,20 @@ it("rejects overlapping starts and prevents durable Test writes in temporary mod
   });
   expect(result.current.busy).toBe(false);
 });
+
+it("finishes through the store, reopens history and safely starts a separate retry", async () => {
+  vi.stubGlobal("indexedDB", new IDBFactory());
+  const { result } = await openStore();
+  let session = await run(() => result.current.startSampleTest());
+  session = await run(() => result.current.saveTestChoice(session, "recall", "a"));
+  const done = await run(() => result.current.finishQuiz(session));
+  expect(done.result?.percentage).toBe(20);
+  expect(await run(() => result.current.finishQuiz(session))).toEqual(done);
+  expect(await run(() => result.current.listQuizSessions())).toEqual([done]);
+  const next = await run(() => result.current.retryQuiz(done.id));
+  expect(next.id).not.toBe(done.id);
+  expect(next.answers).toEqual({});
+  expect(await run(() => result.current.retryQuiz(done.id))).toEqual(next);
+  expect(await run(() => result.current.loadQuizSession(done.id))).toEqual(done);
+  expect(await run(() => result.current.getSourceDocument("missing"))).toBeNull();
+});

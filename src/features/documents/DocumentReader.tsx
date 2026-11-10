@@ -38,7 +38,13 @@ function PagePreview({ document, page }: { document: DocumentRecord; page: numbe
     </div>
   );
 }
-export function DocumentReader({ documentId }: { documentId: string }) {
+export function DocumentReader({
+  documentId,
+  initialPage = 1,
+}: {
+  documentId: string;
+  initialPage?: number;
+}) {
   const { ready, persistence } = useStore();
   const [data, setData] = useState<{ document: DocumentRecord; pages: PageRecord[] } | null>(null);
   const [error, setError] = useState("");
@@ -52,8 +58,15 @@ export function DocumentReader({ documentId }: { documentId: string }) {
     void documentStorage((repo) => repo.getDocumentBundle(documentId)).then(
       (result) => {
         if (!active) return;
-        if (result) setData(result);
-        else
+        if (result) {
+          setData(result);
+          if (
+            Number.isSafeInteger(initialPage) &&
+            initialPage >= 1 &&
+            initialPage <= result.document.pageCount
+          )
+            setPage(initialPage);
+        } else
           setError("This PDF is no longer in this browser. Import it again from the PDF library.");
       },
       () => {
@@ -66,7 +79,7 @@ export function DocumentReader({ documentId }: { documentId: string }) {
     return () => {
       active = false;
     };
-  }, [documentId, ready, persistence]);
+  }, [documentId, ready, persistence, initialPage]);
   const extracted = data?.pages.find((item) => item.page === page);
   return (
     <div className="space-y-5 py-6">

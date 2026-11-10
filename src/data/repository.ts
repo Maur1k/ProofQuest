@@ -253,6 +253,40 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
       return session;
     });
   }
+  listSessions() {
+    return transact(this.database, ["sessions"], "readonly", async (tx) =>
+      z.array(sessionSchema).parse(await requestValue(tx.objectStore("sessions").getAll())),
+    );
+  }
+  async retrySession(id: string, previousId: string, now: number) {
+    return transact(this.database, ["sessions"], "readwrite", async (tx) => {
+      const previous = await read(tx, "sessions", previousId, sessionSchema);
+      if (!previous || previous.completedAt === null)
+        throw new Error("A completed quiz is required for retry");
+      const all = z
+        .array(sessionSchema)
+        .parse(await requestValue(tx.objectStore("sessions").getAll()));
+      const unfinished = all.find(
+        (s) =>
+          s.version.id === previous.version.id &&
+          s.mode === previous.mode &&
+          s.completedAt === null,
+      );
+      if (unfinished) return unfinished;
+      if (
+        all.some(
+          (s) =>
+            s.version.quizId === previous.version.quizId &&
+            s.mode === previous.mode &&
+            s.completedAt === null,
+        )
+      )
+        throw new Error("Finish the existing attempt before retrying an older version");
+      const next = sessionSchema.parse(startQuizSession(id, previous.version, previous.mode, now));
+      await requestValue(tx.objectStore("sessions").add(next));
+      return next;
+    });
+  }
   getSession(id: string) {
     return transact(this.database, ["sessions"], "readonly", (tx) =>
       read(tx, "sessions", id, sessionSchema),

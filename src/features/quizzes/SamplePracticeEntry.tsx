@@ -1,24 +1,27 @@
 import { useRef, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useStore } from "@/store/store";
 import { Button } from "@/components/ui/button";
 
 export function SamplePracticeEntry() {
-  const { persistence, busy, startSamplePractice } = useStore();
+  const { persistence, busy, startSamplePractice, startSampleTest } = useStore();
   const navigate = useNavigate();
   const lock = useRef(false);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  async function start() {
+  async function start(mode: "practice" | "test") {
     if (lock.current) return;
     lock.current = true;
     setPending(true);
     setError(null);
     try {
-      const session = await startSamplePractice();
-      await navigate({ to: "/quiz-practice/$sessionId", params: { sessionId: session.id } });
+      const session = await (mode === "practice" ? startSamplePractice() : startSampleTest());
+      await navigate({
+        to: mode === "practice" ? "/quiz-practice/$sessionId" : "/quiz-test/$sessionId",
+        params: { sessionId: session.id },
+      });
     } catch {
-      setError("Could not open saved Practice. Your progress is unchanged. Please retry.");
+      setError("Could not open the saved quiz. Please retry to start or resume.");
     } finally {
       lock.current = false;
       setPending(false);
@@ -36,15 +39,26 @@ export function SamplePracticeEntry() {
         Practice your study skills
       </h2>
       <p className="text-sm text-muted-foreground">
-        Five multiple-choice questions with feedback. Submitted answers are saved in this browser.
-        This sample is not generated from your PDFs.
+        Five multiple-choice questions. Practice gives feedback; Test keeps solutions hidden. Saved
+        answers stay in this browser. This sample is not generated from your PDFs.
       </p>
-      <Button disabled={busy || pending || persistence !== "durable"} onClick={() => void start()}>
+      <Button
+        disabled={busy || pending || persistence !== "durable"}
+        onClick={() => void start("practice")}
+      >
         {pending ? "Opening…" : "Start or resume Practice"}
+      </Button>
+      <Button
+        variant="outline"
+        className="sm:ml-3"
+        disabled={busy || pending || persistence !== "durable"}
+        onClick={() => void start("test")}
+      >
+        {pending ? "Opening…" : "Start or resume Test"}
       </Button>
       {persistence !== "durable" && (
         <p className="text-sm text-muted-foreground">
-          Saved browser storage is required for this Practice quiz.
+          Saved browser storage is required for these sample quizzes.
         </p>
       )}
       {error && (
@@ -53,8 +67,12 @@ export function SamplePracticeEntry() {
         </p>
       )}
       <p className="text-xs text-muted-foreground">
-        Test mode and results are still in development.
+        Test answers stay editable until submission. Results and quiz history are saved in this
+        browser.
       </p>
+      <Link to="/quiz-history" className="block min-h-11 py-2 text-sm text-primary underline">
+        Quiz history
+      </Link>
     </section>
   );
 }

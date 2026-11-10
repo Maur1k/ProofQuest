@@ -34,6 +34,10 @@ try {
     "/study",
     "/documents",
     "/documents/check-missing",
+    "/quiz-history",
+    "/quiz-test/check-missing",
+    "/quiz-practice/check-missing",
+    "/quiz-results/check-missing",
   ]) {
     const response = await fetch(origin + path);
     assert.equal(response.status, 200, path);

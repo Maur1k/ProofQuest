@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-10. Status: Phase 4 complete within the owner-approved scope excluding physical-phone testing. Phase 4 is pushed. Phase 5 first approximately 10% is complete locally; stop before further work.
+Owner: Maur1k. Updated: 2026-11-11. Status: Phase 5 complete locally. Stop before Phase 6; generation/provider/budget decisions and publication require separate authorization.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -123,6 +123,8 @@ The default execution order is sequential. Building the quiz lifecycle before co
 
 ## Phase 5 — Practice, Test and reliable results
 
+**Status:** Complete locally on 2026-11-11. See [handoff](phase-5-handoff.md).
+
 **Work**
 
 - Connect MCQ UI to the tested repositories and transitions using clearly labeled deterministic fixtures/manual data.
@@ -198,3 +200,5 @@ The owner subsequently authorized pushing Phase 4 and starting Phase 5 through a
 On 2026-11-10 the owner authorized Phase 5 through approximately 50%. Packages 1–3 are complete locally: labeled sample entry, durable start/resume, accessible MCQ selection, Practice feedback, save retry and revision-conflict recovery. See [50% checkpoint](phase-5-50-checkpoint.md). Stop before Test-mode UI; do not push or publish this checkpoint without authorization.
 
 The owner subsequently authorized Phase 5 through approximately 55%. Test-mode start/resume and editable draft storage are integrated through the application store with persistence/regression coverage. See [55% checkpoint](phase-5-55-checkpoint.md). Stop before the visible Test workflow.
+
+On 2026-11-11 the owner expanded the in-progress 65% request to completion of Phase 5. The Test workflow, results, history, retries and integrated desktop/browser validation are complete locally. See [Phase 5 handoff](phase-5-handoff.md). Stop before Phase 6. No push, deployment or publication occurred.

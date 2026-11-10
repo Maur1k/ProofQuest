@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as IntroRouteImport } from './routes/intro'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as ProgressRouteImport } from './routes/progress'
+import { Route as QuizHistoryRouteImport } from './routes/quiz-history'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as DocumentsIndexRouteImport } from './routes/documents.index'
@@ -21,6 +22,8 @@ import { Route as PracticeQuestIdRouteImport } from './routes/practice.$questId'
 import { Route as QuestsIndexRouteImport } from './routes/quests.index'
 import { Route as QuestsNewRouteImport } from './routes/quests.new'
 import { Route as QuizPracticeSessionIdRouteImport } from './routes/quiz-practice.$sessionId'
+import { Route as QuizResultsSessionIdRouteImport } from './routes/quiz-results.$sessionId'
+import { Route as QuizTestSessionIdRouteImport } from './routes/quiz-test.$sessionId'
 import { Route as ResultsQuestIdRouteImport } from './routes/results.$questId'
 import { Route as StudyIndexRouteImport } from './routes/study.index'
 import { Route as StudyReadyRouteImport } from './routes/study.ready'
@@ -49,6 +52,11 @@ const LoginRoute = LoginRouteImport.update({
 const ProgressRoute = ProgressRouteImport.update({
   id: '/progress',
   path: '/progress',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizHistoryRoute = QuizHistoryRouteImport.update({
+  id: '/quiz-history',
+  path: '/quiz-history',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RegisterRoute = RegisterRouteImport.update({
@@ -89,6 +97,16 @@ const QuestsNewRoute = QuestsNewRouteImport.update({
 const QuizPracticeSessionIdRoute = QuizPracticeSessionIdRouteImport.update({
   id: '/quiz-practice/$sessionId',
   path: '/quiz-practice/$sessionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizResultsSessionIdRoute = QuizResultsSessionIdRouteImport.update({
+  id: '/quiz-results/$sessionId',
+  path: '/quiz-results/$sessionId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const QuizTestSessionIdRoute = QuizTestSessionIdRouteImport.update({
+  id: '/quiz-test/$sessionId',
+  path: '/quiz-test/$sessionId',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ResultsQuestIdRoute = ResultsQuestIdRouteImport.update({
@@ -142,12 +160,15 @@ export interface FileRoutesByFullPath {
   '/intro': typeof IntroRoute
   '/login': typeof LoginRoute
   '/progress': typeof ProgressRoute
+  '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/quiz-practice/$sessionId': typeof QuizPracticeSessionIdRoute
+  '/quiz-results/$sessionId': typeof QuizResultsSessionIdRoute
+  '/quiz-test/$sessionId': typeof QuizTestSessionIdRoute
   '/results/$questId': typeof ResultsQuestIdRoute
   '/study/ready': typeof StudyReadyRoute
   '/study/review': typeof StudyReviewRoute
@@ -165,12 +186,15 @@ export interface FileRoutesByTo {
   '/intro': typeof IntroRoute
   '/login': typeof LoginRoute
   '/progress': typeof ProgressRoute
+  '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/quiz-practice/$sessionId': typeof QuizPracticeSessionIdRoute
+  '/quiz-results/$sessionId': typeof QuizResultsSessionIdRoute
+  '/quiz-test/$sessionId': typeof QuizTestSessionIdRoute
   '/results/$questId': typeof ResultsQuestIdRoute
   '/study/ready': typeof StudyReadyRoute
   '/study/review': typeof StudyReviewRoute
@@ -189,12 +213,15 @@ export interface FileRoutesById {
   '/intro': typeof IntroRoute
   '/login': typeof LoginRoute
   '/progress': typeof ProgressRoute
+  '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
   '/quests/new': typeof QuestsNewRoute
   '/quiz-practice/$sessionId': typeof QuizPracticeSessionIdRoute
+  '/quiz-results/$sessionId': typeof QuizResultsSessionIdRoute
+  '/quiz-test/$sessionId': typeof QuizTestSessionIdRoute
   '/results/$questId': typeof ResultsQuestIdRoute
   '/study/ready': typeof StudyReadyRoute
   '/study/review': typeof StudyReviewRoute
@@ -214,12 +241,15 @@ export interface FileRouteTypes {
     | '/intro'
     | '/login'
     | '/progress'
+    | '/quiz-history'
     | '/register'
     | '/welcome'
     | '/documents/$documentId'
     | '/practice/$questId'
     | '/quests/new'
     | '/quiz-practice/$sessionId'
+    | '/quiz-results/$sessionId'
+    | '/quiz-test/$sessionId'
     | '/results/$questId'
     | '/study/ready'
     | '/study/review'
@@ -237,12 +267,15 @@ export interface FileRouteTypes {
     | '/intro'
     | '/login'
     | '/progress'
+    | '/quiz-history'
     | '/register'
     | '/welcome'
     | '/documents/$documentId'
     | '/practice/$questId'
     | '/quests/new'
     | '/quiz-practice/$sessionId'
+    | '/quiz-results/$sessionId'
+    | '/quiz-test/$sessionId'
     | '/results/$questId'
     | '/study/ready'
     | '/study/review'
@@ -260,12 +293,15 @@ export interface FileRouteTypes {
     | '/intro'
     | '/login'
     | '/progress'
+    | '/quiz-history'
     | '/register'
     | '/welcome'
     | '/documents/$documentId'
     | '/practice/$questId'
     | '/quests/new'
     | '/quiz-practice/$sessionId'
+    | '/quiz-results/$sessionId'
+    | '/quiz-test/$sessionId'
     | '/results/$questId'
     | '/study/ready'
     | '/study/review'
@@ -284,12 +320,15 @@ export interface RootRouteChildren {
   IntroRoute: typeof IntroRoute
   LoginRoute: typeof LoginRoute
   ProgressRoute: typeof ProgressRoute
+  QuizHistoryRoute: typeof QuizHistoryRoute
   RegisterRoute: typeof RegisterRoute
   WelcomeRoute: typeof WelcomeRoute
   DocumentsDocumentIdRoute: typeof DocumentsDocumentIdRoute
   PracticeQuestIdRoute: typeof PracticeQuestIdRoute
   QuestsNewRoute: typeof QuestsNewRoute
   QuizPracticeSessionIdRoute: typeof QuizPracticeSessionIdRoute
+  QuizResultsSessionIdRoute: typeof QuizResultsSessionIdRoute
+  QuizTestSessionIdRoute: typeof QuizTestSessionIdRoute
   ResultsQuestIdRoute: typeof ResultsQuestIdRoute
   StudyReadyRoute: typeof StudyReadyRoute
   StudyReviewRoute: typeof StudyReviewRoute
@@ -331,6 +370,13 @@ declare module '@tanstack/react-router' {
       path: '/progress'
       fullPath: '/progress'
       preLoaderRoute: typeof ProgressRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz-history': {
+      id: '/quiz-history'
+      path: '/quiz-history'
+      fullPath: '/quiz-history'
+      preLoaderRoute: typeof QuizHistoryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/register': {
@@ -387,6 +433,20 @@ declare module '@tanstack/react-router' {
       path: '/quiz-practice/$sessionId'
       fullPath: '/quiz-practice/$sessionId'
       preLoaderRoute: typeof QuizPracticeSessionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz-results/$sessionId': {
+      id: '/quiz-results/$sessionId'
+      path: '/quiz-results/$sessionId'
+      fullPath: '/quiz-results/$sessionId'
+      preLoaderRoute: typeof QuizResultsSessionIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/quiz-test/$sessionId': {
+      id: '/quiz-test/$sessionId'
+      path: '/quiz-test/$sessionId'
+      fullPath: '/quiz-test/$sessionId'
+      preLoaderRoute: typeof QuizTestSessionIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/results/$questId': {
@@ -460,12 +520,15 @@ const rootRouteChildren: RootRouteChildren = {
   IntroRoute: IntroRoute,
   LoginRoute: LoginRoute,
   ProgressRoute: ProgressRoute,
+  QuizHistoryRoute: QuizHistoryRoute,
   RegisterRoute: RegisterRoute,
   WelcomeRoute: WelcomeRoute,
   DocumentsDocumentIdRoute: DocumentsDocumentIdRoute,
   PracticeQuestIdRoute: PracticeQuestIdRoute,
   QuestsNewRoute: QuestsNewRoute,
   QuizPracticeSessionIdRoute: QuizPracticeSessionIdRoute,
+  QuizResultsSessionIdRoute: QuizResultsSessionIdRoute,
+  QuizTestSessionIdRoute: QuizTestSessionIdRoute,
   ResultsQuestIdRoute: ResultsQuestIdRoute,
   StudyReadyRoute: StudyReadyRoute,
   StudyReviewRoute: StudyReviewRoute,

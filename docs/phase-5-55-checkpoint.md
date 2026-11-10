@@ -1,5 +1,7 @@
 # Phase 5 — approximately 55% checkpoint
 
+Historical checkpoint. Later owner authorization and phase completion are recorded in [the Phase 5 handoff](phase-5-handoff.md).
+
 Owner: Maur1k. Date: 2026-11-10. Status: authorized 50–55% increment complete locally. Stop here; Phase 5 is still in progress. Percentages describe approximate scope, not measured effort.
 
 ## Delivered

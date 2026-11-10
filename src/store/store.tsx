@@ -23,6 +23,10 @@ import { RevisionConflict } from "@/domain/quiz-session";
 
 type Persistence = "loading" | "durable" | "blocked" | "temporary";
 interface StoreValue {
+  listQuizSessions: () => Promise<QuizSession[]>;
+  finishQuiz: (session: QuizSession) => Promise<QuizSession>;
+  retryQuiz: (sessionId: string) => Promise<QuizSession>;
+  getSourceDocument: (id: string) => Promise<{ name: string; pageCount: number } | null>;
   startSamplePractice: () => Promise<QuizSession>;
   startSampleTest: () => Promise<QuizSession>;
   saveTestChoice: (
@@ -340,8 +344,39 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       ),
     [runQuiz],
   );
+  const listQuizSessions = useCallback(async () => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage is unavailable");
+    return repository.current.listSessions();
+  }, []);
+  const getSourceDocument = useCallback(async (id: string) => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage is unavailable");
+    const document = await repository.current.getDocument(id);
+    return document ? { name: document.name, pageCount: document.pageCount } : null;
+  }, []);
+  const finishQuiz = useCallback(
+    (session: QuizSession) =>
+      runQuiz((repo) =>
+        repo.changeSession(
+          session.id,
+          session.revision,
+          { type: "finalize" },
+          Math.max(Date.now(), session.updatedAt),
+        ),
+      ),
+    [runQuiz],
+  );
+  const retryQuiz = useCallback(
+    (sessionId: string) => runQuiz((repo) => repo.retrySession(newId(), sessionId, Date.now())),
+    [runQuiz],
+  );
   const value = useMemo<StoreValue>(
     () => ({
+      listQuizSessions,
+      finishQuiz,
+      retryQuiz,
+      getSourceDocument,
       startSamplePractice,
       startSampleTest,
       saveTestChoice,
@@ -467,6 +502,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dispatch,
       runRecovery,
       setMode,
+      listQuizSessions,
+      finishQuiz,
+      retryQuiz,
+      getSourceDocument,
       startSamplePractice,
       startSampleTest,
       saveTestChoice,

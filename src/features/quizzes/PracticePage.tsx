@@ -1,4 +1,6 @@
-import { createSampleMcqVersion } from "@/data/sample-mcq";
+import { SourceReference } from "./SourceReference";
+import { FinishQuiz } from "./FinishQuiz";
+import { QuizResults } from "./QuizResults";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useBlocker } from "@tanstack/react-router";
 import { useStore } from "@/store/store";
@@ -25,7 +27,6 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
         if (
           !value ||
           value.mode !== "practice" ||
-          value.version.id !== createSampleMcqVersion().id ||
           value.version.questions.some((q) => q.type !== "mcq")
         ) {
           setSession(null);
@@ -48,7 +49,7 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
       <PageHeader
         title="MCQ Practice"
         back={{ to: "/", label: "Home" }}
-        subtitle="Sample study skills · Not PDF-generated"
+        subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
       {persistence !== "durable" ? (
         <p role="status">Saved browser storage is required. Return Home to recover storage.</p>
@@ -60,14 +61,18 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
           <Button onClick={reload}>Retry loading</Button>
         </div>
       ) : (
-        session && (
+        session &&
+        (session.completedAt !== null ? (
+          <QuizResults session={session} />
+        ) : (
           <PracticeSession
             key={`${session.id}:${generation}`}
             initial={session}
+            onComplete={setSession}
             save={submitPractice}
             reload={reload}
           />
-        )
+        ))
       )}
     </div>
   );
@@ -77,7 +82,9 @@ export function PracticeSession({
   initial,
   save,
   reload,
+  onComplete,
 }: {
+  onComplete?: (session: QuizSession) => void;
   initial: QuizSession;
   save: (session: QuizSession, questionId: string, optionId: string) => Promise<QuizSession>;
   reload: () => void;
@@ -206,7 +213,18 @@ export function PracticeSession({
             {view.options.find((option) => option.id === view.feedback?.correctOptionId)?.text}
           </p>
           <p className="text-sm">{view.feedback.explanation}</p>
-          <p className="text-xs text-muted-foreground">Sample content · No PDF source attached.</p>
+          {view.feedback.sources.length === 0 ? (
+            <p className="text-xs text-muted-foreground">
+              No PDF source attached to this question.
+            </p>
+          ) : (
+            view.feedback.sources.map((source, index) => (
+              <SourceReference
+                key={`${source.documentId}:${source.page}:${index}`}
+                source={source}
+              />
+            ))
+          )}
         </section>
       )}
       <nav aria-label="Practice questions" className="flex flex-wrap gap-3">
@@ -225,11 +243,15 @@ export function PracticeSession({
           Next question
         </Button>
       </nav>
-      {reviewed && (
-        <p role="status" className="rounded-xl border border-border p-4">
-          All sample answers are saved. You can review their feedback above. Final results and Test
-          mode are still in development.
-        </p>
+      {reviewed && <p role="status">All answers are saved. Finish Practice to view your result.</p>}
+      {onComplete && (
+        <FinishQuiz
+          session={session}
+          disabled={dirty || pending || conflict}
+          onPending={setPending}
+          onComplete={onComplete}
+          reload={reload}
+        />
       )}
       <ConfirmDialog
         open={blocker.status === "blocked"}
