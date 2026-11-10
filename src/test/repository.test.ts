@@ -409,3 +409,23 @@ describe("selected PDF pages", () => {
     }
   });
 });
+
+it("rolls back the PDF bytes when a selected page hits quota, then permits a clean retry", async () => {
+  const repo = await repository();
+  const add = IDBObjectStore.prototype.add;
+  vi.spyOn(IDBObjectStore.prototype, "add").mockImplementation(function (
+    this: IDBObjectStore,
+    value,
+    key,
+  ) {
+    if (this.name === "pages")
+      throw new DOMException("Synthetic PDF quota failure", "QuotaExceededError");
+    return add.call(this, value, key);
+  });
+  await expect(addDocument(repo)).rejects.toThrow("quota");
+  expect(await repo.getDocument("doc")).toBeUndefined();
+  expect(await repo.getPages("doc")).toEqual([]);
+  vi.restoreAllMocks();
+  await addDocument(repo);
+  expect(await repo.getPages("doc")).toHaveLength(1);
+});

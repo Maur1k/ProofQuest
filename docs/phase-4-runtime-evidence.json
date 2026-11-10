@@ -1,0 +1,117 @@
+{
+  "scope": "Node legacy PDF parser; not browser or physical device memory",
+  "pdfjs": "6.4.299",
+  "fileBytes": 2858365,
+  "sha256": "60b30efa1048900833d1758440247fe8ac85a3134f2327388dcb24e07d814c89",
+  "forcedGc": true,
+  "runs": [
+    {
+      "iteration": 0,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 384,
+      "heapBefore": 10540784,
+      "heapAfter": 21837440,
+      "rssAfter": 112291840
+    },
+    {
+      "iteration": 1,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 152,
+      "heapBefore": 21826928,
+      "heapAfter": 20433728,
+      "rssAfter": 123027456
+    },
+    {
+      "iteration": 2,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 160,
+      "heapBefore": 20428792,
+      "heapAfter": 20501416,
+      "rssAfter": 131547136
+    },
+    {
+      "iteration": 3,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 149,
+      "heapBefore": 20567408,
+      "heapAfter": 20585064,
+      "rssAfter": 129658880
+    },
+    {
+      "iteration": 4,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 158,
+      "heapBefore": 20583480,
+      "heapAfter": 20576256,
+      "rssAfter": 131584000
+    },
+    {
+      "iteration": 5,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 152,
+      "heapBefore": 20642280,
+      "heapAfter": 20675960,
+      "rssAfter": 131375104
+    },
+    {
+      "iteration": 6,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 153,
+      "heapBefore": 20674080,
+      "heapAfter": 20673888,
+      "rssAfter": 127758336
+    },
+    {
+      "iteration": 7,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 167,
+      "heapBefore": 20663056,
+      "heapAfter": 20717472,
+      "rssAfter": 128225280
+    },
+    {
+      "iteration": 8,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 170,
+      "heapBefore": 20706216,
+      "heapAfter": 20804392,
+      "rssAfter": 137121792
+    },
+    {
+      "iteration": 9,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 157,
+      "heapBefore": 20869944,
+      "heapAfter": 20903936,
+      "rssAfter": 131788800
+    },
+    {
+      "iteration": 10,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 161,
+      "heapBefore": 20900584,
+      "heapAfter": 22581888,
+      "rssAfter": 139735040
+    },
+    {
+      "iteration": 11,
+      "pageCount": 194,
+      "characters": 18747,
+      "elapsedMs": 135,
+      "heapBefore": 22580808,
+      "heapAfter": 20883944,
+      "rssAfter": 142258176
+    }
+  ]
+}

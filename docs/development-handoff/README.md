@@ -1,4 +1,4 @@
-> Current implementation update (2026-11-10): the active project is responsive web; Flutter mapping below is historical reference. Real local PDF import, selected-page extraction and saved reader now exist. See [Phase 4 80% checkpoint](../phase-4-80-checkpoint.md) for current behavior, evidence and limitations. No AI generation or accounts are implemented.
+> Current implementation update (2026-11-10): the active project is responsive web; Flutter mapping below is historical reference. Real local PDF import, selected-page extraction and saved reader now exist. See [completed Phase 4 handoff](../phase-4-handoff.md) for current behavior, evidence and limitations. No AI generation or accounts are implemented.
 
 # ProofQuest — development handoff
 
