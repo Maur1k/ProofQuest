@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-10. Status: Phase 4 complete within the owner-approved scope excluding physical-phone testing. Phase 5 awaits authorization. Phase 4 changes remain local.
+Owner: Maur1k. Updated: 2026-11-10. Status: Phase 4 complete within the owner-approved scope excluding physical-phone testing. Phase 4 is pushed. Phase 5 first approximately 10% is complete locally; stop before further work.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -192,3 +192,5 @@ OCR for scanned PDFs, accounts/cloud sync, installable PWA/offline startup, shar
 Phase 0 was authorized on 2026-10-24 and completed on 2026-10-25. The completion evidence is in docs/phase-0-handoff.md. Phase 1 was authorized and its desktop scope completed on 2026-10-25. Physical-phone validation remains pending by owner instruction. Phase 2 through approximately 60% was subsequently authorized and completed. Phase 2 was accepted for advancement on 2026-10-30; native zoom verification is assigned to the owner. Phase 3 is complete as of 2026-11-01. Phase 4 was authorized through approximately 20% on 2026-11-10, after pushing Phase 3. The owner then authorized progress through approximately 80%; that checkpoint is complete (docs/phase-4-80-checkpoint.md). Obtain confirmation before the final Phase 4 acceptance package.
 
 On 2026-11-10 the owner authorized finishing Phase 4 without physical-phone testing. That scoped phase is complete; see docs/phase-4-handoff.md. No Phase 5 authorization is implied.
+
+The owner subsequently authorized pushing Phase 4 and starting Phase 5 through approximately 10%. Phase 4 is pushed at 030f0fc; the first Phase 5 foundation package is complete locally. Stop at that checkpoint.
