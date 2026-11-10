@@ -16,6 +16,10 @@ sources retain their saved excerpt and result. Imported compatible MCQ sessions
 also work through history. The sample quiz is not PDF-generated. AI generation
 remains Phase 6. Phase 5 has not been pushed or published.
 
+Phase 6 is at its local 15% foundation checkpoint: provider-neutral generation
+contracts and selected-text/question validation are tested. No live generation
+adapter, endpoint or UI is enabled. See [Phase 6 checkpoint](docs/phase-6-15-checkpoint.md).
+
 Development stops at owner-approved checkpoints. See the
 [phased roadmap](docs/development-phases.md),
 [Phase 5 handoff](docs/phase-5-handoff.md) and

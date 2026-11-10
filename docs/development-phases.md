@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-11. Status: Phase 5 complete locally. Stop before Phase 6; generation/provider/budget decisions and publication require separate authorization.
+Owner: Maur1k. Updated: 2026-11-11. Status: Phase 5 complete locally; Phase 6 provider-neutral foundation complete through approximately 15%. Stop at 15%; provider/backend/budget/allowance decisions remain pending.
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -202,3 +202,5 @@ On 2026-11-10 the owner authorized Phase 5 through approximately 50%. Packages 1
 The owner subsequently authorized Phase 5 through approximately 55%. Test-mode start/resume and editable draft storage are integrated through the application store with persistence/regression coverage. See [55% checkpoint](phase-5-55-checkpoint.md). Stop before the visible Test workflow.
 
 On 2026-11-11 the owner expanded the in-progress 65% request to completion of Phase 5. The Test workflow, results, history, retries and integrated desktop/browser validation are complete locally. See [Phase 5 handoff](phase-5-handoff.md). Stop before Phase 6. No push, deployment or publication occurred.
+
+On 2026-11-11 the owner authorized Phase 6 through approximately 15% only. The provider-neutral contract and pure input/output validation foundation are complete; see [checkpoint](phase-6-15-checkpoint.md). This bounded groundwork does not select or enable a provider. Stop before live adapters or further implementation.
