@@ -24,6 +24,12 @@ import { RevisionConflict } from "@/domain/quiz-session";
 type Persistence = "loading" | "durable" | "blocked" | "temporary";
 interface StoreValue {
   startSamplePractice: () => Promise<QuizSession>;
+  startSampleTest: () => Promise<QuizSession>;
+  saveTestChoice: (
+    session: QuizSession,
+    questionId: string,
+    optionId: string | null,
+  ) => Promise<QuizSession>;
   loadQuizSession: (id: string) => Promise<QuizSession | null>;
   submitPractice: (
     session: QuizSession,
@@ -284,13 +290,31 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     },
     [],
   );
-  const startSamplePractice = useCallback(
-    () =>
+  const startSample = useCallback(
+    (mode: QuizSession["mode"]) =>
       runQuiz(async (repo) => {
         const version = createSampleMcqVersion();
         await repo.addVersion(version);
-        return repo.startSession(newId(), version.id, "practice", Date.now());
+        return repo.startSession(newId(), version.id, mode, Date.now());
       }),
+    [runQuiz],
+  );
+  const startSamplePractice = useCallback(() => startSample("practice"), [startSample]);
+  const startSampleTest = useCallback(() => startSample("test"), [startSample]);
+  const saveTestChoice = useCallback(
+    (session: QuizSession, questionId: string, optionId: string | null) =>
+      runQuiz((repo) =>
+        repo.changeSession(
+          session.id,
+          session.revision,
+          {
+            type: "draft",
+            questionId,
+            response: { type: "mcq", optionId },
+          },
+          Math.max(Date.now(), session.updatedAt),
+        ),
+      ),
     [runQuiz],
   );
   const loadQuizSession = useCallback(async (id: string) => {
@@ -319,6 +343,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const value = useMemo<StoreValue>(
     () => ({
       startSamplePractice,
+      startSampleTest,
+      saveTestChoice,
       loadQuizSession,
       submitPractice,
       ready,
@@ -442,6 +468,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       runRecovery,
       setMode,
       startSamplePractice,
+      startSampleTest,
+      saveTestChoice,
       loadQuizSession,
       submitPractice,
     ],
