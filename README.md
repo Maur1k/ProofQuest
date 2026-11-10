@@ -14,11 +14,12 @@ editable Test drafts, final submission, results with explanations, saved history
 and new attempts. Referenced PDFs open at the cited page when available; missing
 sources retain their saved excerpt and result. Imported compatible MCQ sessions
 also work through history. The sample quiz is not PDF-generated. AI generation
-remains Phase 6. Phase 5 has not been pushed or published.
+remains Phase 6. Phase 5 was pushed to GitHub at `b9adce9`; its live publication has not been verified.
 
-Phase 6 is at its local 15% foundation checkpoint: provider-neutral generation
-contracts and selected-text/question validation are tested. No live generation
-adapter, endpoint or UI is enabled. See [Phase 6 checkpoint](docs/phase-6-15-checkpoint.md).
+Phase 6 is at its local 25% checkpoint: provider-neutral validation plus server
+request byte limits, cancellation/deadlines and safe error handling are tested.
+No live generation adapter, endpoint or UI is enabled. Free generation is the
+owner preference; a provider is not selected. See [Phase 6 checkpoint](docs/phase-6-25-checkpoint.md).
 
 Development stops at owner-approved checkpoints. See the
 [phased roadmap](docs/development-phases.md),

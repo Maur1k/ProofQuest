@@ -1,5 +1,7 @@
 # Phase 6 — approximately 15% checkpoint
 
+Historical checkpoint. Later authorization and delivery are recorded in the [25% checkpoint](phase-6-25-checkpoint.md).
+
 Owner: Maur1k. Date: 2026-11-11. Status: authorized foundation complete locally; stop at 15%. Percentages describe approximate scope, not measured effort.
 
 ## Entry decisions and bounded scope
