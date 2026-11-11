@@ -1,3 +1,4 @@
+import { GenerateQuiz } from "@/features/generation/GenerateQuiz";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import type { DocumentRecord, PageRecord } from "@/data/records";
@@ -102,9 +103,10 @@ export function DocumentReader({
             <h1 className="break-words text-2xl font-bold">{data.document.name}</h1>
             <p className="mt-2 text-sm text-muted-foreground">
               Saved in this browser · {data.pages.length} of {data.document.pageCount} pages
-              extracted. Quiz generation is not available yet.
+              extracted.
             </p>
           </header>
+          <GenerateQuiz key={documentId} document={data.document} pages={data.pages} />
           <nav aria-label="PDF pages" className="flex flex-wrap items-center gap-3">
             <button
               className={documentButton}

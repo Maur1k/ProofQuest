@@ -1,3 +1,4 @@
+vi.mock("@/features/generation/GenerateQuiz", () => ({ GenerateQuiz: () => null }));
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { DocumentReader } from "@/features/documents/DocumentReader";

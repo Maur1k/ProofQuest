@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-11. Status: Phase 5 complete locally; Phase 6 provider-neutral safeguards complete through approximately 25%. Stop at 25%; free generation is preferred, with provider/backend/allowance decisions pending.
+Owner: Maur1k. Updated: 2026-11-11. Status: Phase 5 complete and pushed; completion of Phase 6 is authorized and in progress. Provider selection, durable service integration and live acceptance remain pending. See [current progress](phase-6-progress.md).
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -206,3 +206,5 @@ On 2026-11-11 the owner expanded the in-progress 65% request to completion of Ph
 On 2026-11-11 the owner authorized Phase 6 through approximately 15% only. The provider-neutral contract and pure input/output validation foundation are complete; see [checkpoint](phase-6-15-checkpoint.md). This bounded groundwork does not select or enable a provider. Stop before live adapters or further implementation.
 
 On 2026-11-11 the owner authorized Phase 6 through 25% and stated a preference for free generation. Provider selection remains pending; the bounded increment implements unconnected server safeguards, not a live adapter. See [25% checkpoint](phase-6-25-checkpoint.md). Phase 5 was separately pushed with authorization at b9adce9; Phase 6 remains local.
+
+On 2026-11-11 the owner authorized finishing Phase 6. Provider-independent workflow work is implemented; the owner remains undecided about the provider and asked about Groq free limits. No provider choice, spending, deployment or Phase 6 push is implied. See [progress and remaining acceptance](phase-6-progress.md). Phase 7 has not started.

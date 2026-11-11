@@ -16,10 +16,12 @@ sources retain their saved excerpt and result. Imported compatible MCQ sessions
 also work through history. The sample quiz is not PDF-generated. AI generation
 remains Phase 6. Phase 5 was pushed to GitHub at `b9adce9`; its live publication has not been verified.
 
-Phase 6 is at its local 25% checkpoint: provider-neutral validation plus server
-request byte limits, cancellation/deadlines and safe error handling are tested.
-No live generation adapter, endpoint or UI is enabled. Free generation is the
-owner preference; a provider is not selected. See [Phase 6 checkpoint](docs/phase-6-25-checkpoint.md).
+Phase 6 is in progress: selected-text consent UI, validated atomic quiz saving,
+and provider-neutral server orchestration are implemented and tested locally.
+The production generation endpoint remains disabled. A provider, durable usage
+ledger and live quality evaluation are still pending; PDF-to-quiz generation is
+not available yet. Free generation is preferred, but no provider has been selected.
+See [Phase 6 progress](docs/phase-6-progress.md).
 
 Development stops at owner-approved checkpoints. See the
 [phased roadmap](docs/development-phases.md),

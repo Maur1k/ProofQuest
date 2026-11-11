@@ -1,3 +1,8 @@
+import {
+  validateGenerationInput,
+  validateGeneratedQuiz,
+  type GenerationInput,
+} from "@/domain/generation";
 import { z } from "zod";
 import { quizVersionSchema, type QuizResponse, type QuizVersion } from "@/domain/quiz";
 import {
@@ -314,6 +319,59 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
       await requestValue(tx.objectStore("sessions").put(next));
       return next;
     });
+  }
+  async commitGeneratedQuiz(input: GenerationInput, checksum: string, candidate: unknown) {
+    const request = validateGenerationInput(input);
+    const version = quizVersionSchema.parse(candidate);
+    const questions = version.questions.map((question) => {
+      if (question.type !== "mcq") throw new Error("Generated MCQs required");
+      return {
+        prompt: question.prompt,
+        options: question.options,
+        correctOptionId: question.correctOptionId,
+        explanation: question.explanation,
+        sources: question.sources.map((source) => ({ page: source.page, excerpt: source.excerpt })),
+      };
+    });
+    const checked = validateGeneratedQuiz({ questions }, request, {
+      id: version.id,
+      quizId: version.quizId,
+      title: version.title,
+      createdAt: version.createdAt,
+    });
+    if (JSON.stringify(checked) !== JSON.stringify(version))
+      throw new Error("Generated quiz identity does not match its source");
+    return transact(
+      this.database,
+      ["documents", "pages", "versions", "sessions"],
+      "readwrite",
+      async (tx) => {
+        const document = await read(tx, "documents", request.documentId, documentSchema);
+        if (!document || document.checksum !== checksum)
+          throw new Error("Source PDF changed or was removed. Generation was not saved.");
+        for (const page of request.pages) {
+          const stored = await read(tx, "pages", [request.documentId, page.page], pageSchema);
+          if (!stored || stored.text.trim() !== page.text)
+            throw new Error("Source text changed. Generation was not saved.");
+        }
+        const existing = await read(tx, "versions", version.id, quizVersionSchema);
+        if (existing && JSON.stringify(existing) !== JSON.stringify(version))
+          throw new Error("Quiz version is immutable");
+        const sessionId = `generated:${version.id}`;
+        const session = await read(tx, "sessions", sessionId, sessionSchema);
+        if (
+          session &&
+          (session.version.id !== version.id ||
+            JSON.stringify(session.version) !== JSON.stringify(version))
+        )
+          throw new Error("Attempt identity conflict");
+        if (!existing) await requestValue(tx.objectStore("versions").add(version));
+        if (session) return session;
+        const next = sessionSchema.parse(startQuizSession(sessionId, version, "test", Date.now()));
+        await requestValue(tx.objectStore("sessions").add(next));
+        return next;
+      },
+    );
   }
   async saveJob(input: GenerationJob, expectedRevision: number | null) {
     const job = jobSchema.parse(input);

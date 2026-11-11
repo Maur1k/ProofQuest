@@ -1,3 +1,4 @@
+import type { GenerationInput } from "@/domain/generation";
 import {
   createContext,
   useCallback,
@@ -23,6 +24,11 @@ import { RevisionConflict } from "@/domain/quiz-session";
 
 type Persistence = "loading" | "durable" | "blocked" | "temporary";
 interface StoreValue {
+  commitGeneratedQuiz: (
+    input: GenerationInput,
+    checksum: string,
+    version: unknown,
+  ) => Promise<QuizSession>;
   listQuizSessions: () => Promise<QuizSession[]>;
   finishQuiz: (session: QuizSession) => Promise<QuizSession>;
   retryQuiz: (sessionId: string) => Promise<QuizSession>;
@@ -371,8 +377,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     (sessionId: string) => runQuiz((repo) => repo.retrySession(newId(), sessionId, Date.now())),
     [runQuiz],
   );
+  const commitGeneratedQuiz = useCallback(
+    (input: GenerationInput, checksum: string, version: unknown) =>
+      runQuiz((repo) => repo.commitGeneratedQuiz(input, checksum, version)),
+    [runQuiz],
+  );
   const value = useMemo<StoreValue>(
     () => ({
+      commitGeneratedQuiz,
       listQuizSessions,
       finishQuiz,
       retryQuiz,
@@ -502,6 +514,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dispatch,
       runRecovery,
       setMode,
+      commitGeneratedQuiz,
       listQuizSessions,
       finishQuiz,
       retryQuiz,
