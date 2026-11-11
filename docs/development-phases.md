@@ -23,7 +23,7 @@ Read alongside [implementation specification](web-implementation-plan.md) and [v
 | 3 — Durable data and quiz contracts | Safe migration, immutable versions and tested grading transitions | 2 |
 | 4 — Real local PDF import | Choose/drop, read and retain a real text PDF | 3 |
 | 5 — Practice, Test and results | Complete quiz lifecycle using clearly labeled fixtures/manual data | 3 and 4 |
-| 6 — Real PDF-to-quiz generation | First working end-to-end PDF → quiz → result milestone | 4 and 5; provider/budget decision |
+| 6 — Real PDF study generation | PDF → quiz/results, reviewer and flashcards | 4 and 5; provider/budget decision |
 | 7 — Release and recovery verification | Tested public beta and verified Vercel backup | 0–6; release authorization |
 | Later — Optional expansion | OCR, sync, PWA, sharing and richer questions | Stable core release |
 
@@ -141,6 +141,8 @@ The default execution order is sequential. Building the quiz lifecycle before co
 **Review deliverable:** complete sample/manual quiz journey. It is not advertised as real PDF-generated content yet.
 
 ## Phase 6 — Real generation and first end-to-end milestone
+
+**Expanded scope approved 2026-11-11:** all subjects, with quizzes, reviewers and flashcards in this phase. Programming is optional example content. See [expansion specification](phase-6-expansion.md); its three-format acceptance supersedes the earlier quiz-only milestone below.
 
 **Entry decisions:** select AI provider, owner-controlled credentials, backend, monthly budget, guest allowance and general-subject MCQ scope. No paid service is provisioned merely by approving this roadmap.
 

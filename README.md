@@ -1,7 +1,8 @@
 # ProofQuest
 
 A responsive, open-source learning web app by [Maur1k](https://github.com/Maur1k).
-Planned core flow: **PDF → quiz/test → results with explanations**.
+Planned core flow: **PDF → quiz/test, reviewer or flashcards**, across subjects.
+Programming quests remain optional examples.
 
 ## Current state
 
@@ -73,3 +74,5 @@ not grant artwork rights. Distribution terms must be resolved before release.
 ## Portable builds and PDF feasibility
 
 See [Phase 1 handoff](docs/phase-1-handoff.md) for verification and pending phone validation, and [hosting commands](docs/decisions/001-hosting-portability.md) for explicit Node, Vercel and Lovable build targets. The [PDF experiment](experiments/pdf-feasibility/README.md) is separate from the current sample-only study flow. Live backup deployment remains a later release step.
+
+Phase 6 now includes all three study formats. Reviewer/flashcard request and evidence-validation contracts are implemented; their UI, durable storage and live generation remain in progress. See [expanded scope](docs/phase-6-expansion.md).

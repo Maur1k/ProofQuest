@@ -81,7 +81,7 @@ Use one set of routes and shared components with CSS grid/flex/container constra
 | Wide, 1200px and above | Sidebar navigation, document preview alongside settings/review, wider library grid and results summary; cap reading-column length |
 
 - Replace global `max-w-[430px]` wrappers with page-specific widths; do not simply stretch phone cards across a desktop monitor.
-- Preserve all current navigation destinations. Keep Subjects as the existing programming collection while PDF topic filters extend the library; do not force arbitrary PDFs into fixed CS categories.
+- Preserve all current navigation destinations. Make the PDF library and subject-neutral study materials primary. Keep programming as optional examples without deleting existing quests/history; do not force arbitrary PDFs into fixed CS categories.
 - The Choose PDF button must work on touch, mouse and keyboard. File dropping is an enhancement, never the only input method. Keep the existing sample-drag gesture separate from actual file dropping.
 - Use semantic headings, labeled controls, visible focus, keyboard-operable menus and live status announcements. Target WCAG 2.2 AA behavior/contrast, verifying rather than claiming conformance from automated tests alone.
 - Support 200% zoom/text enlargement, reduced motion, portrait/landscape, safe-area insets and on-screen keyboards. Use 44–48px touch controls. Use sticky panels only when they leave usable content space.
@@ -225,7 +225,7 @@ Continuity requirements before public release:
 ## Decisions to resolve before generation implementation
 
 1. AI provider and the operating budget/guest allowance for hosted generation.
-2. Confirm the proposed general-subject, MCQ-first scope; retain programming questions regardless.
+2. Owner approved general-subject quizzes, reviewers and flashcards in Phase 6 on 2026-11-11; retain programming as optional examples and preserve existing data.
 3. Artwork distribution terms separate from the confirmed MIT code license.
 4. Resolved in Phase 0: Lovable is connected to `Maur1k/ProofQuest`; the formerly empty repository is retained as `ProofQuest-reserved`.
 
@@ -245,3 +245,7 @@ These references inform the plan. Baseline checks have been run as recorded in t
 - Vercel function limits: https://vercel.com/docs/functions/limitations
 
 
+
+## Approved Phase 6 expansion
+
+The owner approved quizzes, reviewers and flashcards within Phase 6, with programming retained only as optional examples. [The expansion specification](phase-6-expansion.md) supersedes quiz-only scope and programming-first navigation in earlier sections. Existing five-MCQ behavior remains the Quiz format, not the entire phase. Live generation and larger PDF support are not yet enabled.

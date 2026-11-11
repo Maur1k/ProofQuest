@@ -37,3 +37,8 @@ Proposed, not selected: Groq Free for inference and Upstash Free Redis for share
 6. Evaluate representative public PDFs for factual correctness and citation support, then demonstrate real PDF → five MCQs → completed result → reload with evidence. Citation substring matching alone does not prove an answer is correct.
 
 No Phase 6 push, publication, Lovable AI edits or Phase 7 work occurred. Earlier checkpoints remain historical records.
+
+## Approved expansion checkpoint
+
+The owner approved quizzes, reviewers and flashcards within Phase 6, with programming as optional examples. See phase-6-expansion.md. Subject-neutral request and reviewer/flashcard evidence validators are implemented with eight new tests. Full regression: 222 tests across 26 files pass; TypeScript and scoped ESLint pass. This checkpoint adds no UI, storage migration, provider call or import-limit change. Those remain unfinished; Phase 6 is not complete.
+
