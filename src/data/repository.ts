@@ -258,6 +258,11 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
       return session;
     });
   }
+  listVersions() {
+    return transact(this.database, ["versions"], "readonly", async (tx) =>
+      z.array(quizVersionSchema).parse(await requestValue(tx.objectStore("versions").getAll())),
+    );
+  }
   listSessions() {
     return transact(this.database, ["sessions"], "readonly", async (tx) =>
       z.array(sessionSchema).parse(await requestValue(tx.objectStore("sessions").getAll())),
@@ -320,7 +325,13 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
       return next;
     });
   }
-  async commitGeneratedQuiz(input: GenerationInput, checksum: string, candidate: unknown) {
+  async commitGeneratedQuiz(
+    input: GenerationInput,
+    checksum: string,
+    candidate: unknown,
+    mode: QuizMode = "test",
+  ) {
+    if (mode !== "practice" && mode !== "test") throw new Error("Invalid study mode");
     const request = validateGenerationInput(input);
     const version = quizVersionSchema.parse(candidate);
     const questions = version.questions.map((question) => {
@@ -357,7 +368,8 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
         const existing = await read(tx, "versions", version.id, quizVersionSchema);
         if (existing && JSON.stringify(existing) !== JSON.stringify(version))
           throw new Error("Quiz version is immutable");
-        const sessionId = `generated:${version.id}`;
+        const sessionId =
+          mode === "test" ? `generated:${version.id}` : `generated:practice:${version.id}`;
         const session = await read(tx, "sessions", sessionId, sessionSchema);
         if (
           session &&
@@ -367,7 +379,7 @@ export class ProofQuestRepository implements DocumentRepository, QuizRepository,
           throw new Error("Attempt identity conflict");
         if (!existing) await requestValue(tx.objectStore("versions").add(version));
         if (session) return session;
-        const next = sessionSchema.parse(startQuizSession(sessionId, version, "test", Date.now()));
+        const next = sessionSchema.parse(startQuizSession(sessionId, version, mode, Date.now()));
         await requestValue(tx.objectStore("sessions").add(next));
         return next;
       },

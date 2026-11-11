@@ -28,3 +28,5 @@
 - Real PDF imports live in `src/features/documents/`, separate from the sample demo. Lazy-load the pinned PDF.js adapter only after hydration; retain real workers, cancellation, deadlines and local assets. `extractedPages` records deliberate selection; absent on older documents means all pages. Validate document/page mapping atomically and preserve it in backups. The 5 MiB/10-page development guards are not validated mobile capacity.
 
 - Phase 6 expansion approved on 2026-11-11: subject-neutral quizzes, reviewers and flashcards are all required; programming remains optional examples. Follow docs/phase-6-expansion.md. Preserve existing data, require source evidence, flag unsupported/image-dependent content, and do not claim larger-PDF or live AI support until validated. Provider choice remains pending.
+
+- Four-choice study workflow is implemented locally; see docs/phase-6-study-flow.md. Quiz/Exam keep internal practice/test modes. Immutable reviewer/deck records and separate revisioned progress use IndexedDB version 2; export backup version 3 and accept version 2. Never enable either generation endpoint without validated provider and durable usage controls.

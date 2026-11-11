@@ -40,3 +40,7 @@ OCR, vision-based parasite identification and AI image interpretation are outsid
 - Provider/backend, actual account limits and final quality thresholds remain undecided. Groq Free and Upstash Free are proposals only; no spending or external provisioning is authorized. Live evaluation is required before completion.
 
 Stop before Phase 7. No push or publication is included in this authorization.
+
+## Four-choice implementation update
+
+The owner-approved Flashcards / Quiz / Exam / Reviewer flow is implemented locally, including stored-material access, progress and backup support. See [implementation and verification](phase-6-study-flow.md) for current status. Earlier future-tense descriptions above are historical planning; live AI and larger-file limits remain pending.

@@ -8,18 +8,21 @@ export const TABLES = [
   "versions",
   "sessions",
   "jobs",
+  "materials",
+  "studyProgress",
 ] as const;
 export type Table = (typeof TABLES)[number];
 
 export function openDatabase(factory: IDBFactory, name = DATABASE_NAME): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = factory.open(name, 1);
+    const request = factory.open(name, 2);
     let rejected = false;
     request.onupgradeneeded = () => {
       for (const table of TABLES)
-        request.result.createObjectStore(table, {
-          keyPath: table === "pages" ? ["documentId", "page"] : "id",
-        });
+        if (!request.result.objectStoreNames.contains(table))
+          request.result.createObjectStore(table, {
+            keyPath: table === "pages" ? ["documentId", "page"] : "id",
+          });
     };
     request.onblocked = () => {
       rejected = true;

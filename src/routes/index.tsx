@@ -19,7 +19,7 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "ProofQuest — Practice code by predicting, tracing and debugging" },
+      { title: "ProofQuest — Study your PDFs" },
       {
         name: "description",
         content:
@@ -27,11 +27,11 @@ export const Route = createFileRoute("/")({
       },
       {
         property: "og:title",
-        content: "ProofQuest — Practice code by predicting, tracing and debugging",
+        content: "ProofQuest — Study your PDFs",
       },
       {
         property: "og:description",
-        content: "Self-made programming quests: predict output, trace variables, fix bugs.",
+        content: "Study your PDFs and revisit saved quizzes, reviewers and flashcards.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -117,6 +117,13 @@ function Home() {
         <span className="mt-1 block text-sm text-muted-foreground">
           Choose a PDF, extract selected pages, and save it in this browser.
         </span>
+      </Link>
+      <Link
+        to="/materials"
+        search={{}}
+        className="inline-flex min-h-11 items-center text-primary underline"
+      >
+        Saved study materials
       </Link>
       <SamplePracticeEntry />
       {continueCard}

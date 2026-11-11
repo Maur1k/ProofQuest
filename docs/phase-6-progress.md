@@ -42,3 +42,7 @@ No Phase 6 push, publication, Lovable AI edits or Phase 7 work occurred. Earlier
 
 The owner approved quizzes, reviewers and flashcards within Phase 6, with programming as optional examples. See phase-6-expansion.md. Subject-neutral request and reviewer/flashcard evidence validators are implemented with eight new tests. Full regression: 222 tests across 26 files pass; TypeScript and scoped ESLint pass. This checkpoint adds no UI, storage migration, provider call or import-limit change. Those remain unfinished; Phase 6 is not complete.
 
+
+## Four-choice implementation update
+
+The owner-approved Flashcards / Quiz / Exam / Reviewer flow is implemented locally, including stored-material access, progress and backup support. See [implementation and verification](phase-6-study-flow.md) for current status. Earlier future-tense descriptions above are historical planning; live AI and larger-file limits remain pending.

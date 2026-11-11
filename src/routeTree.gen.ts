@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as IntroRouteImport } from './routes/intro'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as MaterialsRouteImport } from './routes/materials'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuizHistoryRouteImport } from './routes/quiz-history'
 import { Route as RegisterRouteImport } from './routes/register'
@@ -47,6 +48,11 @@ const IntroRoute = IntroRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MaterialsRoute = MaterialsRouteImport.update({
+  id: '/materials',
+  path: '/materials',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProgressRoute = ProgressRouteImport.update({
@@ -159,6 +165,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/intro': typeof IntroRoute
   '/login': typeof LoginRoute
+  '/materials': typeof MaterialsRoute
   '/progress': typeof ProgressRoute
   '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
@@ -185,6 +192,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/intro': typeof IntroRoute
   '/login': typeof LoginRoute
+  '/materials': typeof MaterialsRoute
   '/progress': typeof ProgressRoute
   '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/intro': typeof IntroRoute
   '/login': typeof LoginRoute
+  '/materials': typeof MaterialsRoute
   '/progress': typeof ProgressRoute
   '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
@@ -240,6 +249,7 @@ export interface FileRouteTypes {
     | '/'
     | '/intro'
     | '/login'
+    | '/materials'
     | '/progress'
     | '/quiz-history'
     | '/register'
@@ -266,6 +276,7 @@ export interface FileRouteTypes {
     | '/'
     | '/intro'
     | '/login'
+    | '/materials'
     | '/progress'
     | '/quiz-history'
     | '/register'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/'
     | '/intro'
     | '/login'
+    | '/materials'
     | '/progress'
     | '/quiz-history'
     | '/register'
@@ -319,6 +331,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   IntroRoute: typeof IntroRoute
   LoginRoute: typeof LoginRoute
+  MaterialsRoute: typeof MaterialsRoute
   ProgressRoute: typeof ProgressRoute
   QuizHistoryRoute: typeof QuizHistoryRoute
   RegisterRoute: typeof RegisterRoute
@@ -363,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/materials': {
+      id: '/materials'
+      path: '/materials'
+      fullPath: '/materials'
+      preLoaderRoute: typeof MaterialsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/progress': {
@@ -519,6 +539,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   IntroRoute: IntroRoute,
   LoginRoute: LoginRoute,
+  MaterialsRoute: MaterialsRoute,
   ProgressRoute: ProgressRoute,
   QuizHistoryRoute: QuizHistoryRoute,
   RegisterRoute: RegisterRoute,

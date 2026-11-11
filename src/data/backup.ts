@@ -1,4 +1,9 @@
 import { z } from "zod";
+import {
+  studyRecordSchema,
+  studyProgressSchema,
+  validateStudyProgress,
+} from "@/domain/study-record";
 import { quizVersionSchema } from "@/domain/quiz";
 import {
   documentSchema,
@@ -18,7 +23,7 @@ const encodedDocumentSchema = documentSchema
   .omit({ blob: true })
   .extend({ bytes: z.string().max(28 * 1024 * 1024) })
   .strict();
-const backupSchema = z
+const legacyBackupSchema = z
   .object({
     format: z.literal("proofquest-backup"),
     version: z.literal(2),
@@ -32,6 +37,22 @@ const backupSchema = z
     jobs: z.array(jobSchema),
   })
   .strict();
+
+const backupSchema = z.union([
+  legacyBackupSchema.transform((value) => ({
+    ...value,
+    version: 3 as const,
+    materials: [],
+    studyProgress: [],
+  })),
+  legacyBackupSchema
+    .extend({
+      version: z.literal(3),
+      materials: z.array(studyRecordSchema),
+      studyProgress: z.array(studyProgressSchema),
+    })
+    .strict(),
+]);
 
 function encode(bytes: Uint8Array): string {
   let text = "";
@@ -62,13 +83,19 @@ export async function exportBackup(database: IDBDatabase): Promise<string> {
       .parse(await requestValue(tx.objectStore("versions").getAll())),
     sessions: z.array(sessionSchema).parse(await requestValue(tx.objectStore("sessions").getAll())),
     jobs: z.array(jobSchema).parse(await requestValue(tx.objectStore("jobs").getAll())),
+    materials: z
+      .array(studyRecordSchema)
+      .parse(await requestValue(tx.objectStore("materials").getAll())),
+    studyProgress: z
+      .array(studyProgressSchema)
+      .parse(await requestValue(tx.objectStore("studyProgress").getAll())),
   }));
   // Blob reads happen after the consistent database snapshot, outside its transaction.
   const documents = [];
   for (const { blob, ...document } of snapshot.documents) {
     documents.push({ ...document, bytes: encode(new Uint8Array(await blob.arrayBuffer())) });
   }
-  const text = JSON.stringify({ ...snapshot, documents, format: "proofquest-backup", version: 2 });
+  const text = JSON.stringify({ ...snapshot, documents, format: "proofquest-backup", version: 3 });
   if (new Blob([text]).size > BACKUP_MAX_BYTES)
     throw new Error("Backup exceeds the 100 MiB recovery limit.");
   return text;
@@ -94,7 +121,14 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
   if (new Blob([text]).size > BACKUP_MAX_BYTES)
     throw new Error("Backup exceeds the 100 MiB recovery limit.");
   const backup = backupSchema.parse(JSON.parse(text));
-  for (const records of [backup.documents, backup.versions, backup.sessions, backup.jobs])
+  for (const records of [
+    backup.documents,
+    backup.versions,
+    backup.sessions,
+    backup.jobs,
+    backup.materials,
+    backup.studyProgress,
+  ])
     assertUnique(records.map((record) => record.id));
   assertUnique(backup.pages.map((page) => JSON.stringify([page.documentId, page.page])));
   const documents: DocumentRecord[] = [];
@@ -130,6 +164,11 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
         !backup.versions.some((version) => version.id === job.resultVersionId))
     )
       throw new Error("Invalid generation job reference");
+  }
+  for (const progress of backup.studyProgress) {
+    const record = backup.materials.find((item) => item.id === progress.id);
+    if (!record) throw new Error("Orphan flashcard progress");
+    validateStudyProgress(record, progress);
   }
   return transact(database, TABLES, "readwrite", async (tx) => {
     const stored: unknown = await requestValue(tx.objectStore("legacy").get("legacy"));
@@ -170,6 +209,8 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
       ["versions", backup.versions],
       ["sessions", backup.sessions],
       ["jobs", backup.jobs],
+      ["materials", backup.materials],
+      ["studyProgress", backup.studyProgress],
     ] as const) {
       for (const record of records) {
         const key = "id" in record ? record.id : [record.documentId, record.page];
@@ -177,6 +218,24 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
         if (existing !== undefined && JSON.stringify(existing) !== JSON.stringify(record))
           throw new Error("Conflicting backup record. Nothing was imported.");
         if (existing === undefined) await requestValue(tx.objectStore(table).add(record));
+      }
+    }
+    // Check the merged state, including materials whose original was previously absent.
+    const materials = z
+      .array(studyRecordSchema)
+      .parse(await requestValue(tx.objectStore("materials").getAll()));
+    for (const record of materials) {
+      const raw = await requestValue(tx.objectStore("documents").get(record.request.documentId));
+      if (raw === undefined) continue; // Retained excerpts remain usable after deletion.
+      const document = documentSchema.parse(raw);
+      if (document.checksum !== record.checksum)
+        throw new Error("Study source conflicts with restored PDF");
+      for (const page of record.request.pages) {
+        const stored = pageSchema.parse(
+          await requestValue(tx.objectStore("pages").get([record.request.documentId, page.page])),
+        );
+        if (stored.text.trim() !== page.text.trim())
+          throw new Error("Study source conflicts with restored text");
       }
     }
     const existingSources: unknown = await requestValue(

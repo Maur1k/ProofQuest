@@ -7,7 +7,7 @@ import {
 
 export const studyFormatSchema = z.enum(["quiz", "reviewer", "flashcards"]);
 export type StudyFormat = z.infer<typeof studyFormatSchema>;
-const requestSchema = z
+export const studyRequestSchema = z
   .object({
     format: studyFormatSchema,
     documentId: z.string(),
@@ -17,7 +17,7 @@ const requestSchema = z
 
 /** Formats share the selected-text limits; no subject taxonomy is imposed. */
 export function validateStudyRequest(raw: unknown) {
-  const result = requestSchema.safeParse(raw);
+  const result = studyRequestSchema.safeParse(raw);
   if (!result.success) throw new GenerationValidationError("invalid-input");
   const { format, ...source } = result.data;
   const { questionCount: _count, ...input } = validateGenerationInput({

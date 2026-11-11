@@ -35,6 +35,8 @@ try {
     "/documents",
     "/documents/check-missing",
     "/quiz-history",
+    "/materials",
+    "/materials?id=check-missing",
     "/quiz-test/check-missing",
     "/quiz-practice/check-missing",
     "/quiz-results/check-missing",

@@ -105,3 +105,14 @@ it("production routes remain disabled and never read or echo the posted body", a
   expect(config.enabled).toBe(false);
   expect(disabledGenerationRoute(new Request("https://local.test/"))).toBeNull();
 });
+
+it("keeps reviewer and flashcard generation disabled without reading the source", async () => {
+  const request = new Request("https://local.test/api/study-generation", {
+    method: "POST",
+    body: "PRIVATE_SOURCE",
+  });
+  const response = disabledGenerationRoute(request)!;
+  expect(response.status).toBe(503);
+  expect(request.bodyUsed).toBe(false);
+  expect(await response.text()).not.toContain("PRIVATE_SOURCE");
+});

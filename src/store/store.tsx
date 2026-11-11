@@ -1,3 +1,6 @@
+import type { StudyRecord, StudyProgress } from "@/domain/study-record";
+import type { QuizVersion } from "@/domain/quiz";
+import * as studyRepository from "@/data/study-repository";
 import type { GenerationInput } from "@/domain/generation";
 import {
   createContext,
@@ -28,7 +31,18 @@ interface StoreValue {
     input: GenerationInput,
     checksum: string,
     version: unknown,
+    mode?: QuizSession["mode"],
   ) => Promise<QuizSession>;
+  listStudyMaterials: () => Promise<StudyRecord[]>;
+  saveStudyMaterial: (record: StudyRecord) => Promise<StudyRecord>;
+  loadStudyProgress: (id: string) => Promise<StudyProgress>;
+  saveStudyProgress: (
+    previous: StudyProgress,
+    index: number,
+    revealed: boolean,
+  ) => Promise<StudyProgress>;
+  listSavedQuizzes: () => Promise<QuizVersion[]>;
+  startSavedQuiz: (id: string, mode: QuizSession["mode"]) => Promise<QuizSession>;
   listQuizSessions: () => Promise<QuizSession[]>;
   finishQuiz: (session: QuizSession) => Promise<QuizSession>;
   retryQuiz: (sessionId: string) => Promise<QuizSession>;
@@ -378,13 +392,55 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     [runQuiz],
   );
   const commitGeneratedQuiz = useCallback(
-    (input: GenerationInput, checksum: string, version: unknown) =>
-      runQuiz((repo) => repo.commitGeneratedQuiz(input, checksum, version)),
+    (
+      input: GenerationInput,
+      checksum: string,
+      version: unknown,
+      mode: QuizSession["mode"] = "test",
+    ) => runQuiz((repo) => repo.commitGeneratedQuiz(input, checksum, version, mode)),
+    [runQuiz],
+  );
+  const listStudyMaterials = useCallback(async () => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage unavailable");
+    return studyRepository.listStudyMaterials(repository.current.database);
+  }, []);
+  const saveStudyMaterial = useCallback(
+    (record: StudyRecord) =>
+      runQuiz((repo) => studyRepository.saveStudyMaterial(repo.database, record)),
+    [runQuiz],
+  );
+  const loadStudyProgress = useCallback(async (id: string) => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage unavailable");
+    return studyRepository.loadStudyProgress(repository.current.database, id);
+  }, []);
+  const saveStudyProgress = useCallback(
+    (previous: StudyProgress, index: number, revealed: boolean) =>
+      runQuiz((repo) =>
+        studyRepository.saveStudyProgress(repo.database, previous, index, revealed),
+      ),
+    [runQuiz],
+  );
+  const listSavedQuizzes = useCallback(async () => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage unavailable");
+    return repository.current.listVersions();
+  }, []);
+  const startSavedQuiz = useCallback(
+    (id: string, mode: QuizSession["mode"]) =>
+      runQuiz((repo) => repo.startSession(newId(), id, mode, Date.now())),
     [runQuiz],
   );
   const value = useMemo<StoreValue>(
     () => ({
       commitGeneratedQuiz,
+      listStudyMaterials,
+      saveStudyMaterial,
+      loadStudyProgress,
+      saveStudyProgress,
+      listSavedQuizzes,
+      startSavedQuiz,
       listQuizSessions,
       finishQuiz,
       retryQuiz,
@@ -515,6 +571,12 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       runRecovery,
       setMode,
       commitGeneratedQuiz,
+      listStudyMaterials,
+      saveStudyMaterial,
+      loadStudyProgress,
+      saveStudyProgress,
+      listSavedQuizzes,
+      startSavedQuiz,
       listQuizSessions,
       finishQuiz,
       retryQuiz,

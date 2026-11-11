@@ -75,4 +75,4 @@ not grant artwork rights. Distribution terms must be resolved before release.
 
 See [Phase 1 handoff](docs/phase-1-handoff.md) for verification and pending phone validation, and [hosting commands](docs/decisions/001-hosting-portability.md) for explicit Node, Vercel and Lovable build targets. The [PDF experiment](experiments/pdf-feasibility/README.md) is separate from the current sample-only study flow. Live backup deployment remains a later release step.
 
-Phase 6 now includes all three study formats. Reviewer/flashcard request and evidence-validation contracts are implemented; their UI, durable storage and live generation remain in progress. See [expanded scope](docs/phase-6-expansion.md).
+Phase 6 now includes all three study formats. The four-choice UI, saved reviewer/flashcard screens, durable storage and compatible backup recovery are implemented locally. Live generation remains disabled; provider integration and quality evaluation are still pending. See [study-flow verification](docs/phase-6-study-flow.md). See [expanded scope](docs/phase-6-expansion.md).

@@ -30,7 +30,7 @@ export function SourceReference({ source }: { source: McqQuestion["sources"][num
       <blockquote className="whitespace-pre-wrap break-words text-muted-foreground">
         {source.excerpt}
       </blockquote>
-      <p className="text-xs text-muted-foreground">Excerpt retained with this quiz version.</p>
+      <p className="text-xs text-muted-foreground">Excerpt retained with this saved material.</p>
       {failed ? (
         <>
           <p>PDF availability could not be checked.</p>
