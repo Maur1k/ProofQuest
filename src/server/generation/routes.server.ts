@@ -13,7 +13,11 @@ export function disabledGenerationRoute(request: Request): Response | null {
       guestDailyLimit: 0,
     });
   }
-  if (path === "/api/generation" || path === "/api/study-generation")
+  if (
+    path === "/api/generation" ||
+    path === "/api/study-generation" ||
+    path === "/api/source-generation"
+  )
     return generationResponse(
       { code: "unavailable", message: "Generation is not configured on this host." },
       503,

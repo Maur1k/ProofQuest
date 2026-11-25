@@ -21,6 +21,7 @@ const mocks = vi.hoisted(() => ({
   persistence: "durable",
 }));
 vi.mock("@tanstack/react-router", () => ({
+  Navigate: ({ to }: { to: string }) => <p>Redirected to {to}</p>,
   useNavigate: () => mocks.navigate,
   useBlocker: (options: unknown) => {
     mocks.blocker(options);
@@ -43,7 +44,12 @@ afterEach(() => {
   mocks.persistence = "durable";
 });
 function fresh() {
-  return startQuizSession("test", createSampleMcqVersion(), "test", 1);
+  return startQuizSession(
+    "test",
+    { ...createSampleMcqVersion(), id: "real-saved-quiz" },
+    "test",
+    1,
+  );
 }
 function select(index: number) {
   fireEvent.click(screen.getAllByRole("radio")[index]!);
@@ -121,7 +127,7 @@ it("requires confirmed reload after a revision conflict", async () => {
   );
   select(0);
   fireEvent.click(screen.getByRole("button", { name: "Save answer" }));
-  await screen.findByText(/This Test changed in another tab/);
+  await screen.findByText(/This Exam changed in another tab/);
   expect(screen.getByRole("button", { name: "Retry saving" })).toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Load latest saved answers" }));
   fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
@@ -139,7 +145,7 @@ it("resumes at an unanswered or cleared question, supports saved-order navigatio
   first.unmount();
   for (const id of session.questionOrder) session = await save(session, id, "a");
   const full = render(<TestSession initial={session} save={save} reload={vi.fn()} />);
-  expect(screen.getByText(/This Test has not been submitted/)).toBeVisible();
+  expect(screen.getByText(/This Exam has not been submitted/)).toBeVisible();
   expect(screen.queryByRole("button", { name: /submit/i })).not.toBeInTheDocument();
   full.unmount();
   session = await save(session, "evidence", null);
@@ -152,7 +158,7 @@ it("resumes at an unanswered or cleared question, supports saved-order navigatio
 it("loads saved answers after a failed read, opens completed results and rejects wrong-mode sessions", async () => {
   mocks.load.mockRejectedValueOnce(new Error("unavailable")).mockResolvedValueOnce(fresh());
   const page = render(<TestPage sessionId="test" />);
-  await screen.findByText(/Could not load saved Test answers/);
+  await screen.findByText(/Could not load saved Exam answers/);
   fireEvent.click(screen.getByRole("button", { name: "Retry loading" }));
   await screen.findByText("Question 1 of 5");
   page.unmount();
@@ -161,9 +167,11 @@ it("loads saved answers after a failed read, opens completed results and rejects
   await screen.findByText("Quiz results · 0%");
   expect(screen.queryByRole("radio")).not.toBeInTheDocument();
   completed.unmount();
-  mocks.load.mockResolvedValueOnce(startQuizSession("p", createSampleMcqVersion(), "practice", 1));
+  mocks.load.mockResolvedValueOnce(
+    startQuizSession("p", { ...createSampleMcqVersion(), id: "real-saved-quiz" }, "practice", 1),
+  );
   render(<TestPage sessionId="p" />);
-  await screen.findByText(/MCQ Test is unavailable/);
+  await screen.findByText(/Exam is unavailable/);
 });
 it("gates Test loading in temporary mode", () => {
   mocks.persistence = "temporary";
@@ -188,4 +196,14 @@ it("starts Test only from the explicit entry and navigates after the session com
     to: "/quiz-test/$sessionId",
     params: { sessionId: "test" },
   });
+});
+
+it("redirects archived unfinished samples without mounting an editable Exam", async () => {
+  mocks.load.mockResolvedValueOnce(
+    startQuizSession("archived", createSampleMcqVersion(), "test", 1),
+  );
+  render(<TestPage sessionId="archived" />);
+  await screen.findByText("Redirected to /archive");
+  expect(screen.queryByRole("radio")).toBeNull();
+  expect(mocks.save).not.toHaveBeenCalled();
 });

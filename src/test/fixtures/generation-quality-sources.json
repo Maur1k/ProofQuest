@@ -1,0 +1,47 @@
+[
+  {
+    "id": "water",
+    "subject": "science",
+    "text": "Evaporation changes liquid water into water vapor. Condensation changes water vapor into liquid droplets. Precipitation is water falling from clouds. Plants release water vapor through transpiration. Sunlight supplies energy for evaporation."
+  },
+  {
+    "id": "plants",
+    "subject": "science",
+    "text": "Roots absorb water from soil. Leaves exchange gases through pores called stomata. Chlorophyll is a green pigment that absorbs light. Photosynthesis uses light energy to make sugars. Carbon dioxide supplies carbon for these sugars."
+  },
+  {
+    "id": "printing",
+    "subject": "history",
+    "text": "Johannes Gutenberg developed a movable metal type printing system in Europe in the fifteenth century. His printing workshop was in Mainz. The Gutenberg Bible was printed in Latin. Movable type allows individual characters to be reused. Printed books could be reproduced in many copies from the same type arrangement."
+  },
+  {
+    "id": "moon",
+    "subject": "history",
+    "text": "Apollo 11 landed humans on the Moon in July 1969. Neil Armstrong was the first person to walk on the Moon. Buzz Aldrin also walked on the Moon during Apollo 11. Michael Collins remained in lunar orbit. The lunar module was named Eagle."
+  },
+  {
+    "id": "http",
+    "subject": "technology",
+    "text": "HTTP is a stateless application-level protocol. RFC 9110 describes HTTP semantics. RFC 9110 updates RFC 3864. RFC 9110 is an Internet Standards Track document. RFC 9110 received approval for publication from the Internet Engineering Steering Group."
+  },
+  {
+    "id": "binary",
+    "subject": "technology",
+    "text": "A binary digit is called a bit. A bit has two possible values, zero and one. An eight-bit byte contains eight bits. Binary place values are powers of two. The binary numeral 101 represents the decimal number five."
+  },
+  {
+    "id": "astronomy",
+    "subject": "science",
+    "text": "The Sun is a star. Earth is a planet. The Moon is a natural satellite of Earth. Mars is often called the red planet. Jupiter is the largest planet in the Solar System."
+  },
+  {
+    "id": "chemistry",
+    "subject": "science",
+    "text": "A proton has a positive electric charge. An electron has a negative electric charge. A neutron has no electric charge. The atomic number of an element equals the number of protons in its nucleus. The chemical symbol for oxygen is O."
+  },
+  {
+    "id": "networks",
+    "subject": "technology",
+    "text": "DNS resolves domain names to IP addresses. SMTP is used to transfer email between mail servers. HTTPS protects HTTP communication using TLS. An IPv4 address contains 32 bits. A router forwards packets between networks."
+  }
+]

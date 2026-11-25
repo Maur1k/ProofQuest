@@ -6,6 +6,8 @@ import { quizVersionSchema } from "@/domain/quiz";
 export const availabilitySchema = z
   .object({
     enabled: z.boolean(),
+    sourceContract: z.literal("source-material-v1").optional(),
+    allowedFormats: z.array(z.enum(["quiz", "reviewer", "flashcards"])).optional(),
     provider: z.string().max(100),
     retention: z.string().max(1000),
     maxInputBytes: z.number().int().positive(),
@@ -22,12 +24,15 @@ export class GenerationClientError extends Error {
   }
 }
 const messages: Record<string, string> = {
+  "provider-limited":
+    "The AI provider allowance is used. Try later; saved materials remain available.",
   pending: "This request is still running. Retry the same request shortly.",
   failed: "This request ended without a result. Start a new request if you want to try again.",
   conflict: "The selected text changed. Review it and start a new request.",
-  limited: "Generation allowance reached. Try later; saved quizzes remain available.",
+  limited:
+    "Generation is busy or the allowance is used. Wait at least 65 seconds before retrying; daily allowances reset at 00:00 UTC. Saved materials remain available.",
   "payload-too-large": "Select fewer pages for this service.",
-  "invalid-output": "The generated questions did not pass verification. No quiz was saved.",
+  "invalid-output": "The generated material did not pass verification. Nothing was saved.",
   timeout: "Generation timed out. Retry this same request to check its status.",
   cancelled: "Generation was cancelled.",
   unavailable: "Generation is currently unavailable. Retry later.",

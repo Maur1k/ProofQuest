@@ -1,3 +1,4 @@
+import { checkGeneratedQuizQuality } from "@/domain/generation-quality";
 import {
   GenerationValidationError,
   validateGeneratedQuiz,
@@ -11,6 +12,7 @@ export const GENERATION_SERVER_LIMITS = Object.freeze({
   deadlineMs: 30_000,
 });
 const messages = {
+  "provider-limited": "The AI provider allowance is temporarily exhausted. Retry later.",
   "invalid-request": "The generation request is invalid.",
   "payload-too-large": "The selected text exceeds the request limit.",
   "invalid-output": "The generated questions could not be verified.",
@@ -30,7 +32,14 @@ export function publicGenerationFailure(error: unknown): {
   code: GenerationFailureCode;
   message: string;
 } {
-  const code = error instanceof GenerationFailure ? error.code : "unavailable";
+  const code =
+    error instanceof GenerationFailure
+      ? error.code
+      : error instanceof GenerationValidationError
+        ? error.code === "invalid-input"
+          ? "invalid-request"
+          : "invalid-output"
+        : "unavailable";
   return { code, message: messages[code] };
 }
 function sanitized(error: unknown): GenerationFailure {
@@ -45,7 +54,7 @@ interface DeadlineOptions {
   signal?: AbortSignal;
   deadlineMs?: number;
 }
-async function withDeadline<T>(
+export async function withDeadline<T>(
   work: (signal: AbortSignal) => Promise<T>,
   options: DeadlineOptions,
 ): Promise<T> {
@@ -82,9 +91,10 @@ async function withDeadline<T>(
 }
 
 /** Bound streamed bytes before JSON parsing; Content-Length is never the sole check. */
-export async function readGenerationRequest(
+export async function readGenerationRequest<T = ReturnType<typeof validateGenerationInput>>(
   request: Request,
   deadlineMs: number = GENERATION_SERVER_LIMITS.deadlineMs,
+  validate: (input: unknown) => T = validateGenerationInput as (input: unknown) => T,
 ) {
   return withDeadline(
     async (signal) => {
@@ -131,7 +141,7 @@ export async function readGenerationRequest(
         } catch {
           throw new GenerationFailure("invalid-request");
         }
-        return validateGenerationInput(input);
+        return validate(input);
       } catch (error) {
         cancel();
         if (error instanceof TypeError || error instanceof SyntaxError)
@@ -162,6 +172,6 @@ export async function runGeneration(
     // Retain the validated source for evidence checks even if an adapter mutates its argument.
     const output = await provider.generate(structuredClone(validated), signal);
     if (signal.aborted) throw new GenerationFailure("cancelled");
-    return validateGeneratedQuiz(output, validated, metadata);
+    return checkGeneratedQuizQuality(validateGeneratedQuiz(output, validated, metadata));
   }, options);
 }

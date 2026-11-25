@@ -58,6 +58,7 @@ function setup(enabled = true) {
 }
 afterEach(() => {
   cleanup();
+  sessionStorage.clear();
   vi.resetAllMocks();
   vi.unstubAllGlobals();
 });
@@ -177,3 +178,41 @@ it.each(["flashcards", "reviewer"])(
     expect(mocks.studyRequest).toHaveBeenCalledOnce();
   },
 );
+
+it("prevents unaccepted formats from generating while allowing an accepted format to be selected", async () => {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        enabled: true,
+        allowedFormats: ["reviewer"],
+        provider: "Test provider",
+        retention: "One day",
+        maxInputBytes: 3500,
+        guestDailyLimit: 3,
+      }),
+    }),
+  );
+  render(<GenerateQuiz document={doc} pages={pages} />);
+  await screen.findByText(/This format is awaiting validation/);
+  expect(screen.getByRole("radio", { name: /^Quiz/ })).toBeDisabled();
+  expect(screen.getByRole("radio", { name: /^Exam/ })).toBeDisabled();
+  fireEvent.click(screen.getByRole("checkbox", { name: /Page 1/ }));
+  fireEvent.click(screen.getByRole("checkbox", { name: /I have permission/ }));
+  expect(screen.getByRole("button", { name: "Generate five questions" })).toBeDisabled();
+  fireEvent.click(screen.getByRole("radio", { name: /^Reviewer/ }));
+  expect(screen.queryByText(/This format is awaiting validation/)).not.toBeInTheDocument();
+  expect(mocks.request).not.toHaveBeenCalled();
+  expect(mocks.studyRequest).not.toHaveBeenCalled();
+});
+
+it("retains the old endpoint only for existing request recovery", async () => {
+  setup(false).unmount();
+  render(<GenerateQuiz document={doc} pages={pages} recoveryOnly />);
+  await waitFor(() =>
+    expect(screen.queryByRole("heading", { name: "Recover an unfinished PDF request" })).toBeNull(),
+  );
+  expect(screen.queryByRole("button", { name: /Generate/ })).toBeNull();
+  expect(mocks.request).not.toHaveBeenCalled();
+});

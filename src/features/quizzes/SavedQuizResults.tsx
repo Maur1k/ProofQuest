@@ -1,3 +1,5 @@
+import { Navigate } from "@tanstack/react-router";
+import { isArchivedQuizId } from "@/domain/archive";
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/store";
 import type { QuizSession } from "@/domain/quiz-session";
@@ -34,6 +36,8 @@ export function SavedQuizResults({ sessionId }: { sessionId: string }) {
       active = false;
     };
   }, [persistence, loadQuizSession, sessionId, generation]);
+  if (session && isArchivedQuizId(session.version.id))
+    return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
     <div className="pb-6">
       <PageHeader title="Saved quiz result" back={{ to: "/quiz-history", label: "Quiz history" }} />

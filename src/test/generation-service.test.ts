@@ -14,6 +14,8 @@ const output = () => ({
     options: [
       { id: "a", text: "Recall" },
       { id: "b", text: "Copy" },
+      { id: "c", text: "Sleep" },
+      { id: "d", text: "Erase" },
     ],
     correctOptionId: "a",
     explanation: "Recall retrieves information.",

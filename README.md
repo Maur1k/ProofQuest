@@ -1,33 +1,22 @@
 # ProofQuest
 
 A responsive, open-source learning web app by [Maur1k](https://github.com/Maur1k).
-Planned core flow: **PDF → quiz/test, reviewer or flashcards**, across subjects.
-Programming quests remain optional examples.
+Core flow: **Add PDF or text → choose Flashcards, Quiz, Exam or Reviewer → review and create → study → results**.
 
 ## Current state
 
-ProofQuest reuses the original Lovable source and artwork. Guest access, manual
-programming quests, local PDF import, selected-page text extraction, original-page
-previews and browser-based document saving are implemented.
+Updated 2026-11-25. ProofQuest preserves the original Lovable styling and runs as a responsive guest web app. Development and testing happen locally, without Lovable AI editing.
 
-Phase 5 is complete locally: labeled sample MCQ quizzes support Practice feedback,
-editable Test drafts, final submission, results with explanations, saved history
-and new attempts. Referenced PDFs open at the cited page when available; missing
-sources retain their saved excerpt and result. Imported compatible MCQ sessions
-also work through history. The sample quiz is not PDF-generated. AI generation
-remains Phase 6. Phase 5 was pushed to GitHub at `b9adce9`; its live publication has not been verified.
+- Local PDF import, selected-page extraction, original-page previews and browser saving work without AI. Pasted text uses the same guided study flow.
+- New study provides three steps and four study modes, exact-text review and explicit consent before any AI transfer.
+- Library groups saved sources, study materials and related results. Quiz and Exam reuse saved questions. Older ambiguous records remain under Other saved materials.
+- Retired Quests and identifiable samples remain readable in Archive. IndexedDB schema 4 and backup v5 preserve existing records and historical grades.
 
-Phase 6 is in progress: selected-text consent UI, validated atomic quiz saving,
-and provider-neutral server orchestration are implemented and tested locally.
-The production generation endpoint remains disabled. A provider, durable usage
-ledger and live quality evaluation are still pending; PDF-to-quiz generation is
-not available yet. Free generation is preferred, but no provider has been selected.
-See [Phase 6 progress](docs/phase-6-progress.md).
+**Simplification: S1 and S2 complete; S3 at the approved 50% checkpoint.** Remaining work includes comprehensive compatibility checks, old-entry redirects, full responsive/keyboard acceptance and unused-UI cleanup. See the [checkpoint handoff](docs/simplification-plan.md).
 
-Development stops at owner-approved checkpoints. See the
-[phased roadmap](docs/development-phases.md),
-[Phase 5 handoff](docs/phase-5-handoff.md) and
-[implementation specification](docs/web-implementation-plan.md).
+Groq generation and Upstash usage-control integration exist, but **AI generation remains disabled**. Factual-quality acceptance is unresolved; PDF-to-study generation is not a released feature. Passing workflow tests does not certify factual accuracy. See [AI setup](docs/ai-local-setup.md) and [Phase 6A status](docs/phase-6a-progress.md).
+
+Development stops at owner-approved checkpoints. See the [phased roadmap](docs/development-phases.md) and [implementation specification](docs/web-implementation-plan.md). GitHub progress does not imply live-host publication or release acceptance.
 
 ## Development
 
@@ -39,7 +28,7 @@ bun run dev
 ```
 
 Open the local URL printed by Vite. No API key or account is needed for the
-manual/sample app. Account routes redirect to guest Home.
+local import and saved-study workflows. Account routes redirect to the guest experience.
 
 ```sh
 bun run lint

@@ -1,3 +1,7 @@
+import * as sourceMaterials from "@/data/source-material-repository";
+import type { SourceMaterial } from "@/domain/source-material";
+import * as sourceRepository from "@/data/source-repository";
+import type { SourceRevision } from "@/domain/study-source";
 import type { StudyRecord, StudyProgress } from "@/domain/study-record";
 import type { QuizVersion } from "@/domain/quiz";
 import * as studyRepository from "@/data/study-repository";
@@ -12,7 +16,6 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { createSampleQuests } from "@/data/sample-quests";
 import { STORAGE_KEY, BACKUP_KEY_PREFIX, parseStoredData } from "@/domain/storage";
 import type { AnswerRecord, AppData, Attempt, QuestDraft, Quest } from "@/domain/types";
 import { newId } from "@/lib/id";
@@ -27,6 +30,19 @@ import { RevisionConflict } from "@/domain/quiz-session";
 
 type Persistence = "loading" | "durable" | "blocked" | "temporary";
 interface StoreValue {
+  listSourceMaterials: () => Promise<SourceMaterial[]>;
+  saveSourceMaterial: (material: SourceMaterial) => Promise<SourceMaterial>;
+  sourceCardProgress: (
+    id: string,
+    change?: { previous: StudyProgress; index: number; revealed: boolean },
+  ) => Promise<StudyProgress>;
+
+  listSourceData: () => ReturnType<typeof sourceRepository.listSourceData>;
+  saveSourceRevision: (
+    revision: SourceRevision,
+    expected: number | null,
+  ) => ReturnType<typeof sourceRepository.saveSourceRevision>;
+
   commitGeneratedQuiz: (
     input: GenerationInput,
     checksum: string,
@@ -171,7 +187,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
             apply(recoveryState(parsed.data));
           loaded = await opened.initializeLegacy(raw, {
             version: 1,
-            quests: createSampleQuests(),
+            quests: [],
             attempts: [],
           });
         }
@@ -432,8 +448,38 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       runQuiz((repo) => repo.startSession(newId(), id, mode, Date.now())),
     [runQuiz],
   );
+  const listSourceData = useCallback(async () => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage unavailable");
+    return sourceRepository.listSourceData(repository.current.database);
+  }, []);
+  const saveSourceRevision = useCallback(
+    (revision: SourceRevision, expected: number | null) =>
+      runQuiz((repo) => sourceRepository.saveSourceRevision(repo.database, revision, expected)),
+    [runQuiz],
+  );
+  const listSourceMaterials = useCallback(async () => {
+    if (modeRef.current !== "durable" || !repository.current)
+      throw new Error("Saved storage unavailable");
+    return sourceMaterials.listSourceMaterials(repository.current.database);
+  }, []);
+  const saveSourceMaterial = useCallback(
+    (material: SourceMaterial) =>
+      runQuiz((repo) => sourceMaterials.saveSourceMaterial(repo.database, material)),
+    [runQuiz],
+  );
+  const sourceCardProgress = useCallback(
+    (id: string, change?: { previous: StudyProgress; index: number; revealed: boolean }) =>
+      runQuiz((repo) => sourceMaterials.sourceCardProgress(repo.database, id, change)),
+    [runQuiz],
+  );
   const value = useMemo<StoreValue>(
     () => ({
+      listSourceMaterials,
+      saveSourceMaterial,
+      sourceCardProgress,
+      listSourceData,
+      saveSourceRevision,
       commitGeneratedQuiz,
       listStudyMaterials,
       saveStudyMaterial,
@@ -570,6 +616,11 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       dispatch,
       runRecovery,
       setMode,
+      listSourceMaterials,
+      saveSourceMaterial,
+      sourceCardProgress,
+      listSourceData,
+      saveSourceRevision,
       commitGeneratedQuiz,
       listStudyMaterials,
       saveStudyMaterial,

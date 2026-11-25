@@ -1,3 +1,11 @@
+import { sourceMaterialSchema, sourceQuizVersion } from "@/domain/source-material";
+import { assertMaterialRevision, validateSourceProgress } from "./source-material-repository";
+import {
+  studySourceSchema,
+  sourceRevisionSchema,
+  validateSourceGraph,
+} from "@/domain/study-source";
+import { sourceDigest } from "./source-repository";
 import { z } from "zod";
 import {
   studyRecordSchema,
@@ -38,7 +46,7 @@ const legacyBackupSchema = z
   })
   .strict();
 
-const backupSchema = z.union([
+const previousBackupSchema = z.union([
   legacyBackupSchema.transform((value) => ({
     ...value,
     version: 3 as const,
@@ -50,6 +58,44 @@ const backupSchema = z.union([
       version: z.literal(3),
       materials: z.array(studyRecordSchema),
       studyProgress: z.array(studyProgressSchema),
+    })
+    .strict(),
+]);
+
+const v4BackupSchema = z.union([
+  previousBackupSchema.transform((value) => ({
+    ...value,
+    version: 4 as const,
+    sources: [],
+    sourceRevisions: [],
+  })),
+  legacyBackupSchema
+    .extend({
+      version: z.literal(4),
+      materials: z.array(studyRecordSchema),
+      studyProgress: z.array(studyProgressSchema),
+      sources: z.array(studySourceSchema),
+      sourceRevisions: z.array(sourceRevisionSchema),
+    })
+    .strict(),
+]);
+
+const backupSchema = z.union([
+  v4BackupSchema.transform((value) => ({
+    ...value,
+    version: 5 as const,
+    sourceMaterials: [],
+    sourceMaterialProgress: [],
+  })),
+  legacyBackupSchema
+    .extend({
+      version: z.literal(5),
+      materials: z.array(studyRecordSchema),
+      studyProgress: z.array(studyProgressSchema),
+      sources: z.array(studySourceSchema),
+      sourceRevisions: z.array(sourceRevisionSchema),
+      sourceMaterials: z.array(sourceMaterialSchema),
+      sourceMaterialProgress: z.array(studyProgressSchema),
     })
     .strict(),
 ]);
@@ -86,6 +132,18 @@ export async function exportBackup(database: IDBDatabase): Promise<string> {
     materials: z
       .array(studyRecordSchema)
       .parse(await requestValue(tx.objectStore("materials").getAll())),
+    sourceMaterials: z
+      .array(sourceMaterialSchema)
+      .parse(await requestValue(tx.objectStore("sourceMaterials").getAll())),
+    sourceMaterialProgress: z
+      .array(studyProgressSchema)
+      .parse(await requestValue(tx.objectStore("sourceMaterialProgress").getAll())),
+    sources: z
+      .array(studySourceSchema)
+      .parse(await requestValue(tx.objectStore("sources").getAll())),
+    sourceRevisions: z
+      .array(sourceRevisionSchema)
+      .parse(await requestValue(tx.objectStore("sourceRevisions").getAll())),
     studyProgress: z
       .array(studyProgressSchema)
       .parse(await requestValue(tx.objectStore("studyProgress").getAll())),
@@ -95,7 +153,7 @@ export async function exportBackup(database: IDBDatabase): Promise<string> {
   for (const { blob, ...document } of snapshot.documents) {
     documents.push({ ...document, bytes: encode(new Uint8Array(await blob.arrayBuffer())) });
   }
-  const text = JSON.stringify({ ...snapshot, documents, format: "proofquest-backup", version: 3 });
+  const text = JSON.stringify({ ...snapshot, documents, format: "proofquest-backup", version: 5 });
   if (new Blob([text]).size > BACKUP_MAX_BYTES)
     throw new Error("Backup exceeds the 100 MiB recovery limit.");
   return text;
@@ -128,9 +186,15 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
     backup.jobs,
     backup.materials,
     backup.studyProgress,
+    backup.sourceMaterials,
+    backup.sourceMaterialProgress,
   ])
     assertUnique(records.map((record) => record.id));
   assertUnique(backup.pages.map((page) => JSON.stringify([page.documentId, page.page])));
+  validateSourceGraph(backup.sources, backup.sourceRevisions);
+  for (const revision of backup.sourceRevisions)
+    if ((await sourceDigest(revision)) !== revision.contentHash)
+      throw new Error("Source checksum mismatch");
   const documents: DocumentRecord[] = [];
   for (const { bytes, ...document } of backup.documents) {
     const decoded = atob(bytes);
@@ -211,6 +275,10 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
       ["jobs", backup.jobs],
       ["materials", backup.materials],
       ["studyProgress", backup.studyProgress],
+      ["sources", backup.sources],
+      ["sourceRevisions", backup.sourceRevisions],
+      ["sourceMaterials", backup.sourceMaterials],
+      ["sourceMaterialProgress", backup.sourceMaterialProgress],
     ] as const) {
       for (const record of records) {
         const key = "id" in record ? record.id : [record.documentId, record.page];
@@ -219,6 +287,65 @@ export async function importBackup(database: IDBDatabase, text: string): Promise
           throw new Error("Conflicting backup record. Nothing was imported.");
         if (existing === undefined) await requestValue(tx.objectStore(table).add(record));
       }
+    }
+    const mergedSources = z
+      .array(studySourceSchema)
+      .parse(await requestValue(tx.objectStore("sources").getAll()));
+    const mergedRevisions = z
+      .array(sourceRevisionSchema)
+      .parse(await requestValue(tx.objectStore("sourceRevisions").getAll()));
+    validateSourceGraph(mergedSources, mergedRevisions);
+    for (const revision of mergedRevisions) {
+      if (revision.kind !== "pdf") continue;
+      const raw = await requestValue(tx.objectStore("documents").get(revision.documentId));
+      if (raw === undefined) continue; // Retained revision is usable without original PDF.
+      const document = documentSchema.parse(raw);
+      if (document.checksum !== revision.documentChecksum) throw new Error("PDF source conflict");
+      for (const segment of revision.segments) {
+        const page = pageSchema.parse(
+          await requestValue(tx.objectStore("pages").get([revision.documentId, segment.page])),
+        );
+        if (page.text.trim() !== segment.text) throw new Error("Source text conflict");
+      }
+    }
+    const sourceMaterials = z
+      .array(sourceMaterialSchema)
+      .parse(await requestValue(tx.objectStore("sourceMaterials").getAll()));
+    for (const material of sourceMaterials) {
+      const revision = mergedRevisions.find((r) => r.id === material.request.source.id);
+      if (revision) assertMaterialRevision(material, revision);
+      if (material.output.format === "quiz") {
+        const version = await requestValue(tx.objectStore("versions").get(material.id));
+        if (
+          version !== undefined &&
+          JSON.stringify(version) !== JSON.stringify(sourceQuizVersion(material))
+        )
+          throw new Error("Source quiz snapshot conflict");
+      }
+    }
+    const mergedVersions = z
+      .array(quizVersionSchema)
+      .parse(await requestValue(tx.objectStore("versions").getAll()));
+    const mergedSessions = z
+      .array(sessionSchema)
+      .parse(await requestValue(tx.objectStore("sessions").getAll()));
+    for (const version of [...mergedVersions, ...mergedSessions.map((s) => s.version)]) {
+      if (!version.id.startsWith("source-")) continue;
+      const material = sourceMaterials.find((m) => m.id === version.id);
+      if (
+        !material ||
+        material.output.format !== "quiz" ||
+        JSON.stringify(sourceQuizVersion(material)) !== JSON.stringify(version)
+      )
+        throw new Error("Missing or conflicting source quiz evidence");
+    }
+    const sourceProgress = z
+      .array(studyProgressSchema)
+      .parse(await requestValue(tx.objectStore("sourceMaterialProgress").getAll()));
+    for (const progress of sourceProgress) {
+      const material = sourceMaterials.find((m) => m.id === progress.id);
+      if (!material) throw new Error("Orphan source progress");
+      validateSourceProgress(material, progress);
     }
     // Check the merged state, including materials whose original was previously absent.
     const materials = z

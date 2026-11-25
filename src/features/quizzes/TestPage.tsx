@@ -1,3 +1,5 @@
+import { Navigate } from "@tanstack/react-router";
+import { isArchivedQuizId } from "@/domain/archive";
 import { QuizResults } from "./QuizResults";
 import { useCallback, useEffect, useState } from "react";
 import type { QuizSession } from "@/domain/quiz-session";
@@ -27,11 +29,11 @@ export function TestPage({ sessionId }: { sessionId: string }) {
           value.version.questions.some((q) => q.type !== "mcq")
         ) {
           setSession(null);
-          setError("This MCQ Test is unavailable. Open Quiz history to find an attempt.");
+          setError("This Exam is unavailable. Open Quiz history to find an attempt.");
         } else setSession(value);
       })
       .catch(() => {
-        if (active) setError("Could not load saved Test answers. Please retry.");
+        if (active) setError("Could not load saved Exam answers. Please retry.");
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -40,15 +42,22 @@ export function TestPage({ sessionId }: { sessionId: string }) {
       active = false;
     };
   }, [sessionId, persistence, loadQuizSession, generation]);
+  if (session && isArchivedQuizId(session.version.id))
+    return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
     <div className="pb-6">
       <PageHeader
-        title="MCQ Test"
+        title="Exam"
         back={{ to: "/", label: "Home" }}
         subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
+      {session?.version.id.startsWith("source-generated-") && (
+        <p className="mb-4 text-sm text-muted-foreground">
+          AI-generated material · Not fact-checked. Verify answers against the retained source.
+        </p>
+      )}
       {persistence === "loading" || (persistence === "durable" && loading) ? (
-        <p role="status">Loading saved Test…</p>
+        <p role="status">Loading saved Exam…</p>
       ) : persistence !== "durable" ? (
         <p role="status">Saved browser storage is required. Return Home to recover storage.</p>
       ) : error ? (

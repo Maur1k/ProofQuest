@@ -1,3 +1,4 @@
+import { PagePreview } from "./PagePreview";
 import { GenerateQuiz } from "@/features/generation/GenerateQuiz";
 import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
@@ -7,38 +8,6 @@ import { documentStorage } from "./service";
 import { pdfFailure } from "./errors";
 import { documentButton } from "./DocumentLibrary";
 
-function PagePreview({ document, page }: { document: DocumentRecord; page: number }) {
-  const canvas = useRef<HTMLCanvasElement>(null);
-  const [message, setMessage] = useState("Rendering original page…");
-  useEffect(() => {
-    const controller = new AbortController();
-    void import("./pdfjs-adapter")
-      .then(async (adapter) => {
-        if (controller.signal.aborted || !canvas.current) return;
-        await adapter.renderPdfPage(document.blob, page, canvas.current, controller.signal);
-        if (!controller.signal.aborted) setMessage("");
-      })
-      .catch((e) => {
-        if (!controller.signal.aborted) setMessage(pdfFailure(e).message);
-      });
-    return () => controller.abort();
-  }, [document, page]);
-  return (
-    <div className="min-w-0 space-y-2">
-      {message && (
-        <p role="status" className="text-sm">
-          {message}
-        </p>
-      )}
-      <canvas
-        ref={canvas}
-        aria-label={`Original PDF page ${page}. Extracted text is provided separately.`}
-        role="img"
-        className="h-auto max-w-full rounded-lg bg-white"
-      />
-    </div>
-  );
-}
 export function DocumentReader({
   documentId,
   initialPage = 1,
@@ -106,7 +75,10 @@ export function DocumentReader({
               extracted.
             </p>
           </header>
-          <GenerateQuiz key={documentId} document={data.document} pages={data.pages} />
+          <Link to="/" search={{ document: documentId }} className={documentButton}>
+            Choose study mode
+          </Link>
+          <GenerateQuiz recoveryOnly key={documentId} document={data.document} pages={data.pages} />
           <nav aria-label="PDF pages" className="flex flex-wrap items-center gap-3">
             <button
               className={documentButton}

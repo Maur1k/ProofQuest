@@ -29,6 +29,9 @@ try {
   for (const path of [
     "/",
     "/intro",
+    "/library",
+    "/settings",
+    "/archive",
     "/quests",
     "/progress",
     "/study",
@@ -52,6 +55,22 @@ try {
     for (const asset of new Set(assets))
       assert.equal((await fetch(origin + asset)).status, 200, asset);
     console.log(`PASS ${path}: SSR and linked assets`);
+  }
+  for (const [path, target] of [
+    ["/subjects", "/archive"],
+    ["/subjects/algorithms", "/archive"],
+    ["/quests/new", "/archive"],
+    ["/quests/old/edit", "/archive?quest=old"],
+    ["/practice/old", "/archive?quest=old"],
+    ["/results/old?attempt=record", "/archive?quest=old&attempt=record"],
+    ["/study/review", "/archive"],
+    ["/study/ready", "/archive"],
+    ["/progress", "/archive"],
+  ]) {
+    const response = await fetch(origin + path, { redirect: "manual" });
+    assert.equal(response.status, 307, path);
+    assert.equal(response.headers.get("location"), target, path);
+    console.log(`PASS ${path}: archive redirect`);
   }
   for (const path of ["/login", "/register", "/welcome"]) {
     const response = await fetch(origin + path + "?redirect=https://example.com", {

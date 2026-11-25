@@ -1,3 +1,4 @@
+import { isArchivedQuizId } from "@/domain/archive";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useStore } from "@/store/store";
@@ -23,14 +24,17 @@ export function SavedStudyLibrary({ documentId }: { documentId?: string }) {
           materials.filter((item) => !documentId || item.request.documentId === documentId),
         );
         setQuizzes(
-          versions.filter(
-            (item) =>
-              !documentId ||
-              item.questions.some(
-                (q) =>
-                  q.type === "mcq" && q.sources.some((source) => source.documentId === documentId),
-              ),
-          ),
+          versions
+            .filter((item) => !item.id.startsWith("source-") && !isArchivedQuizId(item.id))
+            .filter(
+              (item) =>
+                !documentId ||
+                item.questions.some(
+                  (q) =>
+                    q.type === "mcq" &&
+                    q.sources.some((source) => source.documentId === documentId),
+                ),
+            ),
         );
         setLoading(false);
       })

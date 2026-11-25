@@ -56,6 +56,23 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 describe("durable app store", () => {
+  it("starts empty without seeding samples and remains empty after reload", async () => {
+    const first = render(
+      <StoreProvider>
+        <Harness />
+      </StoreProvider>,
+    );
+    await waitFor(() => expect(screen.getByTestId("mode")).toHaveTextContent("durable"));
+    expect(screen.getByTestId("count")).toHaveTextContent("0");
+    first.unmount();
+    render(
+      <StoreProvider>
+        <Harness />
+      </StoreProvider>,
+    );
+    await waitFor(() => expect(screen.getByTestId("mode")).toHaveTextContent("durable"));
+    expect(screen.getByTestId("count")).toHaveTextContent("0");
+  });
   it("retains the v1 source, persists a change and reloads the same library", async () => {
     const raw = JSON.stringify({ version: 1, quests: [], attempts: [] });
     window.localStorage.setItem(STORAGE_KEY, raw);

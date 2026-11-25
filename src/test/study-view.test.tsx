@@ -85,7 +85,7 @@ it("keeps the last saved card when writing fails", async () => {
 });
 it("opens Quiz and Exam from saved content without generation", async () => {
   mocks.materials.mockResolvedValue([record]);
-  mocks.quizzes.mockResolvedValue([createSampleMcqVersion()]);
+  mocks.quizzes.mockResolvedValue([{ ...createSampleMcqVersion(), id: "real-saved-quiz" }]);
   mocks.start.mockResolvedValue({ id: "session" });
   render(<SavedStudyLibrary />);
   await screen.findByRole("button", { name: "Open Quiz" });

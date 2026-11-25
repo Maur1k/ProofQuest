@@ -10,12 +10,15 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ArchiveRouteImport } from './routes/archive'
 import { Route as IntroRouteImport } from './routes/intro'
+import { Route as LibraryRouteImport } from './routes/library'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as MaterialsRouteImport } from './routes/materials'
 import { Route as ProgressRouteImport } from './routes/progress'
 import { Route as QuizHistoryRouteImport } from './routes/quiz-history'
 import { Route as RegisterRouteImport } from './routes/register'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as WelcomeRouteImport } from './routes/welcome'
 import { Route as DocumentsIndexRouteImport } from './routes/documents.index'
 import { Route as DocumentsDocumentIdRouteImport } from './routes/documents.$documentId'
@@ -40,9 +43,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ArchiveRoute = ArchiveRouteImport.update({
+  id: '/archive',
+  path: '/archive',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IntroRoute = IntroRouteImport.update({
   id: '/intro',
   path: '/intro',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LibraryRoute = LibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -68,6 +81,11 @@ const QuizHistoryRoute = QuizHistoryRouteImport.update({
 const RegisterRoute = RegisterRouteImport.update({
   id: '/register',
   path: '/register',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const WelcomeRoute = WelcomeRouteImport.update({
@@ -163,12 +181,15 @@ const StudyLessonLessonIdRoute = StudyLessonLessonIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/archive': typeof ArchiveRoute
   '/intro': typeof IntroRoute
+  '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/materials': typeof MaterialsRoute
   '/progress': typeof ProgressRoute
   '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
@@ -190,12 +211,15 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/archive': typeof ArchiveRoute
   '/intro': typeof IntroRoute
+  '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/materials': typeof MaterialsRoute
   '/progress': typeof ProgressRoute
   '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
@@ -218,12 +242,15 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/archive': typeof ArchiveRoute
   '/intro': typeof IntroRoute
+  '/library': typeof LibraryRoute
   '/login': typeof LoginRoute
   '/materials': typeof MaterialsRoute
   '/progress': typeof ProgressRoute
   '/quiz-history': typeof QuizHistoryRoute
   '/register': typeof RegisterRoute
+  '/settings': typeof SettingsRoute
   '/welcome': typeof WelcomeRoute
   '/documents/$documentId': typeof DocumentsDocumentIdRoute
   '/practice/$questId': typeof PracticeQuestIdRoute
@@ -247,12 +274,15 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/archive'
     | '/intro'
+    | '/library'
     | '/login'
     | '/materials'
     | '/progress'
     | '/quiz-history'
     | '/register'
+    | '/settings'
     | '/welcome'
     | '/documents/$documentId'
     | '/practice/$questId'
@@ -274,12 +304,15 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/archive'
     | '/intro'
+    | '/library'
     | '/login'
     | '/materials'
     | '/progress'
     | '/quiz-history'
     | '/register'
+    | '/settings'
     | '/welcome'
     | '/documents/$documentId'
     | '/practice/$questId'
@@ -301,12 +334,15 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/archive'
     | '/intro'
+    | '/library'
     | '/login'
     | '/materials'
     | '/progress'
     | '/quiz-history'
     | '/register'
+    | '/settings'
     | '/welcome'
     | '/documents/$documentId'
     | '/practice/$questId'
@@ -329,12 +365,15 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ArchiveRoute: typeof ArchiveRoute
   IntroRoute: typeof IntroRoute
+  LibraryRoute: typeof LibraryRoute
   LoginRoute: typeof LoginRoute
   MaterialsRoute: typeof MaterialsRoute
   ProgressRoute: typeof ProgressRoute
   QuizHistoryRoute: typeof QuizHistoryRoute
   RegisterRoute: typeof RegisterRoute
+  SettingsRoute: typeof SettingsRoute
   WelcomeRoute: typeof WelcomeRoute
   DocumentsDocumentIdRoute: typeof DocumentsDocumentIdRoute
   PracticeQuestIdRoute: typeof PracticeQuestIdRoute
@@ -364,11 +403,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/archive': {
+      id: '/archive'
+      path: '/archive'
+      fullPath: '/archive'
+      preLoaderRoute: typeof ArchiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/intro': {
       id: '/intro'
       path: '/intro'
       fullPath: '/intro'
       preLoaderRoute: typeof IntroRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/library': {
+      id: '/library'
+      path: '/library'
+      fullPath: '/library'
+      preLoaderRoute: typeof LibraryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -404,6 +457,13 @@ declare module '@tanstack/react-router' {
       path: '/register'
       fullPath: '/register'
       preLoaderRoute: typeof RegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/welcome': {
@@ -537,12 +597,15 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ArchiveRoute: ArchiveRoute,
   IntroRoute: IntroRoute,
+  LibraryRoute: LibraryRoute,
   LoginRoute: LoginRoute,
   MaterialsRoute: MaterialsRoute,
   ProgressRoute: ProgressRoute,
   QuizHistoryRoute: QuizHistoryRoute,
   RegisterRoute: RegisterRoute,
+  SettingsRoute: SettingsRoute,
   WelcomeRoute: WelcomeRoute,
   DocumentsDocumentIdRoute: DocumentsDocumentIdRoute,
   PracticeQuestIdRoute: PracticeQuestIdRoute,

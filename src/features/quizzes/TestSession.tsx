@@ -50,7 +50,7 @@ export function TestSession({
       setConflict(stale);
       setError(
         stale
-          ? "This Test changed in another tab. Load the latest saved answers before continuing."
+          ? "This Exam changed in another tab. Load the latest saved answers before continuing."
           : "Your changes were not saved. They are kept here; retry saving when storage is available.",
       );
     } finally {
@@ -68,7 +68,7 @@ export function TestSession({
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <p className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
-        Test mode · Save and edit your answers. Solutions stay hidden until you finish and submit
+        Exam mode · Save and edit your answers. Solutions stay hidden until you finish and submit
         this attempt.
       </p>
       <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
@@ -79,7 +79,7 @@ export function TestSession({
           Question {view.position} of {view.total}
         </span>
       </div>
-      <nav aria-label="Test question list" className="flex flex-wrap gap-2">
+      <nav aria-label="Exam question list" className="flex flex-wrap gap-2">
         {progress.questions.map((question, position) => (
           <Button
             key={question.id}
@@ -172,7 +172,7 @@ export function TestSession({
           )}
         </div>
       )}
-      <nav aria-label="Test questions" className="flex flex-wrap gap-3">
+      <nav aria-label="Exam questions" className="flex flex-wrap gap-3">
         <Button
           variant="outline"
           disabled={index === 0 || dirty || pending || conflict}
@@ -190,7 +190,7 @@ export function TestSession({
       </nav>
       {progress.answered === progress.questions.length && (
         <p className="rounded-xl border border-border p-4">
-          All answers are saved as editable drafts. This Test has not been submitted. Finish Test
+          All answers are saved as editable drafts. This Exam has not been submitted. Finish Exam
           when you are ready.
         </p>
       )}
@@ -212,9 +212,9 @@ export function TestSession({
         description={
           pending
             ? "Wait for saving to finish before leaving."
-            : "Your unsaved changes will be lost. Previously saved Test answers remain available."
+            : "Your unsaved changes will be lost. Previously saved Exam answers remain available."
         }
-        confirmLabel={pending ? "Stay here" : "Leave Test"}
+        confirmLabel={pending ? "Stay here" : "Leave Exam"}
         onConfirm={() => {
           if (pending) blocker.reset?.();
           else blocker.proceed?.();
@@ -223,7 +223,7 @@ export function TestSession({
       <ConfirmDialog
         open={reloadPrompt}
         onOpenChange={setReloadPrompt}
-        title="Load the latest Test answers?"
+        title="Load the latest Exam answers?"
         description="Your unsaved changes will be discarded. Load the latest answers saved in this browser?"
         confirmLabel="Load latest"
         onConfirm={reload}

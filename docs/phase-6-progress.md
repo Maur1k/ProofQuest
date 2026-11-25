@@ -46,3 +46,25 @@ The owner approved quizzes, reviewers and flashcards within Phase 6, with progra
 ## Four-choice implementation update
 
 The owner-approved Flashcards / Quiz / Exam / Reviewer flow is implemented locally, including stored-material access, progress and backup support. See [implementation and verification](phase-6-study-flow.md) for current status. Earlier future-tense descriptions above are historical planning; live AI and larger-file limits remain pending.
+
+## Local AI reconnection — 2026-11-17
+
+The owner supplied Groq and Upstash credentials and authorized local integration. Earlier provider-pending descriptions above are historical. See [local AI setup and remaining checks](ai-local-setup.md). Phase 6 remains incomplete and unpushed.
+
+## Browser quality checkpoint — 2026-11-17
+
+Quiz/Exam results, reload and history were verified in the browser. Factual acceptance failed: an MCQ marked a source-supported alternative incorrect. Reviewer generation also failed in the browser. Local generation was disabled again pending correction. See [full review](phase-6-browser-quality-review.md). Earlier structural test passes do not establish factual quality.
+
+## Authorized 6A checkpoint — 2026-11-17
+
+The owner authorized milestone 6A. Quality rejection rules, extractive evidence references and per-format gates are implemented locally. Live reliability/quality acceptance remains unmet; see [6A progress](phase-6a-progress.md). Generation remains disabled. 6B has not started.
+
+
+## Phase 6B started — 2026-11-17
+
+Explicit owner authorization advances the source expansion while keeping AI disabled. See [Phase 6B progress](phase-6b-progress.md) for implemented source storage/UI and outstanding generation acceptance.
+
+
+## Current checkpoint — 2026-11-24
+
+Supersedes earlier current-status notes: 6B unified-source implementation and workflow checks are complete locally, including schema 4/backup v5. 6A remains incomplete because live factual review found wrongly keyed/ambiguous PDF questions despite structural success. See [6A quality gate](phase-6a-progress.md), [6B handoff](phase-6b-progress.md) and [validation record](phase-6-validation-2026-11-24.md). Model: Groq `openai/gpt-oss-120b`; unified prompt profile `source-evidence-v2`. Generation is disabled, shared cap is the normal 20, and 6C/push/publication are not authorized.

@@ -10,12 +10,16 @@ export const TABLES = [
   "jobs",
   "materials",
   "studyProgress",
+  "sources",
+  "sourceRevisions",
+  "sourceMaterials",
+  "sourceMaterialProgress",
 ] as const;
 export type Table = (typeof TABLES)[number];
 
 export function openDatabase(factory: IDBFactory, name = DATABASE_NAME): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
-    const request = factory.open(name, 2);
+    const request = factory.open(name, 4);
     let rejected = false;
     request.onupgradeneeded = () => {
       for (const table of TABLES)

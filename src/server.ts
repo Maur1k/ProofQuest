@@ -1,4 +1,4 @@
-import { disabledGenerationRoute } from "./server/generation/routes.server";
+import { handleAiRoute } from "./server/generation/runtime.server";
 import "./lib/error-capture";
 
 import { consumeLastCapturedError } from "./lib/error-capture";
@@ -48,7 +48,7 @@ function isH3SwallowedErrorBody(body: string): boolean {
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
-      const generation = disabledGenerationRoute(request);
+      const generation = await handleAiRoute(request, env);
       if (generation) return generation;
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

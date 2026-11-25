@@ -1,3 +1,4 @@
+import { SourceQuizEvidence } from "@/features/study-sources/SourceEvidence";
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { QuizSession } from "@/domain/quiz-session";
@@ -43,7 +44,7 @@ export function QuizResults({ session }: { session: QuizSession }) {
         Quiz results · {result.score.percentage}%
       </h2>
       <p className="break-words text-muted-foreground">
-        {session.version.title} · {session.mode === "test" ? "Test" : "Practice"}
+        {session.version.title} · {session.mode === "test" ? "Exam" : "Quiz"}
       </p>
       <p>
         {result.score.correct} correct · {result.score.incorrect} incorrect · {result.score.skipped}{" "}
@@ -86,9 +87,7 @@ export function QuizResults({ session }: { session: QuizSession }) {
             </p>
             <p>{question.feedback!.explanation}</p>
             {question.feedback!.sources.length === 0 ? (
-              <p className="text-xs text-muted-foreground">
-                No PDF source attached to this question.
-              </p>
+              <SourceQuizEvidence versionId={session.version.id} questionId={question.id} />
             ) : (
               question.feedback!.sources.map((source, index) => (
                 <SourceReference

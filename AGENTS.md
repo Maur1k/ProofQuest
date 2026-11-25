@@ -30,3 +30,20 @@
 - Phase 6 expansion approved on 2026-11-11: subject-neutral quizzes, reviewers and flashcards are all required; programming remains optional examples. Follow docs/phase-6-expansion.md. Preserve existing data, require source evidence, flag unsupported/image-dependent content, and do not claim larger-PDF or live AI support until validated. Provider choice remains pending.
 
 - Four-choice study workflow is implemented locally; see docs/phase-6-study-flow.md. Quiz/Exam keep internal practice/test modes. Immutable reviewer/deck records and separate revisioned progress use IndexedDB version 2; export backup version 3 and accept version 2. Never enable either generation endpoint without validated provider and durable usage controls.
+
+- 2026-11-17 update: owner supplied Groq and Upstash credentials and authorized local integration after intentionally discarding the earlier uncommitted version. Provider-pending notes above are superseded. Follow docs/ai-local-setup.md. Keep secrets server-only, default generation disabled, and complete quality/browser exit checks before declaring Phase 6 complete. No push, deployment, spending or Phase 7 authorization.
+
+- Phase 6A is authorized and in progress as of 2026-11-17. Follow docs/phase-6a-progress.md. New-output quality checks must never change historical grades or legacy parsing. All generation formats remain disabled pending live acceptance; PROOFQUEST_APPROVED_FORMATS defaults empty. Stop before 6B.
+
+
+- 2026-11-17: owner explicitly authorized starting 6B despite pending 6A live acceptance. Follow docs/phase-6b-progress.md. Schema 3 and backup v4 now include source revisions. Unified-source generation remains unfinished and disabled; do not claim 6B complete. Stop before 6C. This supersedes the earlier stop-before-6B instruction only.
+
+- 2026-11-24: owner authorized finishing 6A/6B. Unified-source implementation/workflow checks are complete; see docs/phase-6b-progress.md. Schema 4/backup v5 supersede earlier source migration notes. 6A factual acceptance is still unmet; exact citations and structural checks are not factual verification. Keep generation disabled/format allowlist empty and normal cap20. See docs/phase-6a-progress.md for the concrete semantic-verifier proposal requiring the owner's decision. No 6C, push, publication or paid usage.
+
+- 2026-11-24 simplification supersedes the earlier active demo/onboarding/navigation guidance. Follow docs/simplification-plan.md. S1 retires those entry points into a read-only Archive and stops fresh sample seeding; preserve readers, snapshots and backup support. IndexedDB remains schema 4, backup remains v5. S2 and S3 each require new owner confirmation. AI quality work is separate and paused; do not add a verifier, enable generation, push or publish as part of simplification.
+
+- 2026-11-25: owner authorized finishing S2. The guided New study workflow now replaces active PDF/source creation panels. Preserve the old PDF endpoint solely for retained-request recovery and the original reader/result deep links. See docs/simplification-plan.md for S2 validation and remaining S3 scope. Stop before S3; generation remains disabled and there is no push/publication authorization.
+
+- 2026-11-25: owner authorized S3 through 50% only. The unified Library projection and source/material/result navigation are implemented and checked locally; see docs/simplification-plan.md. Stop at this halfway checkpoint. Full compatibility/browser acceptance, old-entry redirects and dead-UI cleanup remain pending further owner authorization. No push, publication or AI enablement.
+
+- 2026-11-25: owner explicitly authorized updating Markdown and pushing current progress through S3 50%. Earlier no-push instructions are superseded for this snapshot only. Stop implementation at S3 50%; publication and AI enablement remain unauthorized.

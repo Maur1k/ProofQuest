@@ -119,6 +119,10 @@ it("round-trips new records and progress; accepts version-2 backups and rejects 
   old.version = 2;
   delete old.materials;
   delete old.studyProgress;
+  delete old.sources;
+  delete old.sourceRevisions;
+  delete old.sourceMaterials;
+  delete old.sourceMaterialProgress;
   const legacyTarget = await openDatabase(new IDBFactory());
   await importBackup(legacyTarget, JSON.stringify(old));
   expect(await listStudyMaterials(legacyTarget)).toEqual([]);

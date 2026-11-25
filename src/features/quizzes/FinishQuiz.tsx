@@ -52,7 +52,7 @@ export function FinishQuiz({
         as skipped in your score.
       </p>
       <Button disabled={disabled || conflict} onClick={() => setConfirm(true)}>
-        Finish {session.mode === "test" ? "Test" : "Practice"}
+        Finish {session.mode === "test" ? "Exam" : "Quiz"}
       </Button>
       {error && (
         <div role="alert" className="space-y-2">

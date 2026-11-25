@@ -1,3 +1,4 @@
+import { isArchivedQuizId } from "@/domain/archive";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useStore } from "@/store/store";
@@ -18,7 +19,7 @@ export function QuizHistory() {
     setError(false);
     void listQuizSessions()
       .then((value) => {
-        if (active) setSessions(quizHistory(value));
+        if (active) setSessions(quizHistory(value.filter((s) => !isArchivedQuizId(s.version.id))));
       })
       .catch(() => {
         if (active) setError(true);
@@ -32,7 +33,7 @@ export function QuizHistory() {
       <PageHeader
         title="Quiz history"
         back={{ to: "/", label: "Home" }}
-        subtitle="MCQ attempts saved in this browser. Programming quest history remains in Progress."
+        subtitle="Saved Quiz and Exam attempts. Older Quests and samples are in Archive."
       />
       {persistence === "loading" ? (
         <p role="status">Opening saved storage…</p>
@@ -46,7 +47,7 @@ export function QuizHistory() {
       ) : !sessions ? (
         <p role="status">Loading history…</p>
       ) : sessions.length === 0 ? (
-        <p>No MCQ attempts yet. Start a sample quiz from Home.</p>
+        <p>No attempts yet. Open saved questions from Library to begin.</p>
       ) : (
         <ul className="space-y-3">
           {sessions.map((session) => (
@@ -64,7 +65,7 @@ export function QuizHistory() {
               >
                 <h2 className="break-words font-semibold">{session.version.title}</h2>
                 <p className="capitalize">
-                  {session.mode} ·{" "}
+                  {session.mode === "practice" ? "Quiz" : "Exam"} ·{" "}
                   {session.result
                     ? `${session.result.percentage}% · ${session.result.correct}/${session.result.total} correct`
                     : "In progress — resume"}

@@ -1,38 +1,12 @@
-import { useState, type ReactNode } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { BarChart3, BookOpen, Home, Library, PenLine, Plus, Sparkles, X } from "lucide-react";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import type { ReactNode } from "react";
+import { Link } from "@tanstack/react-router";
+import { Library, Plus, Settings, X } from "lucide-react";
 import { useStore } from "@/store/store";
-
 const navItem =
-  "app-nav-link flex min-h-14 min-w-11 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground";
-const choice =
-  "flex min-h-16 items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3 text-sm transition-colors hover:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
-const BARE_PATHS = ["/intro", "/welcome", "/login", "/register"];
+  "app-nav-link flex min-h-14 min-w-11 flex-1 flex-col items-center justify-center gap-1 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground";
 const active = { className: "text-foreground [&_svg]:text-primary" };
-
 export function AppShell({ children }: { children: ReactNode }) {
   const { warning, dismissWarning, persistence } = useStore();
-  const [createOpen, setCreateOpen] = useState(false);
-  const close = () => setCreateOpen(false);
-  // Onboarding and account demo screens are full-screen: no app navigation behind them.
-  const bare = useRouterState({
-    select: (s) => BARE_PATHS.includes(s.location.pathname.replace(/\/$/, "") || "/"),
-  });
-  if (bare) {
-    return (
-      <main id="main" className="min-h-[100dvh] px-4">
-        {children}
-      </main>
-    );
-  }
   return (
     <div className="app-shell min-h-screen">
       <a
@@ -41,6 +15,16 @@ export function AppShell({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
+      <header className="app-content flex items-center justify-between px-4 py-3 md:px-8">
+        <span className="font-display text-xl font-bold lg:invisible">ProofQuest</span>
+        <Link
+          to="/settings"
+          aria-label="Settings"
+          className="inline-flex min-h-11 min-w-11 items-center justify-center rounded-xl text-muted-foreground hover:bg-accent focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <Settings className="h-5 w-5" aria-hidden />
+        </Link>
+      </header>
       {warning && (
         <div
           role="alert"
@@ -48,13 +32,17 @@ export function AppShell({ children }: { children: ReactNode }) {
         >
           <div className="flex-1">
             <p>{warning}</p>
-            <Link to="/" hash="data-backup" className="inline-flex min-h-11 items-center underline">
+            <Link
+              to="/settings"
+              hash="data-backup"
+              className="inline-flex min-h-11 items-center underline"
+            >
               Data &amp; backup
             </Link>
           </div>
           <button
             onClick={dismissWarning}
-            className="-m-2 inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-lg"
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center"
             aria-label="Dismiss warning"
           >
             <X className="h-4 w-4" />
@@ -75,83 +63,14 @@ export function AppShell({ children }: { children: ReactNode }) {
         style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
       >
         <span className="app-nav-brand font-display text-xl font-bold">ProofQuest</span>
-        <div className="app-nav-items mx-auto flex max-w-[430px] items-center justify-between gap-1 px-2 py-1.5">
+        <div className="app-nav-items mx-auto flex max-w-[430px] items-center justify-between gap-2 px-2 py-1.5">
           <Link to="/" className={navItem} activeProps={active} activeOptions={{ exact: true }}>
-            <Home className="h-5 w-5" aria-hidden /> Home
+            <Plus className="h-5 w-5" aria-hidden />
+            New study
           </Link>
-          <Link to="/subjects" className={navItem} activeProps={active}>
-            <BookOpen className="h-5 w-5" aria-hidden /> Subjects
-          </Link>
-          <Sheet open={createOpen} onOpenChange={setCreateOpen}>
-            <SheetTrigger asChild>
-              <button
-                type="button"
-                aria-label="Create"
-                className="app-create mx-1 inline-flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-primary text-primary-foreground shadow-glow transition-transform hover:scale-105"
-              >
-                <Plus className="h-6 w-6" aria-hidden />
-                <span className="hidden lg:inline">Create</span>
-              </button>
-            </SheetTrigger>
-            <SheetContent
-              side="bottom"
-              className="mx-auto max-w-[430px] md:max-w-xl max-h-[90dvh] overflow-y-auto rounded-t-2xl border-border pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
-            >
-              <SheetHeader className="text-left">
-                <SheetTitle className="font-display">Create</SheetTitle>
-                <SheetDescription>
-                  Import a PDF, write a quest, or study a sample lesson.
-                </SheetDescription>
-              </SheetHeader>
-              <div className="mt-4 space-y-2">
-                <Link to="/documents" onClick={close} className={choice}>
-                  <BookOpen className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-                  <span>
-                    <span className="block font-semibold">Import a PDF</span>
-                    <span className="block text-xs text-muted-foreground">
-                      Read selected pages. Saved in this browser.
-                    </span>
-                  </span>
-                </Link>
-                <Link to="/quests/new" search={{}} onClick={close} className={choice}>
-                  <PenLine className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-                  <span className="min-w-0">
-                    <span className="block font-semibold text-foreground">
-                      Create quest manually
-                    </span>
-                    <span className="block text-xs text-muted-foreground">
-                      Write your own questions. Saved to your library.
-                    </span>
-                  </span>
-                </Link>
-                <Link to="/study" onClick={close} className={choice}>
-                  <Sparkles className="h-5 w-5 shrink-0 text-primary" aria-hidden />
-                  <span className="min-w-0">
-                    <span className="flex flex-wrap items-center gap-2 font-semibold text-foreground">
-                      Study a sample lesson{" "}
-                      <span className="rounded-full bg-warning/15 px-2 py-0.5 text-[11px] font-medium text-warning">
-                        Demo
-                      </span>
-                    </span>
-                    <span className="block text-xs text-muted-foreground">
-                      Drop or tap a sample to start reading. Nothing is saved.
-                    </span>
-                  </span>
-                </Link>
-              </div>
-            </SheetContent>
-          </Sheet>
-
-          <Link
-            to="/quests"
-            className={navItem}
-            activeProps={active}
-            activeOptions={{ exact: true }}
-          >
-            <Library className="h-5 w-5" aria-hidden /> Quests
-          </Link>
-          <Link to="/progress" className={navItem} activeProps={active}>
-            <BarChart3 className="h-5 w-5" aria-hidden /> Progress
+          <Link to="/library" search={{}} className={navItem} activeProps={active}>
+            <Library className="h-5 w-5" aria-hidden />
+            Library
           </Link>
         </div>
       </nav>

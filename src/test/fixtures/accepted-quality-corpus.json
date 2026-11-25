@@ -1,0 +1,792 @@
+[
+  {
+    "source": {
+      "id": "plants",
+      "subject": "science",
+      "text": "Roots absorb water from soil. Leaves exchange gases through pores called stomata. Chlorophyll is a green pigment that absorbs light. Photosynthesis uses light energy to make sugars. Carbon dioxide supplies carbon for these sugars."
+    },
+    "output": {
+      "questions": [
+        {
+          "prompt": "What do roots do according to the passage?",
+          "explanation": "The passage states that roots absorb water from soil.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Absorb water from soil"
+            },
+            {
+              "id": "b",
+              "text": "Produce chlorophyll"
+            },
+            {
+              "id": "c",
+              "text": "Exchange gases through stomata"
+            },
+            {
+              "id": "d",
+              "text": "Make sugars using light energy"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Roots absorb water from soil."
+            }
+          ]
+        },
+        {
+          "prompt": "According to the text, through what structures do leaves exchange gases?",
+          "explanation": "The passage notes that leaves exchange gases through pores called stomata.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Stomata"
+            },
+            {
+              "id": "b",
+              "text": "Xylem vessels"
+            },
+            {
+              "id": "c",
+              "text": "Phloem tubes"
+            },
+            {
+              "id": "d",
+              "text": "Root hairs"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Leaves exchange gases through pores called stomata."
+            }
+          ]
+        },
+        {
+          "prompt": "What pigment is described as green and light‑absorbing?",
+          "explanation": "The passage states that chlorophyll is a green pigment that absorbs light.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Chlorophyll"
+            },
+            {
+              "id": "b",
+              "text": "Carotene"
+            },
+            {
+              "id": "c",
+              "text": "Anthocyanin"
+            },
+            {
+              "id": "d",
+              "text": "Xanthophyll"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Chlorophyll is a green pigment that absorbs light."
+            }
+          ]
+        },
+        {
+          "prompt": "What process uses light energy to make sugars?",
+          "explanation": "The passage says photosynthesis uses light energy to make sugars.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Photosynthesis"
+            },
+            {
+              "id": "b",
+              "text": "Respiration"
+            },
+            {
+              "id": "c",
+              "text": "Transpiration"
+            },
+            {
+              "id": "d",
+              "text": "Germination"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Photosynthesis uses light energy to make sugars."
+            }
+          ]
+        },
+        {
+          "prompt": "What provides the carbon for the sugars made in photosynthesis?",
+          "explanation": "The passage indicates that carbon dioxide supplies carbon for these sugars.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Carbon dioxide"
+            },
+            {
+              "id": "b",
+              "text": "Oxygen"
+            },
+            {
+              "id": "c",
+              "text": "Nitrogen"
+            },
+            {
+              "id": "d",
+              "text": "Phosphorus"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Carbon dioxide supplies carbon for these sugars."
+            }
+          ]
+        }
+      ]
+    },
+    "model": "openai/gpt-oss-120b",
+    "manualReview": "accepted against source; no known alternate correct option"
+  },
+  {
+    "source": {
+      "id": "printing",
+      "subject": "history",
+      "text": "Johannes Gutenberg developed a movable metal type printing system in Europe in the fifteenth century. His printing workshop was in Mainz. The Gutenberg Bible was printed in Latin. Movable type allows individual characters to be reused. Printed books could be reproduced in many copies from the same type arrangement."
+    },
+    "output": {
+      "questions": [
+        {
+          "prompt": "In which century did Johannes Gutenberg develop a movable metal type printing system in Europe?",
+          "explanation": "The source states that Gutenberg developed the system in the fifteenth century.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Fourteenth century"
+            },
+            {
+              "id": "b",
+              "text": "Fifteenth century"
+            },
+            {
+              "id": "c",
+              "text": "Sixteenth century"
+            },
+            {
+              "id": "d",
+              "text": "Seventeenth century"
+            }
+          ],
+          "correctOptionId": "b",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Johannes Gutenberg developed a movable metal type printing system in Europe in the fifteenth century."
+            }
+          ]
+        },
+        {
+          "prompt": "Where was Johannes Gutenberg's printing workshop located?",
+          "explanation": "The source indicates that his workshop was in Mainz.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Cologne"
+            },
+            {
+              "id": "b",
+              "text": "Aachen"
+            },
+            {
+              "id": "c",
+              "text": "Mainz"
+            },
+            {
+              "id": "d",
+              "text": "Berlin"
+            }
+          ],
+          "correctOptionId": "c",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "His printing workshop was in Mainz."
+            }
+          ]
+        },
+        {
+          "prompt": "In what language was the Gutenberg Bible printed?",
+          "explanation": "The source explicitly says the Gutenberg Bible was printed in Latin.",
+          "options": [
+            {
+              "id": "a",
+              "text": "German"
+            },
+            {
+              "id": "b",
+              "text": "Latin"
+            },
+            {
+              "id": "c",
+              "text": "French"
+            },
+            {
+              "id": "d",
+              "text": "Italian"
+            }
+          ],
+          "correctOptionId": "b",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "The Gutenberg Bible was printed in Latin."
+            }
+          ]
+        },
+        {
+          "prompt": "What is a key advantage of movable type according to the source?",
+          "explanation": "The passage states that movable type allows individual characters to be reused.",
+          "options": [
+            {
+              "id": "a",
+              "text": "It allows individual characters to be reused."
+            },
+            {
+              "id": "b",
+              "text": "It requires each page to be hand‑carved anew."
+            },
+            {
+              "id": "c",
+              "text": "It can only produce a single copy of a text."
+            },
+            {
+              "id": "d",
+              "text": "It eliminates the need for ink."
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Movable type allows individual characters to be reused."
+            }
+          ]
+        },
+        {
+          "prompt": "According to the evidence, what benefit did printed books have over handwritten manuscripts?",
+          "explanation": "The source notes that printed books could be reproduced in many copies from the same type arrangement.",
+          "options": [
+            {
+              "id": "a",
+              "text": "They could be reproduced in many copies from the same type arrangement."
+            },
+            {
+              "id": "b",
+              "text": "They required no paper."
+            },
+            {
+              "id": "c",
+              "text": "They were always illustrated with hand‑drawn images."
+            },
+            {
+              "id": "d",
+              "text": "They could only be produced in one language."
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Printed books could be reproduced in many copies from the same type arrangement."
+            }
+          ]
+        }
+      ]
+    },
+    "model": "openai/gpt-oss-120b",
+    "manualReview": "accepted against source; no known alternate correct option"
+  },
+  {
+    "source": {
+      "id": "moon",
+      "subject": "history",
+      "text": "Apollo 11 landed humans on the Moon in July 1969. Neil Armstrong was the first person to walk on the Moon. Buzz Aldrin also walked on the Moon during Apollo 11. Michael Collins remained in lunar orbit. The lunar module was named Eagle."
+    },
+    "output": {
+      "questions": [
+        {
+          "prompt": "In which month and year did Apollo 11 land humans on the Moon?",
+          "explanation": "The evidence states that Apollo 11 landed humans on the Moon in July 1969.",
+          "options": [
+            {
+              "id": "a",
+              "text": "July 1969"
+            },
+            {
+              "id": "b",
+              "text": "June 1968"
+            },
+            {
+              "id": "c",
+              "text": "August 1970"
+            },
+            {
+              "id": "d",
+              "text": "May 1969"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Apollo 11 landed humans on the Moon in July 1969."
+            }
+          ]
+        },
+        {
+          "prompt": "Who was the first person to walk on the Moon?",
+          "explanation": "The evidence states that Neil Armstrong was the first person to walk on the Moon.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Neil Armstrong"
+            },
+            {
+              "id": "b",
+              "text": "Buzz Aldrin"
+            },
+            {
+              "id": "c",
+              "text": "Michael Collins"
+            },
+            {
+              "id": "d",
+              "text": "John Young"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Neil Armstrong was the first person to walk on the Moon."
+            }
+          ]
+        },
+        {
+          "prompt": "Which astronaut also walked on the Moon during Apollo 11?",
+          "explanation": "The evidence notes that Buzz Aldrin also walked on the Moon during Apollo 11.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Buzz Aldrin"
+            },
+            {
+              "id": "b",
+              "text": "Michael Collins"
+            },
+            {
+              "id": "c",
+              "text": "James Lovell"
+            },
+            {
+              "id": "d",
+              "text": "Alan Shepard"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Buzz Aldrin also walked on the Moon during Apollo 11."
+            }
+          ]
+        },
+        {
+          "prompt": "Which astronaut remained in lunar orbit during the Apollo 11 mission?",
+          "explanation": "The evidence states that Michael Collins remained in lunar orbit.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Michael Collins"
+            },
+            {
+              "id": "b",
+              "text": "Neil Armstrong"
+            },
+            {
+              "id": "c",
+              "text": "Buzz Aldrin"
+            },
+            {
+              "id": "d",
+              "text": "Edgar Mitchell"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Michael Collins remained in lunar orbit."
+            }
+          ]
+        },
+        {
+          "prompt": "What was the name of the lunar module used in Apollo 11?",
+          "explanation": "The evidence indicates that the lunar module was named Eagle.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Eagle"
+            },
+            {
+              "id": "b",
+              "text": "Columbia"
+            },
+            {
+              "id": "c",
+              "text": "Odyssey"
+            },
+            {
+              "id": "d",
+              "text": "Intrepid"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "The lunar module was named Eagle."
+            }
+          ]
+        }
+      ]
+    },
+    "model": "openai/gpt-oss-120b",
+    "manualReview": "accepted against source; no known alternate correct option"
+  },
+  {
+    "source": {
+      "id": "astronomy",
+      "subject": "science",
+      "text": "The Sun is a star. Earth is a planet. The Moon is a natural satellite of Earth. Mars is often called the red planet. Jupiter is the largest planet in the Solar System."
+    },
+    "output": {
+      "questions": [
+        {
+          "prompt": "What type of celestial object is the Sun?",
+          "explanation": "The source states that the Sun is a star.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A star"
+            },
+            {
+              "id": "b",
+              "text": "A planet"
+            },
+            {
+              "id": "c",
+              "text": "A moon"
+            },
+            {
+              "id": "d",
+              "text": "A comet"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "The Sun is a star."
+            }
+          ]
+        },
+        {
+          "prompt": "Which of the following is described as a planet in the source?",
+          "explanation": "The source says Earth is a planet.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Earth"
+            },
+            {
+              "id": "b",
+              "text": "The Moon"
+            },
+            {
+              "id": "c",
+              "text": "The Sun"
+            },
+            {
+              "id": "d",
+              "text": "A comet"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Earth is a planet."
+            }
+          ]
+        },
+        {
+          "prompt": "What is the Moon's relationship to Earth according to the source?",
+          "explanation": "The source states the Moon is a natural satellite of Earth.",
+          "options": [
+            {
+              "id": "a",
+              "text": "A natural satellite of Earth"
+            },
+            {
+              "id": "b",
+              "text": "A planet orbiting Earth"
+            },
+            {
+              "id": "c",
+              "text": "A star in the same system as Earth"
+            },
+            {
+              "id": "d",
+              "text": "A dwarf planet beyond Earth"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "The Moon is a natural satellite of Earth."
+            }
+          ]
+        },
+        {
+          "prompt": "Which planet is often called the red planet?",
+          "explanation": "The source notes that Mars is often called the red planet.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Mars"
+            },
+            {
+              "id": "b",
+              "text": "Jupiter"
+            },
+            {
+              "id": "c",
+              "text": "Venus"
+            },
+            {
+              "id": "d",
+              "text": "Saturn"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Mars is often called the red planet."
+            }
+          ]
+        },
+        {
+          "prompt": "Which planet is identified as the largest in the Solar System?",
+          "explanation": "The source states Jupiter is the largest planet in the Solar System.",
+          "options": [
+            {
+              "id": "a",
+              "text": "Jupiter"
+            },
+            {
+              "id": "b",
+              "text": "Mars"
+            },
+            {
+              "id": "c",
+              "text": "Earth"
+            },
+            {
+              "id": "d",
+              "text": "Mercury"
+            }
+          ],
+          "correctOptionId": "a",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Jupiter is the largest planet in the Solar System."
+            }
+          ]
+        }
+      ]
+    },
+    "model": "openai/gpt-oss-120b",
+    "manualReview": "accepted against source; no known alternate correct option"
+  },
+  {
+    "source": {
+      "id": "binary",
+      "subject": "technology",
+      "text": "A binary digit is called a bit. A bit has two possible values, zero and one. An eight-bit byte contains eight bits. Binary place values are powers of two. The binary numeral 101 represents the decimal number five."
+    },
+    "output": {
+      "questions": [
+        {
+          "prompt": "What is a binary digit called?",
+          "options": [
+            {
+              "id": "a",
+              "text": "bit"
+            },
+            {
+              "id": "b",
+              "text": "byte"
+            },
+            {
+              "id": "c",
+              "text": "nibble"
+            },
+            {
+              "id": "d",
+              "text": "word"
+            }
+          ],
+          "correctOptionId": "a",
+          "explanation": "The source states that a binary digit is called a bit.",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "A binary digit is called a bit."
+            }
+          ]
+        },
+        {
+          "prompt": "How many possible values does a bit have?",
+          "options": [
+            {
+              "id": "a",
+              "text": "One"
+            },
+            {
+              "id": "b",
+              "text": "Two"
+            },
+            {
+              "id": "c",
+              "text": "Three"
+            },
+            {
+              "id": "d",
+              "text": "Four"
+            }
+          ],
+          "correctOptionId": "b",
+          "explanation": "The source indicates that a bit has two possible values, zero and one.",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "A bit has two possible values, zero and one."
+            }
+          ]
+        },
+        {
+          "prompt": "How many bits are contained in an eight-bit byte?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Six bits"
+            },
+            {
+              "id": "b",
+              "text": "Eight bits"
+            },
+            {
+              "id": "c",
+              "text": "Ten bits"
+            },
+            {
+              "id": "d",
+              "text": "Twelve bits"
+            }
+          ],
+          "correctOptionId": "b",
+          "explanation": "The source explicitly says an eight-bit byte contains eight bits.",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "An eight-bit byte contains eight bits."
+            }
+          ]
+        },
+        {
+          "prompt": "What are binary place values?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Powers of two"
+            },
+            {
+              "id": "b",
+              "text": "Powers of ten"
+            },
+            {
+              "id": "c",
+              "text": "Prime numbers"
+            },
+            {
+              "id": "d",
+              "text": "Fibonacci numbers"
+            }
+          ],
+          "correctOptionId": "a",
+          "explanation": "The source states that binary place values are powers of two.",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "Binary place values are powers of two."
+            }
+          ]
+        },
+        {
+          "prompt": "What decimal number does the binary numeral 101 represent?",
+          "options": [
+            {
+              "id": "a",
+              "text": "Three"
+            },
+            {
+              "id": "b",
+              "text": "Five"
+            },
+            {
+              "id": "c",
+              "text": "Seven"
+            },
+            {
+              "id": "d",
+              "text": "Nine"
+            }
+          ],
+          "correctOptionId": "b",
+          "explanation": "The source indicates that the binary numeral 101 represents the decimal number five.",
+          "sources": [
+            {
+              "page": 1,
+              "excerpt": "The binary numeral 101 represents the decimal number five."
+            }
+          ]
+        }
+      ]
+    },
+    "model": "openai/gpt-oss-120b",
+    "manualReview": "accepted against source; no known alternate correct option"
+  }
+]

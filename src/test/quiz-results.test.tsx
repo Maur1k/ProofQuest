@@ -59,7 +59,7 @@ afterEach(() => {
 });
 function draft() {
   return saveTestDraft(
-    startQuizSession("s", createSampleMcqVersion(), "test", 1),
+    startQuizSession("s", { ...createSampleMcqVersion(), id: "real-saved-quiz" }, "test", 1),
     0,
     "recall",
     { type: "mcq", optionId: "a" },
@@ -86,11 +86,11 @@ it("confirms skips, waits for a committed result, and prevents duplicate finaliz
       reload={vi.fn()}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Finish Test" }));
+  fireEvent.click(screen.getByRole("button", { name: "Finish Exam" }));
   expect(screen.getByText(/4 will be skipped/)).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Submit quiz" }));
   expect(complete).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole("button", { name: "Finish Test" }));
+  fireEvent.click(screen.getByRole("button", { name: "Finish Exam" }));
   fireEvent.click(screen.getByRole("button", { name: "Submit quiz" }));
   expect(mocks.finish).toHaveBeenCalledOnce();
   await act(async () => resolve(finalizeQuizSession(session, session.revision, 3)));
@@ -112,11 +112,11 @@ it("retains saved answers after failed final submission and supports retry", asy
       reload={vi.fn()}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Finish Test" }));
+  fireEvent.click(screen.getByRole("button", { name: "Finish Exam" }));
   fireEvent.click(screen.getByRole("button", { name: "Submit quiz" }));
   await screen.findByText(/Submission could not be confirmed/);
   expect(complete).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole("button", { name: "Finish Test" }));
+  fireEvent.click(screen.getByRole("button", { name: "Finish Exam" }));
   fireEvent.click(screen.getByRole("button", { name: "Submit quiz" }));
   await waitFor(() => expect(complete).toHaveBeenCalledOnce());
 });
@@ -132,7 +132,7 @@ it("requires reload on finalization conflict and disables submission with unsave
       reload={reload}
     />,
   );
-  expect(screen.getByRole("button", { name: "Finish Test" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Finish Exam" })).toBeDisabled();
   ui.rerender(
     <FinishQuiz
       session={draft()}
@@ -142,10 +142,10 @@ it("requires reload on finalization conflict and disables submission with unsave
       reload={reload}
     />,
   );
-  fireEvent.click(screen.getByRole("button", { name: "Finish Test" }));
+  fireEvent.click(screen.getByRole("button", { name: "Finish Exam" }));
   fireEvent.click(screen.getByRole("button", { name: "Submit quiz" }));
   await screen.findByText(/Answers changed in another tab/);
-  expect(screen.getByRole("button", { name: "Finish Test" })).toBeDisabled();
+  expect(screen.getByRole("button", { name: "Finish Exam" })).toBeDisabled();
   fireEvent.click(screen.getByRole("button", { name: "Reload saved answers" }));
   expect(reload).toHaveBeenCalledOnce();
 });
@@ -195,8 +195,8 @@ it("loads history with completed results and unfinished resume links after a rea
   render(<QuizHistory />);
   await screen.findByText("Could not load quiz history.");
   fireEvent.click(screen.getByRole("button", { name: "Retry history" }));
-  await screen.findByText("test · 20% · 1/5 correct");
-  expect(screen.getByText("test · In progress — resume")).toBeVisible();
+  await screen.findByText("Exam · 20% · 1/5 correct");
+  expect(screen.getByText("Exam · In progress — resume")).toBeVisible();
   expect(screen.getAllByRole("link").map((link) => link.getAttribute("href"))).toContain(
     "/quiz-results/done",
   );

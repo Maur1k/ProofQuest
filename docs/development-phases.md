@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-11. Status: Phase 5 complete and pushed; completion of Phase 6 is authorized and in progress. Provider selection, durable service integration and live acceptance remain pending. See [current progress](phase-6-progress.md).
+Owner: Maur1k. Updated: 2026-11-25. Status: Phase 6 integration exists but factual-quality acceptance remains unresolved and AI generation stays disabled. Simplification S1/S2 are complete; S3 is at its approved 50% checkpoint. The owner authorized pushing current progress on this date, not publication or further implementation. See [simplification handoff](simplification-plan.md) and [Phase 6A status](phase-6a-progress.md).
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 
@@ -210,3 +210,21 @@ On 2026-11-11 the owner authorized Phase 6 through approximately 15% only. The p
 On 2026-11-11 the owner authorized Phase 6 through 25% and stated a preference for free generation. Provider selection remains pending; the bounded increment implements unconnected server safeguards, not a live adapter. See [25% checkpoint](phase-6-25-checkpoint.md). Phase 5 was separately pushed with authorization at b9adce9; Phase 6 remains local.
 
 On 2026-11-11 the owner authorized finishing Phase 6. Provider-independent workflow work is implemented; the owner remains undecided about the provider and asked about Groq free limits. No provider choice, spending, deployment or Phase 6 push is implied. See [progress and remaining acceptance](phase-6-progress.md). Phase 7 has not started.
+
+## Proposed feature expansion — 2026-11-17
+
+The owner requested architecture planning for Gemini-inspired study features while preserving ProofQuest UI/UX. See [the expansion architecture](study-expansion-architecture.md) for proposed milestones 6A–6G, contracts, migrations, quality gates and approval boundaries. This is planning only; it does not authorize implementation of the new milestones or Phase 7. The current AI quality gate remains failed; see [browser review](phase-6-browser-quality-review.md).
+
+## Authorized 6A checkpoint — 2026-11-17
+
+The owner authorized milestone 6A. Quality rejection rules, extractive evidence references and per-format gates are implemented locally. Live reliability/quality acceptance remains unmet; see [6A progress](phase-6a-progress.md). Generation remains disabled. 6B has not started.
+
+
+## Phase 6B source expansion — 2026-11-17
+
+Owner authorized 6B while 6A acceptance remains pending. Local source/revision/migration foundation implemented; generation integration remains outstanding. See [Phase 6B progress](phase-6b-progress.md). Do not begin 6C.
+
+
+## Current checkpoint — 2026-11-24
+
+Supersedes earlier current-status notes: 6B unified-source implementation and workflow checks are complete locally, including schema 4/backup v5. 6A remains incomplete because live factual review found wrongly keyed/ambiguous PDF questions despite structural success. See [6A quality gate](phase-6a-progress.md), [6B handoff](phase-6b-progress.md) and [validation record](phase-6-validation-2026-11-24.md). Model: Groq `openai/gpt-oss-120b`; unified prompt profile `source-evidence-v2`. Generation is disabled, shared cap is the normal 20, and 6C/push/publication are not authorized.

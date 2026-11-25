@@ -1,3 +1,4 @@
+import { recoverGeneration, recoveryValue } from "./recovery";
 import { STUDY_CHOICES, choiceFormat, choiceMode, type StudyChoice } from "@/domain/study-choice";
 import {
   validateStudyRequest,
@@ -24,13 +25,16 @@ import {
 export function GenerateQuiz({
   document,
   pages,
+  recoveryOnly = false,
 }: {
+  recoveryOnly?: boolean;
   document: DocumentRecord;
   pages: PageRecord[];
 }) {
   const { commitGeneratedQuiz, saveStudyMaterial } = useStore();
   const [choice, setChoice] = useState<StudyChoice>("quiz");
   const navigate = useNavigate();
+  const recoveryKey = `proofquest:generation:${document.id}`;
   const [availability, setAvailability] = useState<GenerationAvailability | null>(null);
   const [selected, setSelected] = useState<number[]>([]);
   const [consent, setConsent] = useState(false);
@@ -44,6 +48,7 @@ export function GenerateQuiz({
     id: string;
     input: GenerationInput;
     studyInput: StudyRequest;
+    started: number;
     version?: QuizVersion;
     material?: StudyMaterial;
   } | null>(null);
@@ -83,8 +88,39 @@ export function GenerateQuiz({
       });
     return () => abort.abort();
   }, [refresh]);
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(recoveryKey);
+      if (!raw) return;
+      const saved = recoverGeneration(raw, document.checksum, pages, document.id);
+      request.current = saved;
+      setChoice(saved.choice);
+      setSelected(saved.input.pages.map((page) => page.page));
+      setConsent(false);
+      setError(
+        "An unfinished request was restored. Review the text and consent again to recover its result without starting another generation.",
+      );
+    } catch {
+      try {
+        sessionStorage.removeItem(recoveryKey);
+      } catch {
+        /* No request is issued here. */
+      }
+      setError(
+        "The previous request could not be recovered. Review your source before starting again.",
+      );
+    }
+  }, [recoveryKey, document.checksum, document.id, pages]);
   async function generate() {
-    if (lock.current || !consent || !availability?.enabled || newRequired) return;
+    if (
+      (recoveryOnly && !request.current) ||
+      lock.current ||
+      !consent ||
+      !availability?.enabled ||
+      newRequired ||
+      (availability.allowedFormats && !availability.allowedFormats.includes(choiceFormat(choice)))
+    )
+      return;
     lock.current = true;
     setBusy(true);
     setError(null);
@@ -102,6 +138,7 @@ export function GenerateQuiz({
           throw new Error("Select fewer pages for this service.");
         request.current = {
           id: crypto.randomUUID(),
+          started: Date.now(),
           input,
           studyInput: validateStudyRequest({
             documentId: input.documentId,
@@ -111,6 +148,15 @@ export function GenerateQuiz({
         };
       }
       const current = request.current;
+      if (Date.now() - current.started >= 86400000) {
+        setNewRequired(true);
+        throw new Error("expired");
+      }
+      // Persist the request identity before transmission; never silently repeat after reload.
+      sessionStorage.setItem(
+        recoveryKey,
+        recoveryValue(current.id, current.started, document.checksum, choice, current.input),
+      );
       if (choice === "quiz" || choice === "exam") {
         if (!current.version)
           current.version = await requestGeneratedQuiz(
@@ -126,6 +172,11 @@ export function GenerateQuiz({
           choiceMode(choice),
         );
         if (!mounted.current) return;
+        try {
+          sessionStorage.removeItem(recoveryKey);
+        } catch {
+          /* A retry can still recover the same saved result. */
+        }
         lock.current = false;
         setBusy(false);
         await navigate({
@@ -147,6 +198,11 @@ export function GenerateQuiz({
           material: current.material,
         });
         if (!mounted.current) return;
+        try {
+          sessionStorage.removeItem(recoveryKey);
+        } catch {
+          /* A retry can still recover the same saved result. */
+        }
         lock.current = false;
         setBusy(false);
         await navigate({ to: "/materials", search: { id: saved.id } });
@@ -158,10 +214,12 @@ export function GenerateQuiz({
             ? failure.message
             : request.current?.version || request.current?.material
               ? "Study material could not be saved. Your result is kept in this tab; retry saving. The source PDF must still be unchanged."
-              : "Select readable pages within the service limit, then retry.",
+              : "Select fewer readable pages and allow browser session storage, then retry. Expired requests require starting a new request.",
         );
         setNewRequired(
-          failure instanceof GenerationClientError && ["failed", "conflict"].includes(failure.code),
+          (failure instanceof GenerationClientError &&
+            ["failed", "conflict"].includes(failure.code)) ||
+            Boolean(request.current && Date.now() - request.current.started >= 86400000),
         );
       }
     } finally {
@@ -170,18 +228,24 @@ export function GenerateQuiz({
     }
   }
   function reset() {
+    try {
+      sessionStorage.removeItem(recoveryKey);
+    } catch {
+      /* The in-memory request still resets. */
+    }
     request.current = null;
     setError(null);
     setNewRequired(false);
     setConsent(false);
   }
+  if (recoveryOnly && !request.current && !error) return null;
   return (
     <section
       className="space-y-3 rounded-xl border border-primary/40 bg-card p-4"
       aria-labelledby="generation-title"
     >
       <h2 id="generation-title" className="text-lg font-semibold">
-        Choose how to study this PDF
+        Recover an unfinished PDF request
       </h2>
       <fieldset disabled={busy || request.current !== null}>
         <legend className="mb-2 text-sm">Study format</legend>
@@ -193,6 +257,10 @@ export function GenerateQuiz({
             >
               <input
                 type="radio"
+                disabled={
+                  availability?.allowedFormats !== undefined &&
+                  !availability.allowedFormats.includes(choiceFormat(item.id))
+                }
                 name="study-format"
                 className="mt-1"
                 value={item.id}
@@ -217,6 +285,13 @@ export function GenerateQuiz({
         Review the selected text against the original. Image-dependent questions and unsupported
         answers must be excluded; this text-only workflow cannot identify diagrams.
       </p>
+      {availability?.enabled &&
+        availability.allowedFormats &&
+        !availability.allowedFormats.includes(choiceFormat(choice)) && (
+          <p role="status" className="text-sm text-muted-foreground">
+            This format is awaiting validation. Choose an available format.
+          </p>
+        )}
       <fieldset disabled={busy || request.current !== null} className="space-y-2">
         <legend>Pages to send</legend>
         {pages.map((page) => (
@@ -289,7 +364,14 @@ export function GenerateQuiz({
           </label>
           <div className="flex flex-wrap gap-3">
             <Button
-              disabled={busy || !consent || selected.length === 0 || newRequired}
+              disabled={
+                busy ||
+                !consent ||
+                selected.length === 0 ||
+                newRequired ||
+                (availability.allowedFormats !== undefined &&
+                  !availability.allowedFormats.includes(choiceFormat(choice)))
+              }
               onClick={() => void generate()}
             >
               {busy
@@ -319,15 +401,16 @@ export function GenerateQuiz({
             ) : (
               request.current && (
                 <Button variant="outline" onClick={reset}>
-                  Start a new request
+                  {recoveryOnly ? "Dismiss recovery" : "Start a new request"}
                 </Button>
               )
             )}
           </div>
           {request.current && (
             <p className="text-xs text-muted-foreground">
-              Retry keeps the same request ID in this tab to avoid another provider call. Reloading
-              this page loses this ID; a new request uses another allowance.
+              Retry keeps the same request ID across reloads in this tab for up to 24 hours.
+              Recovery requires the same source and guest cookie. Starting a new request uses
+              another allowance.
             </p>
           )}
         </>

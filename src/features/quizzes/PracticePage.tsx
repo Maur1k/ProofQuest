@@ -1,3 +1,6 @@
+import { Navigate } from "@tanstack/react-router";
+import { isArchivedQuizId } from "@/domain/archive";
+import { SourceQuizEvidence } from "@/features/study-sources/SourceEvidence";
 import { SourceReference } from "./SourceReference";
 import { FinishQuiz } from "./FinishQuiz";
 import { QuizResults } from "./QuizResults";
@@ -30,11 +33,11 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
           value.version.questions.some((q) => q.type !== "mcq")
         ) {
           setSession(null);
-          setError("This Practice session is unavailable. Return Home to open the sample quiz.");
+          setError("This Quiz session is unavailable. Open Library to find saved material.");
         } else setSession(value);
       })
       .catch(() => {
-        if (active) setError("Could not load saved Practice. Please retry.");
+        if (active) setError("Could not load saved Quiz. Please retry.");
       })
       .finally(() => {
         if (active) setLoading(false);
@@ -44,17 +47,24 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
     };
   }, [sessionId, persistence, loadQuizSession, generation]);
   const reload = useCallback(() => setGeneration((value) => value + 1), []);
+  if (session && isArchivedQuizId(session.version.id))
+    return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
     <div className="pb-6">
       <PageHeader
-        title="MCQ Practice"
+        title="Quiz"
         back={{ to: "/", label: "Home" }}
         subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
+      {session?.version.id.startsWith("source-generated-") && (
+        <p className="mb-4 text-sm text-muted-foreground">
+          AI-generated material · Not fact-checked. Verify answers against the retained source.
+        </p>
+      )}
       {persistence !== "durable" ? (
         <p role="status">Saved browser storage is required. Return Home to recover storage.</p>
       ) : loading ? (
-        <p role="status">Loading saved Practice…</p>
+        <p role="status">Loading saved Quiz…</p>
       ) : error ? (
         <div role="alert" className="space-y-3">
           <p>{error}</p>
@@ -140,7 +150,7 @@ export function PracticeSession({
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
-        <span>Practice · Feedback after submission</span>
+        <span>Quiz · Feedback after submission</span>
         <span>
           Question {view.position} of {view.total}
         </span>
@@ -214,9 +224,7 @@ export function PracticeSession({
           </p>
           <p className="text-sm">{view.feedback.explanation}</p>
           {view.feedback.sources.length === 0 ? (
-            <p className="text-xs text-muted-foreground">
-              No PDF source attached to this question.
-            </p>
+            <SourceQuizEvidence versionId={session.version.id} questionId={view.id} />
           ) : (
             view.feedback.sources.map((source, index) => (
               <SourceReference
@@ -227,7 +235,7 @@ export function PracticeSession({
           )}
         </section>
       )}
-      <nav aria-label="Practice questions" className="flex flex-wrap gap-3">
+      <nav aria-label="Quiz questions" className="flex flex-wrap gap-3">
         <Button
           variant="outline"
           disabled={index === 0 || dirty || pending || conflict}
@@ -243,7 +251,7 @@ export function PracticeSession({
           Next question
         </Button>
       </nav>
-      {reviewed && <p role="status">All answers are saved. Finish Practice to view your result.</p>}
+      {reviewed && <p role="status">All answers are saved. Finish Quiz to view your result.</p>}
       {onComplete && (
         <FinishQuiz
           session={session}
@@ -264,7 +272,7 @@ export function PracticeSession({
             ? "Wait for saving to finish before leaving. The saved answer will be available when you resume."
             : "Your unsubmitted selection will be lost. Previously submitted answers remain saved."
         }
-        confirmLabel={pending ? "Stay here" : "Leave Practice"}
+        confirmLabel={pending ? "Stay here" : "Leave Quiz"}
         onConfirm={() => {
           if (pending) blocker.reset?.();
           else blocker.proceed?.();
