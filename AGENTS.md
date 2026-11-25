@@ -49,3 +49,5 @@
 - 2026-11-25: owner explicitly authorized updating Markdown and pushing current progress through S3 50%. Earlier no-push instructions are superseded for this snapshot only. Stop implementation at S3 50%; publication and AI enablement remain unauthorized.
 
 - 2026-11-26: owner authorized finishing S3 and committing locally. S3 is complete; see docs/simplification-plan.md for evidence and limitations. Stop before further development. This authorization does not include a new push/publication or AI enablement. Keep schema 4/backup v5 and archived data support intact.
+
+- 2026-11-26: owner authorized pushing completed S3 and updating Markdown. Push implementation commit e1e8673 and its documentation handoff to origin/main without rewriting history. Earlier local-only/no-new-push restrictions are superseded for this handoff only. No next phase, live publication or AI enablement is authorized.

@@ -12,7 +12,7 @@ Updated 2026-11-26. ProofQuest preserves the original Lovable styling and runs a
 - Library groups saved sources, study materials and related results. Quiz and Exam reuse saved questions. Older ambiguous records remain under Other saved materials.
 - Retired Quests and identifiable samples remain readable in Archive. IndexedDB schema 4 and backup v5 preserve existing records and historical grades.
 
-**Simplification S1, S2 and S3 are complete locally.** Unified Library, preserved legacy data, retired-entry redirects and unused-screen cleanup are validated. See the [completion handoff](docs/simplification-plan.md). Physical-phone testing is excluded; AI factual-quality acceptance remains a separate unresolved gate.
+**Simplification S1, S2 and S3 are complete** (S3 implementation: `e1e8673`). Unified Library, preserved legacy data, retired-entry redirects and unused-screen cleanup are validated. See the [completion handoff](docs/simplification-plan.md). Physical-phone testing is excluded; AI factual-quality acceptance remains a separate unresolved gate.
 
 Groq generation and Upstash usage-control integration exist, but **AI generation remains disabled**. Factual-quality acceptance is unresolved; PDF-to-study generation is not a released feature. Passing workflow tests does not certify factual accuracy. See [AI setup](docs/ai-local-setup.md) and [Phase 6A status](docs/phase-6a-progress.md).
 
