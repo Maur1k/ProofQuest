@@ -1,96 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, Navigate, useNavigate } from "@tanstack/react-router";
+import { Link, Navigate } from "@tanstack/react-router";
 import { useStore } from "@/store/store";
 import { Button } from "@/components/ui/button";
 import { sourcePassages, type SourceMaterial } from "@/domain/source-material";
 import type { StudyProgress } from "@/domain/study-record";
 import { SegmentEvidence } from "./SourceEvidence";
-export function SourceMaterialList({
-  sourceId,
-  refresh = 0,
-}: {
-  sourceId?: string;
-  refresh?: number;
-}) {
-  const { listSourceMaterials, startSavedQuiz } = useStore();
-  const [rows, setRows] = useState<SourceMaterial[]>([]),
-    [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
-  const lock = useRef(false);
-  const navigate = useNavigate();
-  useEffect(() => {
-    let live = true;
-    void listSourceMaterials().then(
-      (rows) => {
-        if (live)
-          setRows(
-            rows.filter(
-              (m) =>
-                m.generation.provider !== "sample" &&
-                (!sourceId || m.request.source.sourceId === sourceId),
-            ),
-          );
-      },
-      () => {
-        if (live) setError("Saved source materials could not be loaded.");
-      },
-    );
-    return () => {
-      live = false;
-    };
-  }, [sourceId, refresh, listSourceMaterials]);
-  async function open(id: string, mode: "practice" | "test") {
-    if (lock.current) return;
-    lock.current = true;
-    setBusy(true);
-    setError("");
-    try {
-      const session = await startSavedQuiz(id, mode);
-      await navigate({
-        to: mode === "practice" ? "/quiz-practice/$sessionId" : "/quiz-test/$sessionId",
-        params: { sessionId: session.id },
-      });
-    } catch {
-      setError("Could not open the saved quiz. Retry without generating again.");
-    } finally {
-      lock.current = false;
-      setBusy(false);
-    }
-  }
-  return (
-    <section className="space-y-3" aria-label="Saved source materials">
-      {rows.length > 0 && <h3 className="font-semibold">Saved source materials</h3>}
-      {rows.map((m) => (
-        <div key={m.id} className="space-y-2 rounded-xl border border-border p-3">
-          <p>
-            {m.title} · {m.output.format}
-            {m.generation.provider === "sample" ? " · Sample" : ""}
-          </p>
-          {m.output.format === "quiz" ? (
-            <div className="flex flex-wrap gap-2">
-              <Button disabled={busy} onClick={() => void open(m.id, "practice")}>
-                Open Quiz
-              </Button>
-              <Button variant="outline" disabled={busy} onClick={() => void open(m.id, "test")}>
-                Open Exam
-              </Button>
-              <span className="text-xs">Uses the same saved questions; no AI call.</span>
-            </div>
-          ) : (
-            <Link
-              to="/materials"
-              search={{ id: m.id }}
-              className="inline-flex min-h-11 items-center text-primary underline"
-            >
-              Open {m.output.format}
-            </Link>
-          )}
-        </div>
-      ))}
-      {error && <p role="alert">{error}</p>}
-    </section>
-  );
-}
 export function SourceMaterialDetail({ id }: { id: string }) {
   const { listSourceMaterials } = useStore();
   const [material, setMaterial] = useState<SourceMaterial | null>(null),

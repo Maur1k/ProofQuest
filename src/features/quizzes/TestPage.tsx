@@ -29,7 +29,7 @@ export function TestPage({ sessionId }: { sessionId: string }) {
           value.version.questions.some((q) => q.type !== "mcq")
         ) {
           setSession(null);
-          setError("This Exam is unavailable. Open Quiz history to find an attempt.");
+          setError("This Exam is unavailable. Open Library to find an attempt.");
         } else setSession(value);
       })
       .catch(() => {
@@ -48,7 +48,7 @@ export function TestPage({ sessionId }: { sessionId: string }) {
     <div className="pb-6">
       <PageHeader
         title="Exam"
-        back={{ to: "/", label: "Home" }}
+        back={{ to: "/", label: "New study" }}
         subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
       {session?.version.id.startsWith("source-generated-") && (
@@ -59,7 +59,7 @@ export function TestPage({ sessionId }: { sessionId: string }) {
       {persistence === "loading" || (persistence === "durable" && loading) ? (
         <p role="status">Loading saved Exam…</p>
       ) : persistence !== "durable" ? (
-        <p role="status">Saved browser storage is required. Return Home to recover storage.</p>
+        <p role="status">Saved browser storage is required. Open Settings to recover storage.</p>
       ) : error ? (
         <div role="alert" className="space-y-3">
           <p>{error}</p>

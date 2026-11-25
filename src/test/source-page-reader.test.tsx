@@ -4,7 +4,7 @@ import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { DocumentReader } from "@/features/documents/DocumentReader";
 const mocks = vi.hoisted(() => ({ load: vi.fn(), render: vi.fn().mockResolvedValue(undefined) }));
 vi.mock("@/store/store", () => ({ useStore: () => ({ ready: true, persistence: "durable" }) }));
-vi.mock("@/features/documents/DocumentLibrary", () => ({ documentButton: "button" }));
+vi.mock("@/features/documents/styles", () => ({ documentButton: "button" }));
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children }: { children: React.ReactNode }) => <a>{children}</a>,
 }));

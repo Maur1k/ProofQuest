@@ -41,7 +41,7 @@ export function QuizResults({ session }: { session: QuizSession }) {
   return (
     <div className="mx-auto max-w-2xl space-y-5">
       <h2 ref={heading} tabIndex={-1} className="text-2xl font-bold">
-        Quiz results · {result.score.percentage}%
+        {session.mode === "test" ? "Exam" : "Quiz"} results · {result.score.percentage}%
       </h2>
       <p className="break-words text-muted-foreground">
         {session.version.title} · {session.mode === "test" ? "Exam" : "Quiz"}
@@ -58,11 +58,8 @@ export function QuizResults({ session }: { session: QuizSession }) {
         <Button disabled={pending} onClick={() => void retry()}>
           {pending ? "Opening attempt…" : "Start or resume another attempt"}
         </Button>
-        <Link
-          to="/quiz-history"
-          className="inline-flex min-h-11 items-center text-primary underline"
-        >
-          Quiz history
+        <Link to="/library" className="inline-flex min-h-11 items-center text-primary underline">
+          Library
         </Link>
       </div>
       {error && <p role="alert">{error}</p>}

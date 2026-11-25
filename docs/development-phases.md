@@ -1,6 +1,6 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-25. Status: Phase 6 integration exists but factual-quality acceptance remains unresolved and AI generation stays disabled. Simplification S1/S2 are complete; S3 is at its approved 50% checkpoint. The owner authorized pushing current progress on this date, not publication or further implementation. See [simplification handoff](simplification-plan.md) and [Phase 6A status](phase-6a-progress.md).
+Owner: Maur1k. Updated: 2026-11-26. Status: simplification S1/S2/S3 complete locally, with S3 completion and a local commit authorized. Phase 6 factual-quality acceptance remains unresolved and AI generation stays disabled. No new push/publication or next phase is authorized. See [simplification completion](simplification-plan.md) and [Phase 6A status](phase-6a-progress.md).
 
 Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
 

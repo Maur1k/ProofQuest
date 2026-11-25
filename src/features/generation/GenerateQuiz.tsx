@@ -5,7 +5,6 @@ import {
   type StudyRequest,
   type StudyMaterial,
 } from "@/domain/study-material";
-import { SavedStudyLibrary } from "@/features/study-materials/SavedStudyLibrary";
 import { useEffect, useRef, useState } from "react";
 import { useBlocker, useNavigate } from "@tanstack/react-router";
 import type { DocumentRecord, PageRecord } from "@/data/records";
@@ -415,7 +414,6 @@ export function GenerateQuiz({
           )}
         </>
       )}
-      <SavedStudyLibrary documentId={document.id} />
       {error && <p role="alert">{error}</p>}
       <ConfirmDialog
         open={blocker.status === "blocked"}

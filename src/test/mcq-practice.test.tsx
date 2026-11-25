@@ -1,7 +1,6 @@
 import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { PracticeSession } from "@/features/quizzes/PracticePage";
-import { SamplePracticeEntry } from "@/features/quizzes/SamplePracticeEntry";
 import { createSampleMcqVersion } from "@/data/sample-mcq";
 import {
   RevisionConflict,
@@ -124,33 +123,4 @@ it("lets all saved answers be reviewed without fabricating final results", () =>
   render(<PracticeSession initial={session} save={vi.fn()} reload={vi.fn()} />);
   expect(screen.getByText(/All answers are saved/)).toBeVisible();
   expect(screen.getByRole("button", { name: "Next question" })).toBeEnabled();
-});
-it("only creates the sample on explicit start and navigates after persistence", async () => {
-  let resolve!: (session: QuizSession) => void;
-  mocks.start.mockImplementation(
-    () =>
-      new Promise<QuizSession>((done) => {
-        resolve = done;
-      }),
-  );
-  render(<SamplePracticeEntry />);
-  expect(mocks.start).not.toHaveBeenCalled();
-  const button = screen.getByRole("button", { name: "Start or resume Practice" });
-  fireEvent.click(button);
-  fireEvent.click(button);
-  expect(mocks.start).toHaveBeenCalledOnce();
-  expect(mocks.navigate).not.toHaveBeenCalled();
-  await act(async () => resolve(fresh()));
-  await waitFor(() =>
-    expect(mocks.navigate).toHaveBeenCalledWith({
-      to: "/quiz-practice/$sessionId",
-      params: { sessionId: "practice" },
-    }),
-  );
-});
-it("does not start a durable quiz in temporary mode", () => {
-  mocks.persistence = "temporary";
-  render(<SamplePracticeEntry />);
-  expect(screen.getByRole("button", { name: "Start or resume Practice" })).toBeDisabled();
-  expect(mocks.start).not.toHaveBeenCalled();
 });

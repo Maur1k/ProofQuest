@@ -10,7 +10,6 @@ const mocks = vi.hoisted(() => ({
   studyRequest: vi.fn(),
   studySave: vi.fn(),
 }));
-vi.mock("@/features/study-materials/SavedStudyLibrary", () => ({ SavedStudyLibrary: () => null }));
 vi.mock("@/store/store", () => ({
   useStore: () => ({ commitGeneratedQuiz: mocks.save, saveStudyMaterial: mocks.studySave }),
 }));

@@ -5,14 +5,14 @@ Core flow: **Add PDF or text → choose Flashcards, Quiz, Exam or Reviewer → r
 
 ## Current state
 
-Updated 2026-11-25. ProofQuest preserves the original Lovable styling and runs as a responsive guest web app. Development and testing happen locally, without Lovable AI editing.
+Updated 2026-11-26. ProofQuest preserves the original Lovable styling and runs as a responsive guest web app. Development and testing happen locally, without Lovable AI editing.
 
 - Local PDF import, selected-page extraction, original-page previews and browser saving work without AI. Pasted text uses the same guided study flow.
 - New study provides three steps and four study modes, exact-text review and explicit consent before any AI transfer.
 - Library groups saved sources, study materials and related results. Quiz and Exam reuse saved questions. Older ambiguous records remain under Other saved materials.
 - Retired Quests and identifiable samples remain readable in Archive. IndexedDB schema 4 and backup v5 preserve existing records and historical grades.
 
-**Simplification: S1 and S2 complete; S3 at the approved 50% checkpoint.** Remaining work includes comprehensive compatibility checks, old-entry redirects, full responsive/keyboard acceptance and unused-UI cleanup. See the [checkpoint handoff](docs/simplification-plan.md).
+**Simplification S1, S2 and S3 are complete locally.** Unified Library, preserved legacy data, retired-entry redirects and unused-screen cleanup are validated. See the [completion handoff](docs/simplification-plan.md). Physical-phone testing is excluded; AI factual-quality acceptance remains a separate unresolved gate.
 
 Groq generation and Upstash usage-control integration exist, but **AI generation remains disabled**. Factual-quality acceptance is unresolved; PDF-to-study generation is not a released feature. Passing workflow tests does not certify factual accuracy. See [AI setup](docs/ai-local-setup.md) and [Phase 6A status](docs/phase-6a-progress.md).
 

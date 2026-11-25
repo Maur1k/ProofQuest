@@ -67,9 +67,9 @@ export function FinishQuiz({
       <ConfirmDialog
         open={confirm}
         onOpenChange={setConfirm}
-        title="Submit this quiz?"
+        title={`Submit this ${session.mode === "test" ? "Exam" : "Quiz"}?`}
         description={`${progress.answered} of ${progress.total} questions answered. ${progress.unanswered} will be skipped. Submitting locks this attempt and shows results. You can start a new attempt afterward.`}
-        confirmLabel="Submit quiz"
+        confirmLabel={`Submit ${session.mode === "test" ? "Exam" : "Quiz"}`}
         onConfirm={() => void finish()}
       />
     </section>

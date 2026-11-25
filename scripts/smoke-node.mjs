@@ -57,6 +57,9 @@ try {
     console.log(`PASS ${path}: SSR and linked assets`);
   }
   for (const [path, target] of [
+    ["/documents", "/library"],
+    ["/materials", "/library"],
+    ["/quiz-history", "/library"],
     ["/subjects", "/archive"],
     ["/subjects/algorithms", "/archive"],
     ["/quests/new", "/archive"],
@@ -70,7 +73,7 @@ try {
     const response = await fetch(origin + path, { redirect: "manual" });
     assert.equal(response.status, 307, path);
     assert.equal(response.headers.get("location"), target, path);
-    console.log(`PASS ${path}: archive redirect`);
+    console.log(`PASS ${path}: preserved-entry redirect`);
   }
   for (const path of ["/login", "/register", "/welcome"]) {
     const response = await fetch(origin + path + "?redirect=https://example.com", {

@@ -1,13 +1,15 @@
-import { SourceMaterialList, SourceMaterialDetail } from "@/features/study-sources/SourceMaterials";
-import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
+import { SourceMaterialDetail } from "@/features/study-sources/SourceMaterials";
+import { createFileRoute, Link, Navigate, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useStore } from "@/store/store";
 import type { StudyRecord } from "@/domain/study-record";
-import { SavedStudyLibrary } from "@/features/study-materials/SavedStudyLibrary";
 import { StudyMaterialView } from "@/features/study-materials/StudyMaterialView";
 export const Route = createFileRoute("/materials")({
   validateSearch: (search: Record<string, unknown>): { id?: string } =>
     typeof search["id"] === "string" ? { id: search["id"] } : {},
+  beforeLoad: ({ search }) => {
+    if (!search.id) throw redirect({ to: "/library", search: {}, replace: true });
+  },
   component: MaterialsPage,
 });
 function Detail({ id }: { id: string }) {
@@ -42,23 +44,19 @@ export function Materials({ id }: { id?: string | undefined }) {
     return <Navigate to="/archive" search={{ sample: id }} replace />;
   return (
     <div className="space-y-5 py-6">
-      <nav className="flex flex-wrap gap-4">
-        <Link to="/documents" className="inline-flex min-h-11 items-center text-primary underline">
-          PDF library
-        </Link>
-        <Link
-          to="/materials"
-          search={{}}
-          className="inline-flex min-h-11 items-center text-primary underline"
-        >
-          All saved study materials
-        </Link>
-      </nav>
+      <Link
+        to="/library"
+        search={{}}
+        className="inline-flex min-h-11 items-center text-primary underline"
+      >
+        Back to Library
+      </Link>
       {!ready ? (
         <p role="status">Opening browser storage…</p>
       ) : persistence !== "durable" ? (
         <p>
-          Saved study materials require browser storage. Return Home to resolve the storage warning.
+          Saved study materials require browser storage. Open Settings to resolve the storage
+          warning.
         </p>
       ) : id ? (
         id.startsWith("source-") ? (
@@ -67,11 +65,7 @@ export function Materials({ id }: { id?: string | undefined }) {
           <Detail key={id} id={id} />
         )
       ) : (
-        <>
-          <h1 className="text-2xl font-bold">Your study materials</h1>
-          <SavedStudyLibrary />
-          <SourceMaterialList />
-        </>
+        <Navigate to="/library" search={{}} replace />
       )}
     </div>
   );

@@ -53,7 +53,7 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
     <div className="pb-6">
       <PageHeader
         title="Quiz"
-        back={{ to: "/", label: "Home" }}
+        back={{ to: "/", label: "New study" }}
         subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
       {session?.version.id.startsWith("source-generated-") && (
@@ -62,7 +62,7 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
         </p>
       )}
       {persistence !== "durable" ? (
-        <p role="status">Saved browser storage is required. Return Home to recover storage.</p>
+        <p role="status">Saved browser storage is required. Open Settings to recover storage.</p>
       ) : loading ? (
         <p role="status">Loading saved Quiz…</p>
       ) : error ? (

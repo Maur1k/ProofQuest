@@ -47,3 +47,5 @@
 - 2026-11-25: owner authorized S3 through 50% only. The unified Library projection and source/material/result navigation are implemented and checked locally; see docs/simplification-plan.md. Stop at this halfway checkpoint. Full compatibility/browser acceptance, old-entry redirects and dead-UI cleanup remain pending further owner authorization. No push, publication or AI enablement.
 
 - 2026-11-25: owner explicitly authorized updating Markdown and pushing current progress through S3 50%. Earlier no-push instructions are superseded for this snapshot only. Stop implementation at S3 50%; publication and AI enablement remain unauthorized.
+
+- 2026-11-26: owner authorized finishing S3 and committing locally. S3 is complete; see docs/simplification-plan.md for evidence and limitations. Stop before further development. This authorization does not include a new push/publication or AI enablement. Keep schema 4/backup v5 and archived data support intact.

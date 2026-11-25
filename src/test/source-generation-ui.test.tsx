@@ -8,7 +8,6 @@ const mocks = vi.hoisted(() => ({ save: vi.fn(), start: vi.fn(), navigate: vi.fn
 vi.mock("@/store/store", () => ({
   useStore: () => ({ saveSourceMaterial: mocks.save, startSavedQuiz: mocks.start }),
 }));
-vi.mock("@/features/study-sources/SourceMaterials", () => ({ SourceMaterialList: () => null }));
 vi.mock("@tanstack/react-router", () => ({
   Link: ({ children }: { children: React.ReactNode }) => <a>{children}</a>,
   useNavigate: () => mocks.navigate,

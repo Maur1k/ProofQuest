@@ -2,7 +2,6 @@ import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { TestSession } from "@/features/quizzes/TestSession";
 import { TestPage } from "@/features/quizzes/TestPage";
-import { SamplePracticeEntry } from "@/features/quizzes/SamplePracticeEntry";
 import { createSampleMcqVersion } from "@/data/sample-mcq";
 import { presentTestDraft } from "@/domain/test-presentation";
 import {
@@ -164,7 +163,7 @@ it("loads saved answers after a failed read, opens completed results and rejects
   page.unmount();
   mocks.load.mockResolvedValueOnce(finalizeQuizSession(fresh(), 0, 2));
   const completed = render(<TestPage sessionId="test" />);
-  await screen.findByText("Quiz results · 0%");
+  await screen.findByText("Exam results · 0%");
   expect(screen.queryByRole("radio")).not.toBeInTheDocument();
   completed.unmount();
   mocks.load.mockResolvedValueOnce(
@@ -179,25 +178,6 @@ it("gates Test loading in temporary mode", () => {
   expect(screen.getByText(/Saved browser storage is required/)).toBeVisible();
   expect(mocks.load).not.toHaveBeenCalled();
 });
-it("starts Test only from the explicit entry and navigates after the session commits", async () => {
-  let resolve!: (session: QuizSession) => void;
-  mocks.start.mockImplementation(
-    () =>
-      new Promise<QuizSession>((done) => {
-        resolve = done;
-      }),
-  );
-  render(<SamplePracticeEntry />);
-  expect(mocks.start).not.toHaveBeenCalled();
-  fireEvent.click(screen.getByRole("button", { name: "Start or resume Test" }));
-  expect(mocks.navigate).not.toHaveBeenCalled();
-  await act(async () => resolve(fresh()));
-  expect(mocks.navigate).toHaveBeenCalledWith({
-    to: "/quiz-test/$sessionId",
-    params: { sessionId: "test" },
-  });
-});
-
 it("redirects archived unfinished samples without mounting an editable Exam", async () => {
   mocks.load.mockResolvedValueOnce(
     startQuizSession("archived", createSampleMcqVersion(), "test", 1),

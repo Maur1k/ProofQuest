@@ -6,7 +6,7 @@ import type { DocumentRecord, PageRecord } from "@/data/records";
 import { useStore } from "@/store/store";
 import { documentStorage } from "./service";
 import { pdfFailure } from "./errors";
-import { documentButton } from "./DocumentLibrary";
+import { documentButton } from "./styles";
 
 export function DocumentReader({
   documentId,
@@ -36,13 +36,12 @@ export function DocumentReader({
             initialPage <= result.document.pageCount
           )
             setPage(initialPage);
-        } else
-          setError("This PDF is no longer in this browser. Import it again from the PDF library.");
+        } else setError("This PDF is no longer in this browser. Add it again from New study.");
       },
       () => {
         if (active)
           setError(
-            "The saved PDF could not be read. Reload to retry, or restore your backup from Home.",
+            "The saved PDF could not be read. Reload to retry, or restore your backup from Settings.",
           );
       },
     );
@@ -53,14 +52,14 @@ export function DocumentReader({
   const extracted = data?.pages.find((item) => item.page === page);
   return (
     <div className="space-y-5 py-6">
-      <Link to="/documents" className={documentButton}>
-        PDF library
+      <Link to="/library" className={documentButton}>
+        Library
       </Link>
       {!ready ? (
         <p role="status">Opening browser storage…</p>
       ) : persistence !== "durable" ? (
         <p role="alert">
-          Browser storage is unavailable. Return Home to resolve the storage warning.
+          Browser storage is unavailable. Open Settings to resolve the storage warning.
         </p>
       ) : error ? (
         <p role="alert">{error}</p>

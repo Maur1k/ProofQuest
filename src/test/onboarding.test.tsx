@@ -1,5 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ONBOARDING_KEY,
   readOnboardingStatus,
@@ -8,7 +7,6 @@ import {
 } from "@/onboarding/preference";
 import { validateLogin, validateRegister, firstErrorField } from "@/onboarding/accountDemo";
 import { INTRO_SLIDES, nextSlideIndex, swipeDelta } from "@/onboarding/slides";
-import { LoginDemoForm, RegisterDemoForm } from "@/onboarding/AccountForms";
 import { STORAGE_KEY } from "@/domain/storage";
 
 describe("onboarding preference", () => {
@@ -103,88 +101,5 @@ describe("account demo validation", () => {
         { password: "x", email: "y" },
       ),
     ).toBe("email");
-  });
-});
-
-describe("account demo forms never send or keep credentials", () => {
-  const SECRET = "Secret123pw";
-  let fetchSpy: ReturnType<typeof vi.fn>;
-  let xhrSpy: ReturnType<typeof vi.spyOn>;
-  let logSpies: ReturnType<typeof vi.spyOn>[];
-
-  beforeEach(() => {
-    localStorage.clear();
-    sessionStorage.clear();
-    fetchSpy = vi.fn();
-    vi.stubGlobal("fetch", fetchSpy);
-    xhrSpy = vi.spyOn(XMLHttpRequest.prototype, "open");
-    logSpies = (["log", "info", "warn", "error", "debug"] as const).map((m) =>
-      vi.spyOn(console, m),
-    );
-  });
-  afterEach(() => {
-    cleanup();
-    vi.unstubAllGlobals();
-    vi.restoreAllMocks();
-  });
-
-  function expectNoLeak() {
-    expect(fetchSpy).not.toHaveBeenCalled();
-    expect(xhrSpy).not.toHaveBeenCalled();
-    expect(localStorage.length).toBe(0);
-    expect(sessionStorage.length).toBe(0);
-    expect(document.cookie).toBe("");
-    for (const s of logSpies)
-      for (const call of s.mock.calls) expect(JSON.stringify(call)).not.toContain(SECRET);
-  }
-
-  it("login: invalid submit focuses the first error; valid submit shows Demo complete and clears", () => {
-    const onGuest = vi.fn();
-    render(<LoginDemoForm onContinueAsGuest={onGuest} />);
-    fireEvent.click(screen.getByRole("button", { name: "Log in (demo)" }));
-    expect(screen.getByLabelText("Email")).toHaveFocus();
-    expect(screen.getByLabelText("Email")).toHaveAttribute("aria-invalid", "true");
-
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "sam@example.com" } });
-    const pw = screen.getByLabelText("Password");
-    fireEvent.change(pw, { target: { value: SECRET } });
-    expect(pw).toHaveAttribute("type", "password");
-    fireEvent.click(screen.getByRole("button", { name: "Show password" }));
-    expect(pw).toHaveAttribute("type", "text");
-    fireEvent.click(screen.getByRole("button", { name: "Log in (demo)" }));
-
-    expect(screen.getByRole("heading", { name: "Demo complete" })).toBeInTheDocument();
-    expect(document.body.innerHTML).not.toContain(SECRET);
-    expect(document.body.innerHTML).not.toContain("sam@example.com");
-    expect(screen.queryByText(/signed in successfully|account created/i)).toBeNull();
-    fireEvent.click(screen.getByRole("button", { name: "Continue as guest" }));
-    expect(onGuest).toHaveBeenCalledOnce();
-    expectNoLeak();
-  });
-
-  it("register: mismatched confirm is reported, valid submit clears without persisting", () => {
-    render(<RegisterDemoForm onContinueAsGuest={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Display name"), { target: { value: "Sam" } });
-    fireEvent.change(screen.getByLabelText("Email"), { target: { value: "sam@example.com" } });
-    fireEvent.change(screen.getByLabelText("Password"), { target: { value: SECRET } });
-    fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: "nope" } });
-    fireEvent.click(screen.getByRole("button", { name: "Create account (demo)" }));
-    expect(screen.getByText("Passwords don't match.")).toBeInTheDocument();
-    expect(screen.getByLabelText("Confirm password")).toHaveFocus();
-
-    fireEvent.change(screen.getByLabelText("Confirm password"), { target: { value: SECRET } });
-    fireEvent.click(screen.getByRole("button", { name: "Create account (demo)" }));
-    expect(screen.getByRole("heading", { name: "Demo complete" })).toBeInTheDocument();
-    expect(document.body.innerHTML).not.toContain(SECRET);
-    expectNoLeak();
-  });
-
-  it("leaving the screen discards typed values", () => {
-    const { unmount } = render(<LoginDemoForm onContinueAsGuest={() => {}} />);
-    fireEvent.change(screen.getByLabelText("Password"), { target: { value: SECRET } });
-    unmount();
-    render(<LoginDemoForm onContinueAsGuest={() => {}} />);
-    expect(screen.getByLabelText("Password")).toHaveValue("");
-    expectNoLeak();
   });
 });

@@ -58,3 +58,45 @@ it("allows retrying a failed read", async () => {
   fireEvent.click(await screen.findByRole("button", { name: "Retry loading Library" }));
   expect(await screen.findByText(/Your Library is empty/)).toBeInTheDocument();
 });
+
+it("opens both modes from one saved question set and preserves recorded result links", async () => {
+  const version = {
+    id: "saved",
+    quizId: "saved",
+    title: "Saved biology",
+    createdAt: 1,
+    questions: [
+      {
+        id: "q",
+        type: "mcq",
+        sources: [],
+        prompt: "Question",
+        options: [],
+        hints: [],
+        explanation: "Evidence",
+        correctOptionId: "a",
+      },
+    ],
+  };
+  mocks.quizzes.mockResolvedValue([version]);
+  mocks.start.mockResolvedValue({ id: "opened" });
+  mocks.sessions.mockResolvedValue([
+    {
+      id: "done",
+      version,
+      mode: "test",
+      updatedAt: 2,
+      completedAt: 2,
+      result: { correct: 1, total: 1, percentage: 100 },
+    },
+    { id: "resume", version, mode: "practice", updatedAt: 1, completedAt: null, result: null },
+  ]);
+  render(<UnifiedLibrary />);
+  fireEvent.click(await screen.findByRole("button", { name: "Open Quiz" }));
+  expect(mocks.start).toHaveBeenCalledWith("saved", "practice");
+  await vi.waitFor(() => expect(screen.getByRole("button", { name: "Open Exam" })).toBeEnabled());
+  fireEvent.click(screen.getByRole("button", { name: "Open Exam" }));
+  expect(mocks.start).toHaveBeenCalledWith("saved", "test");
+  expect(screen.getByText(/Recorded score: 1\/1/)).toBeInTheDocument();
+  expect(screen.getByText(/Resume unfinished attempt/)).toBeInTheDocument();
+});

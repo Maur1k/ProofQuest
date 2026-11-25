@@ -110,3 +110,29 @@ Schema 4 and backup v5 remain unchanged. Generation remains disabled; no push or
 ### GitHub progress snapshot — 2026-11-25
 
 The owner authorized committing and pushing current progress, including the earlier Phase 6 work and simplification through S3 at 50%. README and the roadmap now reflect this checkpoint. This supersedes earlier no-push notes for this snapshot only. It does not authorize publication, AI enablement or the remaining S3 implementation. Validation remains 329 passing tests, 18 skipped opt-in live tests, passing type/build/route checks and the documented limited browser checks.
+
+
+## S3 completion handoff — 2026-11-26
+
+The owner authorized finishing S3 and committing it locally. This supersedes the halfway stop; stop after S3. A new push/publication is not included.
+
+### Delivered
+
+- Unified Library remains a typed projection of existing repositories: sources own Study materials and Results, with explicit Other saved materials for uncertain associations. No copied store, schema migration or historical regrading.
+- `/documents`, `/materials` without an ID, and `/quiz-history` redirect to Library. Original PDF, material-ID and result deep links remain intact. Reader/result return links now use Library.
+- Quiz/Exam confirmations and results use mode-correct labels. Both reuse saved versions through existing session APIs. Retained source versions, citations, unfinished resume and immutable grades remain accessible.
+- Removed unused demo UI/providers, account prototype screens, old source/PDF listing components, sample entry UI and competing saved-material/history lists. Removed their obsolete UI tests; retained archive readers, legacy data contracts and backup support.
+- IndexedDB stays at schema 4 and backup v5. Generation stays disabled; no verifier, timer, new feature or paid operation was added.
+
+### Acceptance evidence
+
+- Final suite: **322 passed, 18 opt-in live tests skipped** across 47 files. Retired UI tests account for the lower total. Type checking, production Node build and build verification pass. Lint has zero errors and eight existing Fast Refresh warnings. All **31 SSR/asset/redirect checks** pass.
+- New compatibility test round-trips legacy decks/reviewers, saved quiz versions and unfinished attempts alongside archived Quests/sample data; preserved user payloads and snapshots match. Import revision/migration bookkeeping is intentionally distinct. Deleting the original document retains text and material access without invented links.
+- Existing regression coverage passes for source revision immutability, unavailable PDFs, failed saves, interrupted/expired generation recovery, backup conflicts, archived unfinished attempts, and Quiz/Exam feedback rules.
+- A generated local-only biology fixture was imported through Settings on port 4197. Library shows one source and three saved formats. Flashcard reveal survives reload; Reviewer opens with source evidence. Quiz shows feedback after answer submission. Exam resumes its stored attempt, saves/reloads editable drafts, permits edits, hides solutions until final submission, and then shows the immutable score. Library Results opens the retained result deep links. No AI request is needed or enabled.
+- Library overview, populated material detail and Results have no horizontal overflow at **320, 390, 768, 1024 and 1440 px**. Keyboard Enter opens a source; Space reveals cards and changes source sections; visible Results focus remains intact. Desktop and mobile layouts inspected visually. S2's three-step responsive checks remain applicable; no wizard layout changes in S3.
+- Final build browser recheck confirms Exam results/Submit Exam labels and Library navigation. Archive displays retained Quests and sample questions read-only. No browser console errors observed.
+
+### Limits and next decision
+
+Physical-phone testing remains excluded. The browser compatibility fixture is deliberately synthetic; original real-PDF rendering was verified in S2 and is covered by existing PDF regression checks. No live provider request or factual-quality certification occurred. AI factual acceptance remains unresolved in Phase 6A. S3 is complete; obtain owner authorization for any next development checkpoint or push/publication.

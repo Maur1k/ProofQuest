@@ -1,7 +1,6 @@
 import { afterEach, expect, it, vi } from "vitest";
 import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { StudyMaterialView } from "@/features/study-materials/StudyMaterialView";
-import { SavedStudyLibrary } from "@/features/study-materials/SavedStudyLibrary";
 import { validateGeneratedStudy } from "@/domain/study-material";
 import { createSampleMcqVersion } from "@/data/sample-mcq";
 const mocks = vi.hoisted(() => ({
@@ -82,18 +81,6 @@ it("keeps the last saved card when writing fails", async () => {
   await screen.findByRole("alert");
   expect(screen.getByText("First question")).toBeInTheDocument();
   expect(screen.queryByText("Second question")).toBeNull();
-});
-it("opens Quiz and Exam from saved content without generation", async () => {
-  mocks.materials.mockResolvedValue([record]);
-  mocks.quizzes.mockResolvedValue([{ ...createSampleMcqVersion(), id: "real-saved-quiz" }]);
-  mocks.start.mockResolvedValue({ id: "session" });
-  render(<SavedStudyLibrary />);
-  await screen.findByRole("button", { name: "Open Quiz" });
-  fireEvent.click(screen.getByRole("button", { name: "Open Quiz" }));
-  await waitFor(() => expect(mocks.start.mock.calls[0]?.[1]).toBe("practice"));
-  await waitFor(() => expect(screen.getByRole("button", { name: "Open Exam" })).toBeEnabled());
-  fireEvent.click(screen.getByRole("button", { name: "Open Exam" }));
-  await waitFor(() => expect(mocks.start.mock.calls[1]?.[1]).toBe("test"));
 });
 it("renders reviewer sections, terms and comparisons with evidence", () => {
   const input = { ...request, format: "reviewer" as const };

@@ -25,7 +25,7 @@ export function SavedQuizResults({ sessionId }: { sessionId: string }) {
           value.version.questions.some((q) => q.type !== "mcq")
         )
           setError(
-            "This completed MCQ result is unavailable. Open Quiz history to find or resume an attempt.",
+            "This completed MCQ result is unavailable. Open Library to find or resume an attempt.",
           );
         else setSession(value);
       })
@@ -40,7 +40,7 @@ export function SavedQuizResults({ sessionId }: { sessionId: string }) {
     return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
     <div className="pb-6">
-      <PageHeader title="Saved quiz result" back={{ to: "/quiz-history", label: "Quiz history" }} />
+      <PageHeader title="Saved result" back={{ to: "/library", label: "Library" }} />
       {persistence !== "durable" ? (
         <p role="status">Saved browser storage is required.</p>
       ) : error ? (
