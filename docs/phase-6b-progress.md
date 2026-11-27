@@ -1,6 +1,6 @@
 # Phase 6B — unified sources handoff
 
-Owner: Maur1k. Updated 2026-11-24. **Implementation and workflow checks complete locally; AI release remains blocked by 6A factual acceptance.** No push, publication, 6C or physical-phone testing.
+Owner: Maur1k. Detailed evidence updated 2026-11-24. **Unified-source implementation and workflow checks are complete; AI release remains blocked by 6A factual acceptance.** Current repository status and later UI commits are summarized in [system-progress-handoff.md](system-progress-handoff.md). No 6C or physical-phone acceptance is claimed.
 
 ## Delivered
 

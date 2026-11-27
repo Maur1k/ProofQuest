@@ -1,65 +1,45 @@
 <!-- LOVABLE:BEGIN -->
 > [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
+> This repository is connected to [Lovable](https://lovable.dev). Commits pushed
+> to the connected branch sync to the Lovable project. Do not force-push, rebase,
+> amend, or squash published history; it may damage the Lovable project history.
 <!-- LOVABLE:END -->
 
-## Architecture rules
-- Domain logic (types, answer checking, validation, stats/mastery, storage parsing) lives in `src/domain/` as pure functions; UI never re-implements it. Why: testable and portable to the responsive web implementation.
-- App state is one React context in `src/store/`, initialized after hydration and saved through typed IndexedDB repositories in `src/data/`. Keep the v1 localStorage source for rollback; never overwrite it during normal saves. Await transaction completion before showing success. Explicit temporary mode is memory-only. See docs/phase-3-data-contracts.md.
-- State changes go through the pure reducer in `src/store/reducer.ts`, which enforces one unfinished attempt per quest and one answer per question. Why: prevents duplicate records regardless of UI double-clicks.
-- Legacy attempts retain recorded outcomes and answered-only scoring; history uses original/reconstructed/missing question snapshots. New quiz sessions copy immutable versions and persist mode/order/grading version. Never regrade migrated history or present reconstructed content as original.
-- Study-to-Quest is a UI-only demo in `src/demo/`: static sample lessons, pure deterministic generation/validation in `logic.ts`, and a memory-only `DemoProvider` that never touches the store, reducer or localStorage; sample drag-and-drop uses pointer events with capture (touch-safe), never reads real files. Why: preview the flow without real uploads, AI or persistence, and keep real progress untouched.
-- Onboarding/account demo lives in `src/onboarding/`: the only persisted value is the isolated `proofquest:onboarding:v1` key (pure read/write in `preference.ts`, in-memory fallback when storage fails); Home now opens directly for guests without reading that preference; `/intro` is optional and finishes at Home. `/welcome`, `/login` and `/register` redirect only to Home; prototype account components remain unused references. Why: no credential collection or onboarding gate, while preserving existing quest data and editor guards.
-- Full-screen routes (`/intro`, `/welcome`, `/login`, `/register`) are listed in `BARE_PATHS` in `AppShell` and render without bottom nav. Why: no app navigation behind onboarding/auth screens.
-- Artwork originals live in `public/assets/proofquest/original/` and are never modified; the app uses resized WebP derivatives. `docs/development-handoff/` is the handoff package (tokens, specs, manifest, Flutter mapping, QA); update it when behavior or tokens change. Why: stable, project-owned assets and a verifiable source/design baseline.
+# Agent instructions
 
-## Phase approval gates
-- Follow docs/development-phases.md. Phase 2 was accepted on 2026-10-30 with native zoom verification assigned to the owner. Phase 3 is complete and pushed. Phase 4 is complete as of 2026-11-10 within the owner-approved scope explicitly excluding physical-phone testing; see docs/phase-4-handoff.md. Do not claim physical-device validation. Phase 4 was pushed on 2026-11-10 at 030f0fc. The owner authorized completion of Phase 5 on 2026-11-11. Phase 5 is complete locally; see docs/phase-5-handoff.md. Phase 5 was subsequently pushed with owner authorization at b9adce9; publication was not performed. The owner subsequently authorized finishing Phase 6 on 2026-11-11. Phase 6 remains in progress; see docs/phase-6-progress.md. Provider selection remains pending after the owner asked about Groq limits. Finish authorized independent work, but do not claim the phase complete without its live generation and quality exit checks. Stop before Phase 7. The owner prefers free generation; provider/backend/allowance decisions remain pending and no spending is authorized. No Phase 6 push or publication is authorized.
-- At the end of EVERY phase, report results and stop. Obtain explicit confirmation from Maur1k before starting the next phase.
-- All code edits and testing happen locally. Never send Lovable AI editing/build prompts. Git synchronization is separate from AI editing.
-- Do not rewrite published history. Keep historical handoff/Flutter documents as references; the active web plan governs future work.
+Read [the system progress handoff](docs/system-progress-handoff.md) for current product, roadmap, deployment and AI status. Read the relevant phase file before changing its area. Historical dated notes describe past checkpoints and do not override the newest status.
 
-- Real PDF imports live in `src/features/documents/`, separate from the sample demo. Lazy-load the pinned PDF.js adapter only after hydration; retain real workers, cancellation, deadlines and local assets. `extractedPages` records deliberate selection; absent on older documents means all pages. Validate document/page mapping atomically and preserve it in backups. The 5 MiB/10-page development guards are not validated mobile capacity.
+## Current product state
 
-- Phase 6 expansion approved on 2026-11-11: subject-neutral quizzes, reviewers and flashcards are all required; programming remains optional examples. Follow docs/phase-6-expansion.md. Preserve existing data, require source evidence, flag unsupported/image-dependent content, and do not claim larger-PDF or live AI support until validated. Provider choice remains pending.
+- ProofQuest is a guest-first, local-first responsive web study app: **Add material → Choose study mode → Review and create → Study → Results**.
+- Main destinations are New study and Library. Study modes are Flashcards, Quiz, Exam and Reviewer. Settings contains Data & backup, Archive and About.
+- Phases 0–5, simplification S1–S3, and UI/UX refinement checkpoints 1–5 are complete. Phase 6A AI factual acceptance is unresolved; generation is disabled. Vercel is a planned, unverified backup host. No public release or AI enablement follows from documentation or a source push.
+- Current data contracts are IndexedDB schema 4 and backup format v5. Do not change them without an explicit migration design, compatibility coverage and owner authorization.
 
-- Four-choice study workflow is implemented locally; see docs/phase-6-study-flow.md. Quiz/Exam keep internal practice/test modes. Immutable reviewer/deck records and separate revisioned progress use IndexedDB version 2; export backup version 3 and accept version 2. Never enable either generation endpoint without validated provider and durable usage controls.
+## Architecture and data rules
 
-- 2026-11-17 update: owner supplied Groq and Upstash credentials and authorized local integration after intentionally discarding the earlier uncommitted version. Provider-pending notes above are superseded. Follow docs/ai-local-setup.md. Keep secrets server-only, default generation disabled, and complete quality/browser exit checks before declaring Phase 6 complete. No push, deployment, spending or Phase 7 authorization.
+- Keep domain types, validation, scoring and projections as pure functions in `src/domain/`. UI must not reimplement these rules.
+- Keep routes thin; UI in `src/features/` and shared `src/components/`; app commands/state in the existing `src/store/`; persistence in typed `src/data/` repositories.
+- Await durable transactions before showing success. Preserve explicit temporary mode, migration recovery and backup conflict handling.
+- New Quiz/Exam sessions use immutable question snapshots. Do not edit/regrade historical outcomes. Keep `practice` and `test` as internal modes for visible Quiz and Exam.
+- Preserve source revisions, citations, local PDF access, selected-text consent, backup compatibility and Archive readers. Never infer ambiguous legacy source associations.
+- Preserve original artwork in `public/assets/proofquest/original/`; derivatives and asset terms are documented separately. MIT code licensing does not grant artwork rights.
 
-- Phase 6A is authorized and in progress as of 2026-11-17. Follow docs/phase-6a-progress.md. New-output quality checks must never change historical grades or legacy parsing. All generation formats remain disabled pending live acceptance; PROOFQUEST_APPROVED_FORMATS defaults empty. Stop before 6B.
+## AI and secrets
 
+- AI generation is off. `PROOFQUEST_APPROVED_FORMATS` defaults empty. Never enable a format, raise production limits, run live provider calls, or add a semantic verifier without explicit owner authorization and satisfaction of [Phase 6A acceptance](docs/phase-6a-progress.md).
+- Keep Groq/Upstash credentials server-only in ignored local environment files. Never print, commit, upload, or place credentials in browser bundles, URLs, logs, fixtures, or documentation.
+- Explicit user review and consent are required before selected source text is sent to an AI provider. Structural validity and exact quotations do not prove factual correctness.
+- Keep free/paid usage limits honest. No paid billing, public deployment, host switch, or custom-domain change is implied.
 
-- 2026-11-17: owner explicitly authorized starting 6B despite pending 6A live acceptance. Follow docs/phase-6b-progress.md. Schema 3 and backup v4 now include source revisions. Unified-source generation remains unfinished and disabled; do not claim 6B complete. Stop before 6C. This supersedes the earlier stop-before-6B instruction only.
+## Work and release boundaries
 
-- 2026-11-24: owner authorized finishing 6A/6B. Unified-source implementation/workflow checks are complete; see docs/phase-6b-progress.md. Schema 4/backup v5 supersede earlier source migration notes. 6A factual acceptance is still unmet; exact citations and structural checks are not factual verification. Keep generation disabled/format allowlist empty and normal cap20. See docs/phase-6a-progress.md for the concrete semantic-verifier proposal requiring the owner's decision. No 6C, push, publication or paid usage.
+- Follow [development-phases.md](docs/development-phases.md) and [simplification-plan.md](docs/simplification-plan.md). Checkpointed work stops at its agreed boundary; get owner direction before beginning another phase or resolving a material product decision.
+- Make code changes locally. Do not use Lovable AI to edit/build. Git sync and publishing the live site are separate; a commit/push does not prove that a public deployment was republished.
+- Commit or push only when the owner explicitly asks. Never rewrite published history.
+- Keep historical phase evidence, source manifests, asset provenance and Flutter/design references unless an owner explicitly requests their removal. Remove generated build/cache artifacts only when safe and reproducible; preserve dependencies, secrets, and host configuration.
+- Update the README, [system handoff](docs/system-progress-handoff.md), and the relevant phase record when the current project status materially changes.
 
-- 2026-11-24 simplification supersedes the earlier active demo/onboarding/navigation guidance. Follow docs/simplification-plan.md. S1 retires those entry points into a read-only Archive and stops fresh sample seeding; preserve readers, snapshots and backup support. IndexedDB remains schema 4, backup remains v5. S2 and S3 each require new owner confirmation. AI quality work is separate and paused; do not add a verifier, enable generation, push or publish as part of simplification.
+## Validation
 
-- 2026-11-25: owner authorized finishing S2. The guided New study workflow now replaces active PDF/source creation panels. Preserve the old PDF endpoint solely for retained-request recovery and the original reader/result deep links. See docs/simplification-plan.md for S2 validation and remaining S3 scope. Stop before S3; generation remains disabled and there is no push/publication authorization.
-
-- 2026-11-25: owner authorized S3 through 50% only. The unified Library projection and source/material/result navigation are implemented and checked locally; see docs/simplification-plan.md. Stop at this halfway checkpoint. Full compatibility/browser acceptance, old-entry redirects and dead-UI cleanup remain pending further owner authorization. No push, publication or AI enablement.
-
-- 2026-11-25: owner explicitly authorized updating Markdown and pushing current progress through S3 50%. Earlier no-push instructions are superseded for this snapshot only. Stop implementation at S3 50%; publication and AI enablement remain unauthorized.
-
-- 2026-11-26: owner authorized finishing S3 and committing locally. S3 is complete; see docs/simplification-plan.md for evidence and limitations. Stop before further development. This authorization does not include a new push/publication or AI enablement. Keep schema 4/backup v5 and archived data support intact.
-
-- 2026-11-26: owner authorized pushing completed S3 and updating Markdown. Push implementation commit e1e8673 and its documentation handoff to origin/main without rewriting history. Earlier local-only/no-new-push restrictions are superseded for this handoff only. No next phase, live publication or AI enablement is authorized.
-
-- 2026-11-27: owner authorized UI/UX checkpoint 1, New study only, to simplify presentation while preserving branding and behavior. See docs/simplification-plan.md. Stop for review before Library refinement; no commit/push/publication or AI enablement authorization.
-
-- 2026-11-27: owner authorized UI/UX checkpoint 2 (Library). Presentation refinement and checks are complete locally; see docs/simplification-plan.md. Stop before study-screen refinement pending confirmation. No commit/push/publication or AI enablement authorization.
-
-- 2026-11-27: owner authorized UI/UX checkpoint 3, study screens. Refinements and validation complete locally; see docs/simplification-plan.md. Stop before Results refinement pending confirmation. No commit/push/publication or AI enablement authorization.
-
-- 2026-11-27: owner authorized UI/UX checkpoint 4, Results. Presentation refinement and validation are complete locally; see docs/simplification-plan.md. Stop before Settings/Archive refinement pending confirmation. No commit/push/publication or AI enablement authorization.
-
-- 2026-11-28: owner authorized continuing UI/UX refinement through checkpoint 5 (Settings and Archive). Local presentation changes and browser review are complete; see docs/simplification-plan.md. Checkpoints 1–5 are complete locally. No commit/push/publication or AI enablement authorization.
-
-- 2026-11-28: owner authorized documenting and pushing the completed UI/UX refinement checkpoints 1–5. See docs/ui-ux-handoff.md for an agent-ready project pickup guide and docs/simplification-plan.md for checkpoint details. Push the resulting commit to origin/main without rewriting history. This does not authorize publication, AI enablement or unrelated work.
+Use Node 22.18.0 and Bun 1.4.4 with the committed Bun lockfile. Run the checks relevant to the requested change and report their scope and limits accurately. Browser viewport checks do not establish physical-device support. Build, schema, citation and unit checks do not establish AI factual acceptance.

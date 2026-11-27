@@ -1,8 +1,10 @@
 # ProofQuest — phased development roadmap
 
-Owner: Maur1k. Updated: 2026-11-26. Status: simplification S1/S2/S3 complete locally, with S3 completion committed as `e1e8673` and its GitHub push authorized. Phase 6 factual-quality acceptance remains unresolved and AI generation stays disabled. The owner authorized the S3 GitHub handoff; publication, AI enablement and the next phase remain unauthorized. See [simplification completion](simplification-plan.md) and [Phase 6A status](phase-6a-progress.md).
+Owner: Maur1k. Current status updated: 2026-11-28. Phases 0–5 are complete; Phase 6 product workflow/source implementation is present, but AI factual-quality acceptance has failed and generation remains disabled. Simplification S1–S3 and UI/UX checkpoints 1–5 are complete and pushed through commit `a4d4844`. Phase 6C–6G and Phase 7 have not begun. Lovable is the existing public host; Vercel remains an unverified backup plan. See [system progress handoff](system-progress-handoff.md) for the consolidated current state, [simplification completion](simplification-plan.md), and [Phase 6A status](phase-6a-progress.md).
 
-Read alongside [implementation specification](web-implementation-plan.md) and [validation evidence](plan-validation-report.md). This roadmap defines delivery order; the specification retains detailed architecture, privacy, migration and hosting requirements.
+The dated notes below are historical approval/evidence records. Use the newest status and phase-specific handoffs when older entries say a phase, commit, push or decision is still pending.
+
+For current architecture, privacy rules, data constraints, deployment state and pickup instructions, read the [system progress handoff](system-progress-handoff.md). The [original web implementation proposal](web-implementation-plan.md) and [plan validation report](plan-validation-report.md) are historical records, not active specifications.
 
 ## Delivery rules
 

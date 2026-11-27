@@ -1,6 +1,6 @@
 # Phase 6: four-choice study workflow
 
-Status: local implementation complete for the approved four-choice workflow; Phase 6 overall remains in progress. No provider is selected or enabled. No push or publication.
+Workflow status: implemented and retained in the current app. Phase 6 overall remains incomplete because factual-quality acceptance failed; AI generation remains disabled. Groq and Upstash are integrated server-side, but their presence does not enable generation. Current schema is 4 and backup format is v5; older implementation-specific version numbers below are historical notes from this original checkpoint. See the [current Phase 6 rollup](phase-6-progress.md), [6A quality gate](phase-6a-progress.md), and [system handoff](system-progress-handoff.md).
 
 ## Delivered
 

@@ -6,7 +6,8 @@ The ZIP did not include .git. After the authorized GitHub connection, original
 history was fetched and merged; no published history was rewritten.
 
 The original README from the archive is retained as lovable-README.md.
-The connected repository later added its own README at 470a609; local contributor
-instructions supersede it. The source/lovable-8c1b2541 tag retains the import tree.
+The connected repository later added its own README; the current root README and
+system handoff describe the product as it stands today. The source/lovable-8c1b2541
+tag retains the import tree.
 
 See ../phase-0-handoff.md for checks, backup locations and current status.

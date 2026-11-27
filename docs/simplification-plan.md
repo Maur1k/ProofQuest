@@ -182,3 +182,5 @@ UI/UX checkpoints 1–5 are complete locally. The edits remain uncommitted and u
 ## UI/UX refinement handoff — 2026-11-28
 
 All five refinement checkpoints are complete. The agent-ready pickup guide is [ui-ux-handoff.md](ui-ux-handoff.md); it records architecture constraints, what changed, validation evidence and limits, AI/data guardrails, useful commands, and a suggested pickup sequence. The owner authorized pushing this completed UI refinement snapshot on 2026-11-28. Publication and AI enablement remain separate and unauthorized.
+
+The whole-project status for a new agent is captured in [system-progress-handoff.md](system-progress-handoff.md). It consolidates roadmap status, architecture, the AI acceptance blocker, hosting state and source-of-truth documents.

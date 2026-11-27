@@ -1,67 +1,59 @@
 # ProofQuest
 
-A responsive, open-source learning web app by [Maur1k](https://github.com/Maur1k).
-Core flow: **Add PDF or text → choose Flashcards, Quiz, Exam or Reviewer → review and create → study → results**.
+ProofQuest is a responsive, open-source study app by [Maur1k](https://github.com/Maur1k). Add a PDF or text, choose how to study, then review saved material and results.
 
-## Current state
+**Current status — 2026-11-28:** The local-first study workflow and UI simplification are implemented. AI provider and shared usage-control integration exist, but generation remains **disabled** because factual-quality acceptance failed. Do not present PDF-to-AI study generation as available. See the [system progress handoff](docs/system-progress-handoff.md) for the complete status and next-agent guide.
 
-Updated 2026-11-26. ProofQuest preserves the original Lovable styling and runs as a responsive guest web app. Development and testing happen locally, without Lovable AI editing.
+## What works
 
-- Local PDF import, selected-page extraction, original-page previews and browser saving work without AI. Pasted text uses the same guided study flow.
-- New study provides three steps and four study modes, exact-text review and explicit consent before any AI transfer.
-- Library groups saved sources, study materials and related results. Quiz and Exam reuse saved questions. Older ambiguous records remain under Other saved materials.
-- Retired Quests and identifiable samples remain readable in Archive. IndexedDB schema 4 and backup v5 preserve existing records and historical grades.
+- Import a PDF, select pages, extract text locally, preview the original pages, and save the source in this browser; pasted text is also supported.
+- Choose **Flashcards**, **Quiz**, **Exam**, or **Reviewer** in one guided flow.
+- Read saved, source-linked material in Library. Quiz and Exam reuse the same saved question version.
+- Resume attempts and view immutable Quiz/Exam results and explanations.
+- Export or import a versioned backup. Older Quests, attempts, and identifiable sample content remain available as read-only Archive records.
+- Use the app as a guest. No login is required.
 
-**Simplification S1, S2 and S3 are complete** (S3 implementation: `e1e8673`). Unified Library, preserved legacy data, retired-entry redirects and unused-screen cleanup are validated. See the [completion handoff](docs/simplification-plan.md). Physical-phone testing is excluded; AI factual-quality acceptance remains a separate unresolved gate.
+Local PDF extraction and saved study workflows do not require AI. Scanned/image-only PDF content is not extracted with OCR. Saved data belongs to the current browser and site origin; use **Settings → Data & backup** before changing browser, device, or host.
 
-Groq generation and Upstash usage-control integration exist, but **AI generation remains disabled**. Factual-quality acceptance is unresolved; PDF-to-study generation is not a released feature. Passing workflow tests does not certify factual accuracy. See [AI setup](docs/ai-local-setup.md) and [Phase 6A status](docs/phase-6a-progress.md).
+## Current architecture
 
-Development stops at owner-approved checkpoints. See the [phased roadmap](docs/development-phases.md) and [implementation specification](docs/web-implementation-plan.md). GitHub progress does not imply live-host publication or release acceptance.
+- React 19, TypeScript, TanStack Start/Router, Tailwind CSS, and PDF.js.
+- Pure domain logic in `src/domain/`, UI in `src/features/`, application commands/state in `src/store/`, and typed IndexedDB repositories in `src/data/`.
+- IndexedDB schema **4**, backup format **v5**. Preserve legacy adapters and immutable historical results.
+- Server-only Groq generation integration and Upstash shared usage controls. Generation is off and the approved format allowlist is empty pending factual review and release checks.
 
 ## Development
 
-Use **Node 22.18.0** and **Bun 1.4.4**:
+Use Node **22.18.0** and Bun **1.4.4**. Install from the frozen lockfile:
 
 ```sh
 bun install --frozen-lockfile
 bun run dev
 ```
 
-Open the local URL printed by Vite. No API key or account is needed for the
-local import and saved-study workflows. Account routes redirect to the guest experience.
+Run focused checks for the files you change:
 
 ```sh
 bun run lint
 bun run typecheck
 bun run test
-bun run build
+bun run build:node
+bun run test:node
 ```
 
-See [contributor instructions](CONTRIBUTING.md). Dependencies use the original
-frozen Bun lockfile; avoid installing with another package manager.
+The repository is connected to Lovable; code changes are made locally and pushed through Git. Do not use Lovable AI editing prompts or rewrite published Git history. Read [AGENTS.md](AGENTS.md), [contributor guidance](CONTRIBUTING.md), and the [system progress handoff](docs/system-progress-handoff.md) before making changes.
 
-## Source and hosting
+## Roadmap and hosting
 
-Reuse the [Lovable project](https://lovable.dev/projects/020eed6a-df65-4e71-b47f-c5ada619051b).
-All code editing/testing happens locally; no Lovable AI editing prompts.
-Lovable is the primary host and Vercel the planned backup. Backup readiness
-requires later build/runtime and recovery verification. The baseline build
-targets Cloudflare; a successful build alone does not prove Vercel support.
+Phases 0–5 are complete; simplification milestones S1–S3 and UI/UX checkpoints 1–5 are complete. Phase 6A is **not accepted** because factual-quality review found incorrect/ambiguous AI questions. Phase 6B source implementation and workflow checks are complete; 6C–6G and Phase 7 have not started. See the [development roadmap](docs/development-phases.md), [simplification record](docs/simplification-plan.md), and [system handoff](docs/system-progress-handoff.md).
 
-Source import details and checksums are in docs/source-import/manifest.json.
-The original ZIP preserves files only; the separate Phase 0 Git bundle also preserves the retrieved history.
-Historical Flutter plans and handoff references remain for context; Flutter
-development is cancelled.
+The public Lovable host is [proofquest.lovable.app](https://proofquest.lovable.app/). Vercel is the planned backup host; it has not been verified as a recovery deployment. GitHub commits sync source to the connected Lovable project, but a push alone does not confirm the public host was republished with that commit.
 
-## License
+## Source and license
 
-Original code and documentation: [MIT](LICENSE), copyright 2026 Maur1k.
-Dependencies retain their own licenses. Artwork and branding have separate
-provenance and terms in docs/development-handoff/asset-manifest.json; MIT does
-not grant artwork rights. Distribution terms must be resolved before release.
+- Source: [github.com/Maur1k/ProofQuest](https://github.com/Maur1k/ProofQuest)
+- Lovable project: [project editor](https://lovable.dev/projects/020eed6a-df65-4e71-b47f-c5ada619051b)
+- Code and documentation: [MIT license](LICENSE), copyright Maur1k.
+- Artwork retains separate provenance and terms in `docs/development-handoff/asset-manifest.json`; the code license does not grant artwork rights.
 
-## Portable builds and PDF feasibility
-
-See [Phase 1 handoff](docs/phase-1-handoff.md) for verification and pending phone validation, and [hosting commands](docs/decisions/001-hosting-portability.md) for explicit Node, Vercel and Lovable build targets. The [PDF experiment](experiments/pdf-feasibility/README.md) is separate from the current sample-only study flow. Live backup deployment remains a later release step.
-
-Phase 6 now includes all three study formats. The four-choice UI, saved reviewer/flashcard screens, durable storage and compatible backup recovery are implemented locally. Live generation remains disabled; provider integration and quality evaluation are still pending. See [study-flow verification](docs/phase-6-study-flow.md). See [expanded scope](docs/phase-6-expansion.md).
+Historical phase records, source-import manifests, the early web proposal, and the cancelled Flutter plan remain under `docs/` as project history. Current product status and instructions are linked above.

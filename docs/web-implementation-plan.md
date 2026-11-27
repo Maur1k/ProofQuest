@@ -1,6 +1,6 @@
-# ProofQuest — responsive web implementation plan
+# ProofQuest — responsive web implementation plan (historical proposal)
 
-Updated 2026-11-10. Owner: **Maur1k**. Status: Phases 0–2 accepted within documented verification limits; Phase 3 pushed; Phase 4 first 20% checkpoint complete and stopped at the owner-authorized limit. See the active roadmap and phase handoffs.
+Historical proposal dated 2026-11-10. Its early product assumptions, screen flows, architecture descriptions, statuses, and pending checklists have been superseded by the implemented application and later decisions. Do not use this file as the current roadmap. For current status, see the [system progress handoff](system-progress-handoff.md), [development roadmap](development-phases.md), and [simplification plan](simplification-plan.md).
 
 This supersedes `flutter-implementation-plan.md`. Stop Flutter development. The owner requested cleanup and the Flutter starter was removed on 2026-10-23. Keep the historical plan for reference. Continue the existing Lovable web application as the actual product, preserving its useful code, assets, data contracts and tests.
 

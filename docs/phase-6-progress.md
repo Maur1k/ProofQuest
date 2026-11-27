@@ -1,70 +1,37 @@
-# Phase 6 — implementation progress
+# Phase 6 — PDF study materials and AI status
 
-Owner: Maur1k. Date: 2026-11-11. Status: in progress, not complete.
-The owner authorized finishing this phase, but remains undecided about the AI provider. This supersedes the earlier 25% work limit, not the entry decisions or exit criteria.
+Current rollup: 2026-11-28. **Phase 6 is not complete. AI generation remains disabled.** This file summarizes the current status; the linked 6A/6B records contain detailed evidence. Historical percentage checkpoints and implementation notes were recorded in this file before it was consolidated and are preserved in Git history.
 
-## Implemented locally
+## Implemented product foundation
 
-- Reader generation panel with selected-page text preview, explicit transfer consent, cancellation, fixed public errors and retry states. Disabled hosts show an honest unavailable message.
-- Client retains a request ID within the mounted panel. If saving fails after generation, retry reuses the returned version without another provider call.
-- Atomic generated-version and Test-session storage checks the original document checksum, selected text and citations. Stale sources and partial writes are rejected; repeated saves return the same session.
-- Server orchestration validates consent, request size and structured output; reserves through an injected ledger before generation and records completion before returning success. Cached jobs bypass the provider. This is an interface and tested orchestration, not an implemented durable quota service.
-- Production config reports generation disabled and POST returns unavailable without reading the body. No provider credentials or external calls are wired.
+- Subject-neutral PDF and pasted-text sources with local extraction, explicit page/paragraph selection, source revisions and immutable saved materials.
+- Four study formats: Flashcards, Quiz, Exam, Reviewer. Quiz and Exam reuse the same saved question version and existing internal `practice`/`test` session rules.
+- User review and explicit consent precede any AI transfer. Existing saved content, source references, progress, results, and recovery flow remain available.
+- Groq inference and Upstash shared usage controls are integrated behind server paths. Current model/profile at last validation: `openai/gpt-oss-120b` / `source-evidence-v2`.
+- Current persistence contracts: IndexedDB schema 4, backup v5. Keep legacy records and completed grades intact.
 
-## Validation
+## Release gate: factual quality
 
-214 tests across 25 files pass. TypeScript passes. ESLint passes with the existing nine Fast Refresh warnings. Node production build, artifact verification and route smoke checks pass.
+Phase 6A acceptance **failed** in manual review. Public-PDF output contained a wrong percolation/infiltration key and a questionable cloud-condensation-nucleus distractor; browser generation also produced ambiguous/incorrect MCQs. Schema validation and exact source evidence did not prevent these errors. Keep the approved-format allowlist empty and generation disabled. Do not describe PDF-to-AI material generation as released or fact-checked.
 
-Desktop browser check imported public RFC 9110, extracted pages 1–2, saved the document and opened the reader. The original preview, extracted text and disabled generation message rendered correctly. Screenshot: `C:/Users/maurik/Documents/ChatGPT/ProofQuest/validation/phase6-generation-unavailable.jpg`.
+The owner has not authorized a semantic verifier or the next 6C–6G milestones. The independent second-review proposal, its cost/capacity tradeoffs, and required quality gates are detailed in [Phase 6A progress](phase-6a-progress.md). Do not make live provider calls or change limits as an exploratory test.
 
-Enabled generation UI behavior is covered by mocked component tests, not a live provider browser run. No physical phone test or public hosting check is claimed.
+## Current outstanding work
 
-## Provider research and owner decision
+1. Owner decides whether to pursue the second semantic review call and agrees measurable factual acceptance criteria.
+2. Pass the minimum accepted-question corpus and representative public-PDF review against the current unified-source prompt.
+3. Validate atomic shared/guest quotas, concurrency, failure accounting, request idempotency, origin/CSRF protection, timeouts and outages in the intended host runtime.
+4. Validate generation recovery across reload, result retention/deletion, privacy disclosure and credential/log redaction.
+5. Complete an authorized real PDF → material → study → result/reload browser acceptance without transmitting private documents.
+6. Confirm PDF size/page limits and host configuration; larger-PDF and physical-phone capacity are not certified.
 
-Proposed, not selected: Groq Free for inference and Upstash Free Redis for shared limits. Owner answered that they remain undecided and asked about Groq limits. No accounts were provisioned and no spending is authorized.
+## Detailed records
 
-[Groq limits](https://console.groq.com/docs/rate-limits) currently list gpt-oss-20b at 30 requests/minute, 1,000/day, 8,000 tokens/minute and 200,000/day. Limits are organization-wide and the actual account limits are authoritative. At an illustrative 5,000 tokens per quiz, the daily token ceiling permits roughly 40 quizzes before other limits and overhead; this is not a measured capacity promise. [Free-plan FAQ](https://community.groq.com/t/do-i-get-charged-for-anything-on-the-groq-free-plan/832) says excess usage returns 429 rather than a charge.
+- [6A factual quality gate](phase-6a-progress.md)
+- [6B unified sources and migrations](phase-6b-progress.md)
+- [Four-choice study workflow](phase-6-study-flow.md)
+- [AI local setup and operational checks](ai-local-setup.md)
+- [2026-11-24 validation record](phase-6-validation-2026-11-24.md)
+- [Study expansion architecture proposal](study-expansion-architecture.md)
 
-[Structured outputs](https://console.groq.com/docs/structured-outputs), [data handling](https://console.groq.com/docs/your-data), [Upstash pricing](https://upstash.com/pricing/redis) and [Redis REST API](https://upstash.com/docs/redis/features/restapi) were reviewed. Provider privacy disclosure must reflect actual account settings; do not promise zero retention without verifying them.
-
-## Required before Phase 6 completion
-
-1. Select provider/backend, agree guest/global allowance and measurable quality acceptance. Keep paid billing disabled unless separately authorized. Owner supplies credentials through an ignored local environment file, never chat.
-2. Implement the selected server-only adapter with token/output byte bounds, cancellation and safe diagnostics. Configure host-specific secrets without exposing them to the browser.
-3. Implement and test atomic durable guest/global reservations, concurrency limits, idempotent completion and conservative failure accounting across both hosts. A completion write followed by a transport failure must never be overwritten as failed. Add guest identity and origin/CSRF protection before enabling the route.
-4. Persist recovery metadata for generation requests across reload; the current panel's in-memory request ID is lost on navigation/reload. Bound cached result retention and document deletion behavior.
-5. Verify live quotas, counter outages, concurrent requests, retry recovery and synthetic document/secret leakage checks. Align library privacy copy with enabled generation behavior.
-6. Evaluate representative public PDFs for factual correctness and citation support, then demonstrate real PDF → five MCQs → completed result → reload with evidence. Citation substring matching alone does not prove an answer is correct.
-
-No Phase 6 push, publication, Lovable AI edits or Phase 7 work occurred. Earlier checkpoints remain historical records.
-
-## Approved expansion checkpoint
-
-The owner approved quizzes, reviewers and flashcards within Phase 6, with programming as optional examples. See phase-6-expansion.md. Subject-neutral request and reviewer/flashcard evidence validators are implemented with eight new tests. Full regression: 222 tests across 26 files pass; TypeScript and scoped ESLint pass. This checkpoint adds no UI, storage migration, provider call or import-limit change. Those remain unfinished; Phase 6 is not complete.
-
-
-## Four-choice implementation update
-
-The owner-approved Flashcards / Quiz / Exam / Reviewer flow is implemented locally, including stored-material access, progress and backup support. See [implementation and verification](phase-6-study-flow.md) for current status. Earlier future-tense descriptions above are historical planning; live AI and larger-file limits remain pending.
-
-## Local AI reconnection — 2026-11-17
-
-The owner supplied Groq and Upstash credentials and authorized local integration. Earlier provider-pending descriptions above are historical. See [local AI setup and remaining checks](ai-local-setup.md). Phase 6 remains incomplete and unpushed.
-
-## Browser quality checkpoint — 2026-11-17
-
-Quiz/Exam results, reload and history were verified in the browser. Factual acceptance failed: an MCQ marked a source-supported alternative incorrect. Reviewer generation also failed in the browser. Local generation was disabled again pending correction. See [full review](phase-6-browser-quality-review.md). Earlier structural test passes do not establish factual quality.
-
-## Authorized 6A checkpoint — 2026-11-17
-
-The owner authorized milestone 6A. Quality rejection rules, extractive evidence references and per-format gates are implemented locally. Live reliability/quality acceptance remains unmet; see [6A progress](phase-6a-progress.md). Generation remains disabled. 6B has not started.
-
-
-## Phase 6B started — 2026-11-17
-
-Explicit owner authorization advances the source expansion while keeping AI disabled. See [Phase 6B progress](phase-6b-progress.md) for implemented source storage/UI and outstanding generation acceptance.
-
-
-## Current checkpoint — 2026-11-24
-
-Supersedes earlier current-status notes: 6B unified-source implementation and workflow checks are complete locally, including schema 4/backup v5. 6A remains incomplete because live factual review found wrongly keyed/ambiguous PDF questions despite structural success. See [6A quality gate](phase-6a-progress.md), [6B handoff](phase-6b-progress.md) and [validation record](phase-6-validation-2026-11-24.md). Model: Groq `openai/gpt-oss-120b`; unified prompt profile `source-evidence-v2`. Generation is disabled, shared cap is the normal 20, and 6C/push/publication are not authorized.
+The product workflow and recent UI/UX simplification are documented separately in [simplification-plan.md](simplification-plan.md). Those completions do not satisfy the AI quality gate or authorize Phase 7.

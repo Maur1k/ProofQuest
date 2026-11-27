@@ -1,6 +1,6 @@
 # Local AI setup
 
-Checkpoint: 2026-11-17. Phase 6 is still in progress; no deployment or Phase 7 approval.
+Setup details originate from 2026-11-17. Current status (2026-11-28): the Groq/Upstash server integration remains present, but AI generation is disabled because factual-quality acceptance failed. No deployment or Phase 7 approval follows from local credentials. See [current Phase 6 status](phase-6-progress.md) and [system handoff](system-progress-handoff.md) before using any instructions below.
 
 The owner supplied Groq and Upstash credentials locally and requested reconnection after intentionally removing the previous uncommitted integration. Credentials remain in ignored `.env.local`; never use VITE_ prefixes for secrets.
 

@@ -1,14 +1,8 @@
-> Current phase update (2026-11-11): Phase 5 is complete locally. MCQ Practice/Test, finalization, results, retry and history are implemented. See [Phase 5 handoff](../phase-5-handoff.md); older checkpoint notes below are historical. Phase 6 generation has not started.
-
-> Phase 5 update (2026-11-10): Home now offers a clearly labeled five-question sample MCQ Practice quiz with durable start/resume, saved feedback and save/conflict recovery. See [50% checkpoint](../phase-5-50-checkpoint.md). Test-mode UI, final results and generation remain pending.
-
-> Current implementation update (2026-11-10): the active project is responsive web; Flutter mapping below is historical reference. Real local PDF import, selected-page extraction and saved reader now exist. See [completed Phase 4 handoff](../phase-4-handoff.md) for current behavior, evidence and limitations. No AI generation or accounts are implemented.
+> Historical reference package from the initial implementation. Its screen inventory, route descriptions, setup commands, and phase status may be outdated. For current behavior read [the system status handoff](../system-progress-handoff.md), [the UI/UX handoff](../ui-ux-handoff.md), and the root [README](../../README.md). Keep its asset provenance, design tokens, source snapshots, and historical Flutter mapping as reference data.
 
 # ProofQuest — development handoff
 
-Reference package for continuing ProofQuest (web) and for the planned Flutter rewrite.
-Everything described as **working** runs in this repository today. Everything marked
-**demo** or **future** is UI only: no generation backend, accounts or AI exist; the historical demo remains separate from real document processing.
+Historical design and source-analysis package for the original web project and cancelled Flutter proposal. Its route inventory, setup and feature status are not current. Use the root README and system handoff for current behavior. Preserve design tokens, artwork provenance, and screenshots as reference assets.
 
 | File | Contents |
 | --- | --- |
