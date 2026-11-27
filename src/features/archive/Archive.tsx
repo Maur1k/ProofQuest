@@ -159,19 +159,20 @@ export function Archive({
     listQuizSessions,
     retry,
   ]);
-  const panel = "rounded-xl border border-border bg-card p-4 space-y-3 break-words";
+  const panel =
+    "rounded-xl border border-border bg-card p-4 space-y-4 break-words leading-relaxed sm:p-5";
   return (
-    <div className="space-y-6 py-6">
-      <header>
-        <h1 className="text-2xl font-bold">Archive</h1>
-        <p className="mt-2 text-muted-foreground">
+    <div className="mx-auto max-w-4xl space-y-7 break-words py-6 sm:py-8">
+      <header className="space-y-3">
+        <h1 className="text-3xl font-bold tracking-tight">Archive</h1>
+        <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground">
           Retired Quests and samples are read-only. Unfinished attempts cannot resume. Recorded
           results have not been regraded.
         </p>
         <Link
           to="/settings"
           hash="data-backup"
-          className="inline-flex min-h-11 items-center text-primary underline"
+          className="inline-flex min-h-11 items-center rounded-md text-primary underline underline-offset-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
         >
           Export everything in Data &amp; backup
         </Link>
@@ -185,7 +186,9 @@ export function Archive({
             {!data.quests.length && <p>No archived Quests.</p>}
             {data.quests.map((q) => (
               <details key={q.id} open={selected.quest === q.id} className={panel}>
-                <summary className="min-h-11 cursor-pointer py-2 font-medium">{q.title}</summary>
+                <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
+                  {q.title}
+                </summary>
                 {q.questions.map((question) => (
                   <Question key={question.id} question={question} />
                 ))}
@@ -204,7 +207,7 @@ export function Archive({
                   open={selected.attempt === a.id || selected.quest === a.questId}
                   className={panel}
                 >
-                  <summary className="min-h-11 cursor-pointer py-2 font-medium">
+                  <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
                     {a.questTitle} ·{" "}
                     {a.completedAt === null ? "Unfinished (read-only)" : "Completed"}
                   </summary>
@@ -262,7 +265,7 @@ export function Archive({
                   !saved.sessions.length && <p>No saved samples.</p>}
                 {saved.revisions.map((r) => (
                   <details key={r.id} className={panel}>
-                    <summary className="min-h-11 cursor-pointer py-2">
+                    <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
                       {r.title} · Saved source ({new Date(r.createdAt).toLocaleDateString()})
                     </summary>
                     {r.segments.map((s) => (
@@ -274,7 +277,7 @@ export function Archive({
                 ))}
                 {saved.materials.map((m) => (
                   <details key={m.id} open={selected.sample === m.id} className={panel}>
-                    <summary className="min-h-11 cursor-pointer py-2">
+                    <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
                       {m.title} · {m.output.format}
                     </summary>
                     <SampleMaterial material={m} />
@@ -284,7 +287,7 @@ export function Archive({
                   .filter((q) => !saved.materials.some((m) => m.id === q.id))
                   .map((q) => (
                     <details key={q.id} open={selected.sample === q.id} className={panel}>
-                      <summary className="min-h-11 cursor-pointer py-2">
+                      <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
                         {q.title} · Saved questions
                       </summary>
                       {q.questions.map((question) => (
@@ -294,7 +297,7 @@ export function Archive({
                   ))}
                 {saved.sessions.map((s) => (
                   <details key={s.id} open={selected.session === s.id} className={panel}>
-                    <summary className="min-h-11 cursor-pointer py-2">
+                    <summary className="min-h-11 cursor-pointer py-2 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
                       {s.version.title} · {s.mode === "practice" ? "Quiz" : "Exam"} ·{" "}
                       {s.completedAt === null ? "Unfinished (read-only)" : "Completed"}
                     </summary>

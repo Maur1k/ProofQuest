@@ -50,10 +50,10 @@ export function PracticePage({ sessionId }: { sessionId: string }) {
   if (session && isArchivedQuizId(session.version.id))
     return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
-    <div className="pb-6">
+    <div className="mx-auto max-w-3xl pb-8">
       <PageHeader
         title="Quiz"
-        back={{ to: "/", label: "New study" }}
+        back={{ to: "/library", label: "Library" }}
         subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
       {session?.version.id.startsWith("source-generated-") && (
@@ -148,14 +148,18 @@ export function PracticeSession({
   }
   const reviewed = session.questionOrder.every((id) => Object.hasOwn(session.answers, id));
   return (
-    <div className="mx-auto max-w-2xl space-y-5">
-      <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
+    <div className="mx-auto max-w-2xl space-y-6 break-words">
+      <div className="flex flex-wrap justify-between gap-2 rounded-xl border border-border px-4 py-3 text-sm text-muted-foreground">
         <span>Quiz · Feedback after submission</span>
         <span>
           Question {view.position} of {view.total}
         </span>
       </div>
-      <h2 ref={heading} tabIndex={-1} className="text-xl font-semibold">
+      <h2
+        ref={heading}
+        tabIndex={-1}
+        className="rounded-2xl bg-muted/30 p-5 text-xl font-semibold leading-relaxed sm:p-6"
+      >
         {view.prompt}
       </h2>
       <form
@@ -235,7 +239,7 @@ export function PracticeSession({
           )}
         </section>
       )}
-      <nav aria-label="Quiz questions" className="flex flex-wrap gap-3">
+      <nav aria-label="Quiz questions" className="flex flex-wrap justify-between gap-3">
         <Button
           variant="outline"
           disabled={index === 0 || dirty || pending || conflict}

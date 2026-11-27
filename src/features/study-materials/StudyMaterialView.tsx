@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 type Citation = { page: number; excerpt: string };
 function Evidence({ sources, documentId }: { sources: Citation[]; documentId: string }) {
   return (
-    <div className="space-y-2">
+    <details className="rounded-xl bg-muted/30 p-3 text-sm">
+      <summary className="min-h-11 cursor-pointer py-3 font-medium">View source evidence</summary>
       {sources.map((source, index) => (
         <SourceReference key={index} source={{ ...source, documentId }} />
       ))}
-    </div>
+    </details>
   );
 }
 export function StudyMaterialView({ record }: { record: StudyRecord }) {
@@ -54,7 +55,7 @@ export function StudyMaterialView({ record }: { record: StudyRecord }) {
     <Evidence sources={sources} documentId={material.documentId} />
   );
   return (
-    <article className="min-w-0 space-y-5 break-words">
+    <article className="mx-auto min-w-0 max-w-3xl space-y-6 break-words leading-relaxed">
       <h1 className="text-2xl font-bold">{material.title}</h1>
       <p className="text-sm text-muted-foreground">
         {material.format === "flashcards" ? "Flashcards" : "Reviewer"} · Saved in this browser.
@@ -65,7 +66,7 @@ export function StudyMaterialView({ record }: { record: StudyRecord }) {
           {material.sections.map((section) => (
             <section
               key={section.heading}
-              className="space-y-3 rounded-xl border border-border p-4"
+              className="space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6"
             >
               <h2 className="text-lg font-semibold">{section.heading}</h2>
               {section.points.map((point, i) => (
@@ -118,15 +119,17 @@ export function StudyMaterialView({ record }: { record: StudyRecord }) {
         </>
       ) : progress ? (
         <section
-          className="space-y-4 rounded-xl border border-border bg-card p-5"
+          className="space-y-5 rounded-2xl border border-border bg-card p-5 sm:p-8"
           aria-label="Flashcard deck"
         >
-          <p role="status">
+          <p role="status" className="text-sm font-medium text-muted-foreground">
             Card {progress.index + 1} of {material.cards.length}
           </p>
-          <h2 className="text-xl font-semibold">{material.cards[progress.index]!.front}</h2>
+          <h2 className="py-4 text-xl font-semibold leading-relaxed sm:text-2xl">
+            {material.cards[progress.index]!.front}
+          </h2>
           {progress.revealed && (
-            <div id="flashcard-answer" className="space-y-3">
+            <div id="flashcard-answer" className="space-y-3 border-t border-border pt-5">
               <p>{material.cards[progress.index]!.back}</p>
               {evidence(material.cards[progress.index]!.sources)}
             </div>
@@ -138,7 +141,7 @@ export function StudyMaterialView({ record }: { record: StudyRecord }) {
           >
             {progress.revealed ? "Hide answer" : "Reveal answer"}
           </Button>
-          <div className="flex flex-wrap gap-3">
+          <div className="flex justify-between gap-3 border-t border-border pt-4">
             <Button
               variant="outline"
               disabled={busy || progress.index === 0}

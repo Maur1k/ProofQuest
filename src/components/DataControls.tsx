@@ -32,11 +32,11 @@ export function DataControls() {
     }
   }
   return (
-    <details id="data-backup" className="mt-6 rounded-xl border border-border bg-card p-4 text-sm">
-      <summary className="min-h-11 cursor-pointer content-center font-semibold">
+    <details className="mt-4 rounded-xl border border-border bg-muted/20 p-4 text-sm sm:p-5">
+      <summary className="min-h-11 cursor-pointer content-center font-semibold focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring">
         Data &amp; backup
       </summary>
-      <div className="space-y-3 pt-2">
+      <div className="space-y-4 pt-3 leading-relaxed">
         <p>
           Your library belongs to this browser and website address. Export a backup before changing
           devices or hosts. Backups can contain document text, PDFs and your study history; keep
@@ -56,7 +56,7 @@ export function DataControls() {
             Existing browser records are left untouched.
           </p>
         )}
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <Button
             variant="outline"
             disabled={disabled}
@@ -98,7 +98,7 @@ export function DataControls() {
             type="file"
             accept="application/json,.json"
             disabled={disabled || persistence !== "durable"}
-            className="block w-full min-h-11 max-w-full"
+            className="block min-h-11 w-full max-w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:mr-3 file:min-h-8 file:rounded file:border-0 file:bg-primary file:px-3 file:font-medium file:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring"
             onChange={(event) => {
               const file = event.target.files?.[0];
               event.target.value = "";

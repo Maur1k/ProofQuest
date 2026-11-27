@@ -234,7 +234,10 @@ export function GenerateSource({
         </p>
       </details>
       {!enabled && (
-        <div role="status">
+        <div
+          role="status"
+          className="space-y-2 rounded-xl border border-primary/30 bg-primary/10 p-5"
+        >
           <p>AI generation is currently unavailable. Your material is saved in Library.</p>
           <Link
             to="/library"

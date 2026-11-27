@@ -66,12 +66,12 @@ export function TestSession({
     heading.current?.focus();
   }
   return (
-    <div className="mx-auto max-w-2xl space-y-5">
+    <div className="mx-auto max-w-2xl space-y-6 break-words">
       <p className="rounded-xl border border-border bg-card p-4 text-sm text-muted-foreground">
         Exam mode · Save and edit your answers. Solutions stay hidden until you finish and submit
         this attempt.
       </p>
-      <div className="flex flex-wrap justify-between gap-2 text-sm text-muted-foreground">
+      <div className="flex flex-wrap justify-between gap-2 rounded-xl border border-border px-4 py-3 text-sm text-muted-foreground">
         <span>
           {progress.answered} of {progress.questions.length} answers saved
         </span>
@@ -93,7 +93,11 @@ export function TestSession({
           </Button>
         ))}
       </nav>
-      <h2 ref={heading} tabIndex={-1} className="text-xl font-semibold">
+      <h2
+        ref={heading}
+        tabIndex={-1}
+        className="rounded-2xl bg-muted/30 p-5 text-xl font-semibold leading-relaxed sm:p-6"
+      >
         {view.prompt}
       </h2>
       <form
@@ -131,7 +135,7 @@ export function TestSession({
                 ? "No saved answer for this question."
                 : "Answer saved in this browser. You can still change it."}
         </p>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap justify-between gap-3">
           <Button type="submit" disabled={!dirty || pending || conflict}>
             {pending ? "Saving…" : error ? "Retry saving" : "Save answer"}
           </Button>
@@ -172,7 +176,7 @@ export function TestSession({
           )}
         </div>
       )}
-      <nav aria-label="Exam questions" className="flex flex-wrap gap-3">
+      <nav aria-label="Exam questions" className="flex flex-wrap justify-between gap-3">
         <Button
           variant="outline"
           disabled={index === 0 || dirty || pending || conflict}

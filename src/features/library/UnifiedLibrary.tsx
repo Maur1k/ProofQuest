@@ -17,7 +17,7 @@ function Attempts({ rows }: { rows: QuizSession[] }) {
       {rows.map((s) => (
         <li key={s.id}>
           <Link
-            className="block rounded-xl border border-border p-4 focus-visible:ring-2 focus-visible:ring-primary"
+            className="block space-y-2 rounded-xl border border-border bg-card p-5 transition-colors hover:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary"
             to={
               s.completedAt !== null
                 ? "/quiz-results/$sessionId"
@@ -70,8 +70,8 @@ function Material({ row }: { row: LibraryMaterial }) {
     }
   }
   return (
-    <article className="space-y-3 rounded-xl border border-border bg-card p-4">
-      <h3 className="break-words font-semibold">{row.title}</h3>
+    <article className="space-y-4 rounded-2xl border border-border bg-card p-5">
+      <h3 className="break-words text-lg font-semibold">{row.title}</h3>
       <p className="text-sm text-muted-foreground">
         {row.format === "quiz"
           ? "Quiz / Exam"
@@ -80,7 +80,9 @@ function Material({ row }: { row: LibraryMaterial }) {
             : "Reviewer"}
       </p>
       {row.kind === "attempt" ? (
-        <p className="text-sm">Retained attempt snapshot. Open the saved attempt below.</p>
+        <p className="text-sm text-muted-foreground">
+          Your saved attempt is available below, with its original questions and answers.
+        </p>
       ) : row.format === "quiz" ? (
         <div className="flex flex-wrap gap-2">
           <Button disabled={busy} onClick={() => void open("practice")}>
@@ -120,7 +122,7 @@ function SourceDetails({ group }: { group: LibrarySource }) {
     .flatMap((m) => m.attempts)
     .sort((a, b) => b.updatedAt - a.updatedAt);
   return (
-    <div className="space-y-5">
+    <div className="mx-auto max-w-4xl space-y-6">
       <Link
         to="/library"
         search={{}}
@@ -128,7 +130,12 @@ function SourceDetails({ group }: { group: LibrarySource }) {
       >
         Back to Library
       </Link>
-      <h1 className="break-words text-2xl font-bold">{group.title}</h1>
+      <header className="space-y-2">
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
+          {group.source?.kind === "text" ? "Text source" : "PDF source"} · Saved locally
+        </p>
+        <h1 className="break-words text-2xl font-bold sm:text-3xl">{group.title}</h1>
+      </header>
       <div className="flex flex-wrap gap-3">
         {group.source ? (
           <Link
@@ -187,7 +194,11 @@ function SourceDetails({ group }: { group: LibrarySource }) {
         ))}
         {!group.revisions.length && <p>Original PDF retained. Open it to read extracted text.</p>}
       </details>
-      <div role="group" aria-label="Source sections" className="flex flex-wrap gap-2">
+      <div
+        role="group"
+        aria-label="Source sections"
+        className="grid grid-cols-2 gap-2 rounded-2xl bg-muted/40 p-2"
+      >
         <Button
           variant={section === "materials" ? "default" : "outline"}
           aria-pressed={section === "materials"}
@@ -206,7 +217,15 @@ function SourceDetails({ group }: { group: LibrarySource }) {
       {section === "materials" ? (
         <section aria-label="Study materials" className="space-y-3">
           {!group.materials.length && (
-            <p>No saved study materials yet. Your source is saved and ready to use.</p>
+            <div className="rounded-2xl border border-dashed border-border p-6 sm:p-8">
+              <h2 className="mb-2 text-lg font-semibold">Ready when you are</h2>
+              <p className="text-sm text-muted-foreground">
+                No saved study materials yet. Your source is saved and ready to use.
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Choose Create study material above to select a study mode.
+              </p>
+            </div>
           )}
           {group.materials.map((row) => (
             <Material key={row.key} row={row} />
@@ -215,7 +234,15 @@ function SourceDetails({ group }: { group: LibrarySource }) {
       ) : (
         <section aria-label="Results">
           {!attempts.length ? (
-            <p>No saved attempts for this source yet.</p>
+            <div className="rounded-2xl border border-dashed border-border p-6 sm:p-8">
+              <h2 className="mb-2 text-lg font-semibold">Your results will appear here</h2>
+              <p className="text-sm text-muted-foreground">
+                No saved attempts for this source yet.
+              </p>
+              <p className="mt-2 text-sm text-muted-foreground">
+                Open a Quiz or Exam from Study materials to get started.
+              </p>
+            </div>
           ) : (
             <Attempts rows={attempts} />
           )}
@@ -300,7 +327,7 @@ export function UnifiedLibrary({ sourceKey }: { sourceKey?: string | undefined }
   if (sourceKey) {
     const group = view.sources.find((g) => g.key === sourceKey);
     return (
-      <div className="py-6">
+      <div className="py-6 sm:py-10">
         {group ? (
           <SourceDetails key={group.key} group={group} />
         ) : (
@@ -319,18 +346,30 @@ export function UnifiedLibrary({ sourceKey }: { sourceKey?: string | undefined }
     );
   }
   return (
-    <div className="space-y-6 py-6">
+    <div className="mx-auto max-w-4xl space-y-6 py-6 sm:py-10">
       <header>
         <h1 className="text-3xl font-bold">Library</h1>
         <p className="mt-2 text-muted-foreground">
-          Your sources, study materials and results, saved in this browser.
+          Pick up where you left off. Everything here is saved in this browser.
         </p>
       </header>
-      <Link to="/" className="inline-flex min-h-11 items-center text-primary underline">
+      <Link
+        to="/"
+        className="inline-flex min-h-11 items-center justify-center rounded-xl bg-gradient-primary px-5 py-3 text-sm font-semibold text-primary-foreground focus-visible:ring-2 focus-visible:ring-ring"
+      >
         New study
       </Link>
       {view.sources.length === 0 && view.other.length === 0 && (
-        <p>Your Library is empty. Add a PDF or paste text to begin.</p>
+        <div className="rounded-2xl border border-dashed border-border bg-card p-6 sm:p-10">
+          <h2 className="mb-2 text-xl font-semibold">Your next study starts here</h2>
+          <p className="text-muted-foreground">
+            Your Library is empty. Add a PDF or paste text to begin.
+          </p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Choose New study above. Your saved sources, study materials and results will stay
+            together.
+          </p>
+        </div>
       )}
       <div className="grid gap-4 sm:grid-cols-2">
         {view.sources.map((g) => (
@@ -340,9 +379,14 @@ export function UnifiedLibrary({ sourceKey }: { sourceKey?: string | undefined }
             search={{ source: g.key }}
             className="block rounded-2xl border border-border bg-card p-5 hover:border-primary focus-visible:ring-2 focus-visible:ring-primary"
           >
-            <h2 className="break-words font-semibold">{g.title}</h2>
+            <span className="mb-3 inline-flex rounded-lg bg-primary/10 px-2.5 py-1 text-xs font-semibold text-primary">
+              {g.source?.kind === "text" ? "Text" : "PDF"}
+            </span>
+            <h2 className="break-words text-lg font-semibold">{g.title}</h2>
             <p className="mt-2 text-sm text-muted-foreground">
-              {g.source?.kind === "text" ? "Text" : "PDF"} · {g.materials.length} saved materials
+              {g.materials.length === 0
+                ? "Source saved · Ready to study"
+                : `${g.materials.length} saved ${g.materials.length === 1 ? "material" : "materials"}`}
             </p>
             <span className="mt-3 block text-sm text-primary">Open source</span>
           </Link>
@@ -352,8 +396,8 @@ export function UnifiedLibrary({ sourceKey }: { sourceKey?: string | undefined }
         <section aria-label="Other saved materials" className="space-y-3">
           <h2 className="text-xl font-semibold">Other saved materials</h2>
           <p className="text-sm text-muted-foreground">
-            These records have no unambiguous saved source link. Their original content and results
-            are preserved.
+            These materials could not be matched to a saved source. You can still open their
+            original content and results.
           </p>
           {view.other.map((row) => (
             <Material key={row.key} row={row} />

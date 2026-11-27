@@ -51,3 +51,15 @@
 - 2026-11-26: owner authorized finishing S3 and committing locally. S3 is complete; see docs/simplification-plan.md for evidence and limitations. Stop before further development. This authorization does not include a new push/publication or AI enablement. Keep schema 4/backup v5 and archived data support intact.
 
 - 2026-11-26: owner authorized pushing completed S3 and updating Markdown. Push implementation commit e1e8673 and its documentation handoff to origin/main without rewriting history. Earlier local-only/no-new-push restrictions are superseded for this handoff only. No next phase, live publication or AI enablement is authorized.
+
+- 2026-11-27: owner authorized UI/UX checkpoint 1, New study only, to simplify presentation while preserving branding and behavior. See docs/simplification-plan.md. Stop for review before Library refinement; no commit/push/publication or AI enablement authorization.
+
+- 2026-11-27: owner authorized UI/UX checkpoint 2 (Library). Presentation refinement and checks are complete locally; see docs/simplification-plan.md. Stop before study-screen refinement pending confirmation. No commit/push/publication or AI enablement authorization.
+
+- 2026-11-27: owner authorized UI/UX checkpoint 3, study screens. Refinements and validation complete locally; see docs/simplification-plan.md. Stop before Results refinement pending confirmation. No commit/push/publication or AI enablement authorization.
+
+- 2026-11-27: owner authorized UI/UX checkpoint 4, Results. Presentation refinement and validation are complete locally; see docs/simplification-plan.md. Stop before Settings/Archive refinement pending confirmation. No commit/push/publication or AI enablement authorization.
+
+- 2026-11-28: owner authorized continuing UI/UX refinement through checkpoint 5 (Settings and Archive). Local presentation changes and browser review are complete; see docs/simplification-plan.md. Checkpoints 1–5 are complete locally. No commit/push/publication or AI enablement authorization.
+
+- 2026-11-28: owner authorized documenting and pushing the completed UI/UX refinement checkpoints 1–5. See docs/ui-ux-handoff.md for an agent-ready project pickup guide and docs/simplification-plan.md for checkpoint details. Push the resulting commit to origin/main without rewriting history. This does not authorize publication, AI enablement or unrelated work.

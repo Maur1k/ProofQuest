@@ -85,14 +85,17 @@ export function PdfInput({
         PDFs stay local. Up to 5 MiB and 10 selected pages; scans and password-protected files are
         unsupported.
       </p>
-      <label className="block">
-        Upload PDF
+      <label className="block rounded-2xl border border-dashed border-primary/40 bg-card p-5 sm:p-8 focus-within:ring-2 focus-within:ring-primary">
+        <span className="block text-lg font-semibold">Choose a PDF</span>
+        <span className="mt-1 block text-sm text-muted-foreground">
+          Browse your files or drop a PDF here.
+        </span>
         <input
           aria-label="Choose PDF or drop one here"
           type="file"
           accept="application/pdf,.pdf"
           disabled={disabled || busy}
-          className="mt-2 block w-full min-w-0 text-sm"
+          className="mt-5 block min-h-11 w-full min-w-0 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-primary/15 file:px-4 file:py-3 file:font-semibold file:text-foreground"
           onChange={(e) => {
             void run(Array.from(e.target.files ?? []));
             e.target.value = "";

@@ -273,14 +273,15 @@ export function NewStudy({
       )}
       <div hidden={state.step !== 0} className="space-y-4">
         <fieldset disabled={busy || !available} className="grid grid-cols-2 gap-3">
-          <legend className="mb-2">Add material</legend>
+          <legend className="sr-only">Add material</legend>
           {(["pdf", "text"] as const).map((k) => (
             <label
               key={k}
-              className="rounded-xl border border-border p-4 focus-within:ring-2 focus-within:ring-primary"
+              className={`flex min-h-16 cursor-pointer items-center gap-3 rounded-xl border p-4 transition-colors focus-within:ring-2 focus-within:ring-primary ${kind === k ? "border-primary bg-primary/10" : "border-border bg-card hover:border-primary/50"}`}
             >
               <input
                 type="radio"
+                className="accent-primary"
                 name="input-kind"
                 checked={kind === k}
                 onChange={() => {
@@ -288,7 +289,9 @@ export function NewStudy({
                   else switchKind(k);
                 }}
               />
-              <span className="ml-2">{k === "pdf" ? "Upload PDF" : "Paste text"}</span>
+              <span className="text-sm font-semibold sm:text-base">
+                {k === "pdf" ? "Upload PDF" : "Paste text"}
+              </span>
             </label>
           ))}
         </fieldset>
@@ -308,6 +311,7 @@ export function NewStudy({
               Title
               <input
                 className="mt-1 min-h-11 w-full rounded-xl border bg-background p-3"
+                placeholder="e.g. Biology — Cell structure"
                 value={title}
                 maxLength={200}
                 onChange={(e) => {
@@ -320,6 +324,7 @@ export function NewStudy({
               Source text
               <textarea
                 className="mt-1 min-h-48 w-full rounded-xl border bg-background p-3"
+                placeholder="Paste the notes you want to study…"
                 value={text}
                 onChange={(e) => {
                   setText(e.target.value);
@@ -327,7 +332,7 @@ export function NewStudy({
                 }}
               />
             </label>
-            <p className="text-sm">
+            <p className="text-xs text-muted-foreground">
               Separate paragraphs with a blank line. {text.length.toLocaleString()} / 60,000
               characters; up to 100 paragraphs. Over-limit text is rejected, never truncated.
             </p>
@@ -361,10 +366,16 @@ export function NewStudy({
             ))}
           </fieldset>
         )}
-        <p className="text-sm text-muted-foreground">
-          Continue saves your source in this browser. No text is sent to AI at this step. Use
-          Settings → Data &amp; backup to keep a separate copy.
-        </p>
+        <aside className="rounded-xl bg-muted/40 p-4 text-sm text-muted-foreground">
+          <p>Continue saves your source in this browser. Nothing is sent to AI yet.</p>
+          <details className="mt-1">
+            <summary className="min-h-11 cursor-pointer py-3 text-xs">About local saving</summary>
+            <p className="text-xs">
+              Saved material stays on this browser and device. Use Settings → Data &amp; backup to
+              keep a separate copy.
+            </p>
+          </details>
+        </aside>
         {saveFailed && (
           <Button disabled={busy} onClick={() => void next()}>
             Retry saving
@@ -389,25 +400,37 @@ export function NewStudy({
       </div>
       {state.step === 1 && state.source && (
         <div className="space-y-4">
-          <p className="break-words">
-            {state.source.title} · {state.selected.length} selected pages/paragraphs
-          </p>
+          <div className="rounded-xl border border-border bg-card p-4">
+            <p className="break-words font-semibold">{state.source.title}</p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {state.selected.length}{" "}
+              {state.source.kind === "pdf"
+                ? state.selected.length === 1
+                  ? "page"
+                  : "pages"
+                : state.selected.length === 1
+                  ? "paragraph"
+                  : "paragraphs"}{" "}
+              selected · Saved locally
+            </p>
+          </div>
           <fieldset disabled={busy}>
-            <legend className="mb-3">Choose how to study</legend>
+            <legend className="sr-only">Choose how to study</legend>
             <div className="grid gap-3 sm:grid-cols-2">
               {STUDY_CHOICES.map((c) => (
                 <label
                   key={c.id}
-                  className={`flex min-h-28 items-start gap-3 rounded-xl border p-4 focus-within:ring-2 focus-within:ring-primary ${state.choice === c.id ? "border-primary bg-primary/10" : "border-border"}`}
+                  className={`flex min-h-28 cursor-pointer items-start gap-3 rounded-xl border bg-card p-5 transition-colors hover:border-primary/50 focus-within:ring-2 focus-within:ring-primary ${state.choice === c.id ? "border-primary bg-primary/10" : "border-border"}`}
                 >
                   <input
                     type="radio"
+                    className="mt-1 accent-primary"
                     name="study-choice"
                     checked={state.choice === c.id}
                     onChange={() => dispatch({ type: "choose", choice: c.id })}
                   />
                   <span>
-                    <strong className="block">{c.label}</strong>
+                    <strong className="mb-1 block text-lg">{c.label}</strong>
                     <span className="text-sm text-muted-foreground">{c.description}</span>
                   </span>
                 </label>
@@ -434,8 +457,8 @@ export function NewStudy({
               .map((s) => s.label)
               .join(", ")}
           </p>
-          <details>
-            <summary className="min-h-11 cursor-pointer py-2">
+          <details className="rounded-xl border border-border bg-card p-4">
+            <summary className="min-h-11 cursor-pointer py-2 font-medium">
               Review the exact selected text
             </summary>
             {state.source.segments

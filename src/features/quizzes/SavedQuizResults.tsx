@@ -39,12 +39,12 @@ export function SavedQuizResults({ sessionId }: { sessionId: string }) {
   if (session && isArchivedQuizId(session.version.id))
     return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
-    <div className="pb-6">
+    <div className="mx-auto max-w-3xl pb-8">
       <PageHeader title="Saved result" back={{ to: "/library", label: "Library" }} />
       {persistence !== "durable" ? (
         <p role="status">Saved browser storage is required.</p>
       ) : error ? (
-        <div role="alert">
+        <div role="alert" className="space-y-4 rounded-xl border border-border bg-card p-5">
           <p>{error}</p>
           <Button onClick={() => setGeneration((n) => n + 1)}>Retry result</Button>
         </div>

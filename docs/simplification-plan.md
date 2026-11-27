@@ -141,3 +141,44 @@ Physical-phone testing remains excluded. The browser compatibility fixture is de
 ### S3 GitHub handoff — 2026-11-26
 
 The owner authorized pushing completed S3 and updating Markdown. Implementation commit: `e1e8673` (Complete S3 Library compatibility and simplification acceptance). This supersedes the local-only/no-new-push restriction for this handoff. The snapshot includes 322 passing tests, 18 skipped opt-in live tests, passing type/build checks and 31 route checks, as recorded above. No additional implementation changes were made for this push. Live publication, AI enablement and the next development phase remain separate decisions.
+
+
+## UI/UX refinement checkpoint 1 — 2026-11-27
+
+Owner authorized refining New study before returning to AI work. This checkpoint preserves the existing identity and behavior: three-step progress indicator, short contextual instructions, selected input/mode styling, a clearer PDF upload area, source summary, expandable local-saving details, framed exact-text review and a more visible unavailable-generation message. Continue stays consistently named and positioned; Back and focus handling are preserved. No changes to Library, study/results screens, storage, generation policy or request recovery.
+
+Validation: 20 existing affected workflow/generation tests passed. Browser check covered all three steps at 320/390/768/1024/1440 px without horizontal overflow, keyboard selection/Continue, automatic heading focus, Back retaining the chosen mode, and disabled generation with an enabled Library link. Desktop upload and mobile mode screens visually inspected; no console errors. Physical-phone testing excluded. Stop for owner review before Library refinement. No commit, push, publication or AI enablement requested.
+
+
+## UI/UX refinement checkpoint 2 — 2026-11-27
+
+Owner authorized continuing to Library. Refined the overview with a prominent New study action, PDF/Text badges, readable source titles and clear zero-material wording. Source details retain on-demand original/version access, with a consistent two-column Study materials/Results switch. Material and attempt cards use clearer spacing and typography. Empty states explain the next action; ambiguous-source copy uses plain language. No repository, association, grading or generation behavior changed.
+
+Validation: all nine Library projection/compatibility/UI tests passed; focused lint, TypeScript and production build passed. Populated overview, materials and results checked at 320/390/768/1024/1440 pixels without horizontal overflow. Keyboard Enter opens a source; Space switches sections with visible focus. Existing recorded scores and unfinished-attempt links are intact. Mobile Results visually inspected; no browser console errors. Physical-device testing remains excluded. Stop for owner review before refining study screens. No commit, push, publication or AI enablement performed.
+
+
+## UI/UX refinement checkpoint 3 — 2026-11-27
+
+Owner authorized the four study screens. Quiz/Exam now use a bounded reading column, clearer question panels and progress rows, consistent navigation spacing and a Library return link. Legacy and unified Flashcards/Reviewer use roomier reading cards and expandable source evidence; original references and exclusions remain accessible. Unified flashcard reveal exposes its expanded state to assistive technology. Grading, saved-progress operations, consent and generation remain unchanged. Results-screen refinement remains a separate next checkpoint.
+
+Validation: 28 affected study/quiz/source tests passed; focused lint, type checks and production build passed. Browser checks on the existing local biology fixture verified Flashcard evidence expansion via keyboard, Reviewer evidence disclosure, Quiz immediate feedback and locked submitted answers, and Exam draft saving/reload with solutions hidden. All four screens were checked across 320/390/768/1024/1440 px without observed horizontal overflow; viewport measurements were rechecked where browser resize applied asynchronously. Mobile Exam and desktop reading layouts visually inspected; no console errors. Unified material persistence is covered by automated tests; browser fixture uses legacy formats. Physical-phone testing excluded. Stop before Results refinement pending owner confirmation. No commit, push, publication or AI enablement.
+
+## UI/UX checkpoint 4 — Results (2026-11-27)
+
+Completed locally with owner authorization. Results now groups the recorded score and totals into a summary, separates answer review into readable cards, labels explanations, and keeps source evidence behind keyboard-accessible disclosures. Retry and Library actions stack on narrow screens; saved-result pages share the bounded reading layout. Existing scores, snapshots, storage and retry behavior are unchanged.
+
+Validation: 18 relevant tests passed (quiz-results, mcq-practice, mcq-test); focused ESLint, TypeScript and Node production build/artifact checks passed. Browser checks covered saved Quiz and Exam results, Exam reload persistence, heading focus and keyboard source disclosure. No horizontal overflow at actual viewport widths 320, 390, 768, 1024 and 1440; mobile/desktop screenshots reviewed; no browser console errors. Physical-phone testing excluded. No AI requests or factual-quality claims.
+
+Stop before checkpoint 5 (Settings/Archive), pending owner confirmation. Changes remain local and uncommitted; no push, publication or AI enablement.
+
+## UI/UX refinement checkpoint 5 — Settings and Archive (2026-11-28)
+
+Completed locally with owner authorization. Settings now groups Data & backup, Archive and About in a clearer page hierarchy; backup privacy/recovery copy and all actions remain intact. Backup import controls use responsive spacing and clearer focus styling. Archive uses a bounded reading column, clearer record spacing and consistent keyboard focus while preserving read-only content and recorded outcomes.
+
+Validation: focused ESLint and TypeScript check completed. Browser review confirmed the Settings sections, keyboard expansion of Data & backup, available export/import/delete controls, Archive deep link, and keyboard expansion of a retained Quest. At 320 px Archive had no horizontal overflow. No browser console errors. No backup was imported/exported and no records were deleted. Physical-phone testing excluded. AI remains disabled.
+
+UI/UX checkpoints 1–5 are complete locally. The edits remain uncommitted and unpushed; no publication or AI enablement.
+
+## UI/UX refinement handoff — 2026-11-28
+
+All five refinement checkpoints are complete. The agent-ready pickup guide is [ui-ux-handoff.md](ui-ux-handoff.md); it records architecture constraints, what changed, validation evidence and limits, AI/data guardrails, useful commands, and a suggested pickup sequence. The owner authorized pushing this completed UI refinement snapshot on 2026-11-28. Publication and AI enablement remain separate and unauthorized.

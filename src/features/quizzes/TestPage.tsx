@@ -45,10 +45,10 @@ export function TestPage({ sessionId }: { sessionId: string }) {
   if (session && isArchivedQuizId(session.version.id))
     return <Navigate to="/archive" search={{ session: session.id }} replace />;
   return (
-    <div className="pb-6">
+    <div className="mx-auto max-w-3xl pb-8">
       <PageHeader
         title="Exam"
-        back={{ to: "/", label: "New study" }}
+        back={{ to: "/library", label: "Library" }}
         subtitle={session?.version.title ?? "Saved MCQ quiz"}
       />
       {session?.version.id.startsWith("source-generated-") && (

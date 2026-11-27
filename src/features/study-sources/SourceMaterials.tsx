@@ -61,7 +61,12 @@ export function SourceMaterialView({ material }: { material: SourceMaterial }) {
     return (
       <>
         <p className="whitespace-pre-wrap break-words">{p.text}</p>
-        <SegmentEvidence source={material.request.source} segmentId={p.segmentId} text={p.text} />
+        <details className="rounded-xl bg-muted/30 p-3 text-sm">
+          <summary className="min-h-11 cursor-pointer py-3 font-medium">
+            View source evidence
+          </summary>
+          <SegmentEvidence source={material.request.source} segmentId={p.segmentId} text={p.text} />
+        </details>
       </>
     );
   };
@@ -81,7 +86,7 @@ export function SourceMaterialView({ material }: { material: SourceMaterial }) {
   }
   const output = material.output;
   return (
-    <section className="space-y-4">
+    <section className="mx-auto max-w-3xl space-y-6 break-words leading-relaxed">
       <h1 className="text-2xl font-bold">{material.title}</h1>
       <p className="text-sm text-muted-foreground">
         {material.generation.provider === "sample"
@@ -92,7 +97,10 @@ export function SourceMaterialView({ material }: { material: SourceMaterial }) {
       {output.format === "reviewer" && (
         <>
           {output.sections.map((s, i) => (
-            <section key={i} className="space-y-3 rounded-xl border p-4">
+            <section
+              key={i}
+              className="space-y-4 rounded-2xl border border-border bg-card p-5 sm:p-6"
+            >
               <h2 className="font-semibold">{s.heading}</h2>
               {s.points.map((p, j) => (
                 <div key={j} className="space-y-2">
@@ -121,14 +129,20 @@ export function SourceMaterialView({ material }: { material: SourceMaterial }) {
         </>
       )}
       {output.format === "flashcards" && progress && (
-        <div className="space-y-4 rounded-xl border bg-card p-5">
+        <div className="space-y-5 rounded-2xl border border-border bg-card p-5 sm:p-8">
           <p>
             Card {progress.index + 1} of {output.cards.length}
           </p>
-          <h2 className="text-lg font-semibold">{output.cards[progress.index]!.front}</h2>
+          <h2 className="py-4 text-xl font-semibold leading-relaxed sm:text-2xl">
+            {output.cards[progress.index]!.front}
+          </h2>
           {progress.revealed && evidence(output.cards[progress.index]!.evidenceId)}
           <div className="flex flex-wrap gap-3">
-            <Button disabled={busy} onClick={() => void change(progress.index, !progress.revealed)}>
+            <Button
+              aria-expanded={progress.revealed}
+              disabled={busy}
+              onClick={() => void change(progress.index, !progress.revealed)}
+            >
               {progress.revealed ? "Hide answer" : "Reveal answer"}
             </Button>
             <Button
